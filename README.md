@@ -13,4 +13,4 @@ Quy định đặt tên của Team:
 - Commit message: feat: ..., fix: ...
 - File name: kebab-case (ví dụ: danh-sach-gia-su.html)
 
-Quy Trình Làm Việc
+

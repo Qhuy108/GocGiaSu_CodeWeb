@@ -1,0 +1,114 @@
+/* =========================================
+   1. GOOGLE FONTS (Phông chữ)
+========================================= */
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap'); */
+
+/* =========================================
+   2. GLOBAL STYLES (Định dạng chung)
+========================================= */
+color {
+    --color-primary: #9FC131;       /* Xanh lá mạ */
+    --color-navy: #042940;          /* Xanh lam đậm */
+    --color-teal: #005C53;          /* Xanh mòng két */
+    --color-yellow: #DBF227;        /* Vàng chanh */
+    --color-beige: #D6D58E;         /* Vàng Be */
+    --font-main: 'Roboto', sans-serif;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #042940; /* Dùng xanh navy thay cho đen tuyền để dịu mắt */
+    background-color: #fcfdfa;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    color: #005C53; /* Tiêu đề dùng màu xanh mòng két cho sang trọng */
+}
+
+a {
+    text-decoration: none;
+    color: #005C53;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: #9FC131; /* Màu xanh lá cây khi hover để nổi bật */
+}
+
+/* =========================================
+   3. CUSTOM UTILITIES (Tiện ích tự chế)
+========================================= */
+/* -- Tiện ích màu chữ -- */
+.text-primary-custom { color: #9FC131 !important; }
+.text-navy { color: #042940 !important; }
+.text-teal { color: #005C53 !important; }
+
+/* -- Tiện ích màu nền -- */
+.bg-navy { background-color: #042940 !important; }
+.bg-teal { background-color: #005C53 !important; }
+.bg-primary-custom { background-color: #9FC131 !important; }
+.bg-beige { background-color: #D6D58E !important; }
+
+/* -- Nút bấm (Buttons) -- */
+.btn-gocgiasu {
+    background-color: #9FC131;
+    color: #042940;
+    font-weight: 700;
+    padding: 10px 24px;
+    border: 2px solid #9FC131;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.btn-gocgiasu:hover {
+    background-color: #DBF227;
+    border-color: #DBF227;
+    color: #042940;
+    transform: translateY(-2px); /* Hiệu ứng nảy nhẹ lên khi đưa chuột vào */
+    box-shadow: 0 4px 12px rgba(159, 193, 49, 0.4);
+}
+
+/* =========================================
+   4. COMPONENTS (Thành phần cụ thể)
+========================================= */
+/* --- Navbar --- */
+.navbar-custom {
+    /* background-color: #ffffff; */
+    box-shadow: 0 2px 15px rgba(4, 41, 64, 0.05);
+}
+
+/* --- Hero Section (Khối phân quyền) --- */
+.hero-section {
+    /* Tạo dải màu gradient từ Navy sang Teal cho sang trọng */
+    background: linear-gradient(135deg, #042940 0%, #005C53 100%);
+    padding: 80px 0;
+}
+
+/* --- Card (Thẻ Gia sư / Học sinh) --- */
+.role-card {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 24px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-bottom: 5px solid #9FC131; /* Nhấn nhá vạch màu dưới đáy */
+}
+
+.role-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(4, 41, 64, 0.15);
+}
+
+/* =========================================
+   5. RESPONSIVE (Tối ưu thiết bị di động)
+========================================= */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 40px 0;
+    }
+    .btn-gocgiasu {
+        width: 100%; /* Nút full viền trên điện thoại */
+    }
+}

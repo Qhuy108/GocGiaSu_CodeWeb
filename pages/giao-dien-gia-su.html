@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giao diện Gia sư</title>
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <!-- Google Font Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-primary: #9FC131;
+            --color-navy: #042940;
+            --color-teal: #005C53;
+            --color-yellow: #DBF227;
+            --color-beige: #D6D58E;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #fcfdfa;
+            color: var(--color-navy);
+            line-height: 1.6;
+        }
+
+        .navbar-custom {
+            background-color: #15803d;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-custom .form-control {
+            border-radius: 50px;
+            padding-left: 20px;
+        }
+
+        .sidebar {
+            background-color: #ffffff;
+            border-right: 1px solid #eee;
+            min-height: 100vh;
+        }
+
+        .sidebar .nav-link {
+            color: #333;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: #f0f9f0;
+            color: var(--color-primary);
+            font-weight: 500;
+        }
+
+        .card-tutor {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .card-tutor:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .avatar-circle {
+            width: 48px;
+            height: 48px;
+            background-color: #9FC131;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .btn-contact {
+            background-color: #15803d;
+            color: white;
+            border-radius: 50px;
+            padding: 10px 24px;
+            font-weight: 600;
+        }
+
+        .btn-contact:hover {
+            background-color: #166534;
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: #005C53;
+            margin-bottom: 20px;
+        }
+
+        .right-sidebar .item {
+            padding: 12px 16px;
+            background-color: white;
+            border-radius: 50px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom py-3 sticky-top">
+    <div class="container-fluid px-4">
+
+        <!-- Thanh tìm kiếm - Chính giữa và có icon kính lúp -->
+        <div class="flex-grow-1 d-flex justify-content-center mx-4">
+            <div class="position-relative" style="max-width: 580px; width: 100%;">
+                <input 
+                    class="form-control form-control-lg rounded-pill ps-5 py-3" 
+                    type="search" 
+                    placeholder="Tìm môn học, khu vực..." 
+                    aria-label="Search">
+                
+                <!-- Icon kính lúp -->
+                <i class="fa-solid fa-magnifying-glass position-absolute top-50 translate-middle-y text-muted"
+                   style="left: 22px; font-size: 1.3rem;"></i>
+            </div>
+        </div>
+
+        <!-- Phần bên phải -->
+        <div class="d-flex align-items-center gap-4 text-white">
+            <i class="fa-solid fa-bell fs-5 cursor-pointer"></i>
+            <i class="fa-solid fa-envelope fs-5 cursor-pointer"></i>
+            
+            <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold">Xin chào, Gia sư</span>
+                <div class="rounded-circle bg-white text-success d-flex align-items-center justify-content-center overflow-hidden"
+                    style="width: 38px; height: 38px; border: 2px solid #fff;">
+    
+                <img src="../assets/teacher.png"
+                     width="20"
+                     height="20"
+                     style="object-fit: contain;">
+         
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Sidebar trái -->
+        <div class="col-lg-2 sidebar py-4 px-3">
+            <div class="nav flex-column">
+                <a href="#" class="nav-link active"><i class="fa-solid fa-table me-3"></i> Bảng tin</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-user me-3"></i> Hồ sơ của tôi</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-clipboard-check me-3"></i> Lớp đã nhận</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-bookmark me-3"></i> Lớp đã lưu</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-gear me-3"></i> Cài đặt tài khoản</a>
+            </div>
+        </div>
+
+        <!-- Nội dung chính -->
+        <div class="col-lg-7 py-4">
+
+            <!-- Tab navigation -->
+            <ul class="nav nav-tabs mb-4 border-0">
+                <li class="nav-item">
+                    <a class="nav-link active fw-bold text-dark border-0 border-bottom border-success border-3" href="#">Tất cả lớp mới</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="#">Gần khu vực của bạn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="#">Môn học quan tâm</a>
+                </li>
+            </ul>
+
+            <!-- Bài đăng tìm gia sư -->
+            <div class="mb-4 p-3 bg-light rounded-4">
+    <div class="d-flex align-items-center gap-3">
+        <div class="bg-success rounded-circle d-flex align-items-center justify-content-center"
+     style="width: 50px; height: 50px;">
+    <img src="../assets/findtutor.png"
+         width="24"
+         height="24"
+         alt="icon">
+</div>
+        <div>
+            <strong>Bài đăng tìm gia sư</strong>
+        </div>
+    </div>
+</div>
+
+            <!-- Card Gia sư 1 -->
+            <div class="card card-tutor mb-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="avatar-circle fs-4">CĐ</div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="mb-1">Chu Thành Đức <i class="fa-solid fa-circle-check text-success"></i></h5>
+                                    <small class="text-muted">36 phút trước</small>
+                                </div>
+                            </div>
+                            <p class="mb-1"><strong>Môn:</strong> Toán, Lớp: 12</p>
+                            <p class="mb-1"><i class="fa-solid fa-location-dot text-muted"></i> Tân Bình, Hồ Chí Minh, Việt Nam</p>
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                            <img src="../assets/money.png" width="20" height="20" alt="money">
+                            <span class="fw-bold text-dark">
+                                  180.000 - 360.000 / buổi
+                            </span>
+                            </div>
+                            <p class="text-muted small">Mô tả: Tìm giáo viên dạy toán quanh khu vực tân bình</p>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button class="btn btn-success rounded-pill px-4 d-flex align-items-center gap-2">
+                        <img src="../assets/phone-call.png" width="18" height="18" alt="">
+                        Liên hệ ngay
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Gia sư 2 -->
+            <div class="card card-tutor">
+                <div class="card-body">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="avatar-circle fs-4">T</div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="mb-1">Nguyễn Hương Mai <i class="fa-solid fa-circle-check text-success"></i></h5>
+                                    <small class="text-muted">36 phút trước</small>
+                                </div>
+                            </div>
+                            <p class="mb-1"><strong>Môn:</strong> Ngữ Văn, lớp 9</p>
+                            <p class="mb-1"><i class="fa-solid fa-location-dot text-muted"></i> 120 Yên Lãng, Đống Đa, Hà Nội, Việt Nam</p>
+                             <div class="d-flex align-items-center gap-2 mb-2">
+                            <img src="../assets/money.png" width="20" height="20" alt="money">
+                            <span class="fw-bold text-dark">
+                                  150.000 - 200.000 / buổi
+                            </span>
+                            </div>
+                            <p class="text-muted small">Mô tả: Tìm giáo viên có kinh nghiệm luyện thi ngữ văn 9 lên 10</p>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button class="btn btn-success rounded-pill px-4 d-flex align-items-center gap-2">
+                        <img src="../assets/phone-call.png" width="18" height="18" alt="">
+                        Liên hệ ngay
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sidebar phải -->
+        <div class="col-lg-3 py-4 right-sidebar">
+            <h5 class="section-title">Có thể bạn quan tâm</h5>
+            
+            <div class="item d-flex align-items-center gap-3">
+                <div class="avatar-circle d-flex align-items-center justify-content-center"
+                     style="width: 36px; height: 36px;">
+                <img src="../assets/math.png"
+                     width="18"
+                     height="18"
+                    style="object-fit: contain;">
+                </div>
+                <div>
+                    <strong>Toán lớp 9 (Quận 3)</strong>
+                </div>
+            </div>
+
+            <div class="item d-flex align-items-center gap-3">
+               <div class="avatar-circle d-flex align-items-center justify-content-center"
+                     style="width: 36px; height: 36px;">
+                <img src="../assets/english communication.png"
+                     width="18"
+                     height="18"
+                    style="object-fit: contain;">
+                </div>
+                <div>
+                    <strong>Tiếng Anh giao tiếp (Online)</strong>
+                </div>
+            </div>
+
+            <div class="item d-flex align-items-center gap-3">
+                <div class="avatar-circle d-flex align-items-center justify-content-center"
+                     style="width: 36px; height: 36px;">
+                <img src="../assets/physics.png"
+                     width="18"
+                     height="18"
+                    style="object-fit: contain;">
+                </div>
+                <div>
+                    <strong>Vật Lý lớp 11 (Bình Thạnh)</strong>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

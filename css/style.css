@@ -18,7 +18,7 @@ color {
 body {
     font-family: 'Roboto', sans-serif;
     color: #042940; /* Dùng xanh navy thay cho đen tuyền để dịu mắt */
-    background-color: #fcfdfa;
+    background-color: #ebecebf4;
     line-height: 1.6;
 }
 
@@ -99,6 +99,26 @@ a:hover {
 .role-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 30px rgba(4, 41, 64, 0.15);
+}
+/*BTN ĐĂNG TIN TÌM GS*/
+/* Class duy nhất để định vị nút lơ lửng */
+.fab-custom {
+    position: fixed !important;
+    bottom: 30px;
+    left: 30px;
+    z-index: 1050; /* Để nó luôn nằm trên cùng */
+    border: none !important;
+}
+
+/* Tận dụng biến màu của nhóm để icon bên trong có màu đồng bộ */
+.text-teal {
+    color: var(--color-teal) !important;
+}
+
+/* Hiệu ứng nảy nhẹ khi rê chuột*/
+.fab-custom:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
 }
 
 /* =========================================

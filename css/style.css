@@ -198,3 +198,14 @@ a:hover {
 .text-primary { color: #9FC131 !important; }
 .text-teal { color: #005C53 !important; }
 .text-navy { color: #042940 !important; }
+
+/* Màu cho chữ "Góc Gia Sư" - Dùng màu có sẵn trong thư viện */
+.text-gocgiasu {
+    color: var(--color-primary) !important;    
+    transition: all 0.3s ease;
+}
+
+.text-gocgiasu:hover {
+    color: #DBF227 !important;                 
+    text-shadow: 0 0 8px rgba(159, 193, 49, 0.6);
+}

@@ -209,3 +209,15 @@ a:hover {
     color: #DBF227 !important;                 
     text-shadow: 0 0 8px rgba(159, 193, 49, 0.6);
 }
+/* ===== Hiệu ứng riêng cho nút gọi điện ===== */
+
+.btn-call-hover {
+    transition: all 0.3s ease;
+}
+
+.btn-call-hover:hover {
+    background-color: #166534;   /* đổi màu nền */
+    color: white !important;     /* giữ nguyên màu chữ */
+    transform: translateY(-4px); /* nhích lên */
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}

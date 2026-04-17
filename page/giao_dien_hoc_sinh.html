@@ -368,13 +368,94 @@
     </div>
     </div>
 
-    <button type="button" class="btn btn-gocgiasu rounded-pill shadow-lg d-flex align-items-center p-2 pe-3 fab-custom">
+    <button type="button" class="btn btn-gocgiasu rounded-pill shadow-lg d-flex align-items-center p-2 pe-3 fab-custom"
+        data-bs-toggle="modal" 
+        data-bs-target="#modalDangTin">
     <div class="bg-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
         <i class="bi bi-plus text-teal fw-bold" style="font-size: 1.5rem; line-height: 0;"></i>
     </div>
     <span class="text-navy fw-bold" style="font-size: 1.2rem;">Đăng tin tìm gia sư</span>
 </button>
 
+
+<div class="modal fade" id="modalDangTin" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 450px;"> <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-body p-4">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="rounded-circle me-3 shadow-sm" style="width: 65px; height: 65px; background-color: #9de3c5;"></div>
+                    <h4 class="fw-bold m-0 text-navy text-uppercase" style="letter-spacing: 1px;">YOUR NAME</h4>
+                    <button type="button" class="btn-close ms-auto shadow-none" data-bs-dismiss="modal"></button>
+                </div>
+
+               <form id="formPostTutor">
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <label class="form-label fw-bold text-navy small">Môn học</label>
+                        <input list="subjects" class="form-control border-0 text-white shadow-none" 
+                            placeholder="Chọn hoặc nhập..."
+                            style="background-color: #005c53; border-radius: 12px; font-size: 0.9rem;">
+                        <datalist id="subjects">
+                            <option value="Toán">
+                            <option value="Ngữ Văn">
+                            <option value="Tiếng Anh">
+                            <option value="Vật Lý">
+                            <option value="Hóa Học">
+                        </datalist>
+                    </div>
+                    
+                    <div class="col-6">
+                        <label class="form-label fw-bold text-navy small">Lớp</label>
+                        <input list="grades" class="form-control border-0 text-white shadow-none" 
+                            placeholder="Chọn hoặc nhập..."
+                            style="background-color: #005c53; border-radius: 12px; font-size: 0.9rem;">
+                        <datalist id="grades">
+                            <option value="Lớp 1">
+                            <option value="Lớp 6">
+                            <option value="Lớp 9">
+                            <option value="Lớp 12">
+                            <option value="Ôn thi đại học">
+                        </datalist>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-navy small">Mục tiêu</label>
+                    <textarea class="form-control border-success shadow-none" rows="3" 
+                            placeholder="Ví dụ: Cải thiện môn Toán từ 7 lên 9+ .."
+                            style="border-radius: 12px; border-width: 1.5px; font-size: 0.9rem;"></textarea>
+                </div>
+                
+                    <div class="row align-items-center mb-3">
+                        <div class="col-5">
+                            <label class="form-label fw-bold m-0 text-navy small">Học phí dự kiến</label>
+                        </div>
+                        <div class="col-7">
+                            <div class="input-group border border-success rounded-3 px-2">
+                                <input type="text" class="form-control border-0 shadow-none text-end bg-transparent p-1" placeholder="0">
+                                <span class="input-group-text bg-transparent border-0 fw-bold text-navy small">VNĐ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 flex-wrap">
+                         <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">T2</button>
+                        <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">T3</button>
+                        <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">T4</button>
+                        <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">T5</button>
+                        <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">T6</button>
+                        <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">T7</button>
+                        <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">CN</button>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="button" class="btn btn-light rounded-pill px-4 fw-bold text-muted border-0 shadow-sm" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn text-white rounded-pill px-4 fw-bold shadow-sm" style="background-color: #005c53;">Đăng tin</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>

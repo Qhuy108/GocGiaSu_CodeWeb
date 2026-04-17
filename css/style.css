@@ -121,6 +121,25 @@ a:hover {
     transition: 0.3s;
 }
 
+/* Màu mặc định của nút thứ */
+.btn-day-click {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: bold;
+    transition: 0.2s;
+    position: relative;
+}
+
+/* KHI CLICK VÀO NÓ SẼ CÓ CLASS 'active' VÀ HIỆN MÀU NÀY */
+.btn-day-click.active {
+    background-color: #2d8a5d !important; 
+    color: white !important;
+    border-color: #2d8a5d !important;
+}
 /* =========================================
    5. RESPONSIVE (Tối ưu thiết bị di động)
 ========================================= */

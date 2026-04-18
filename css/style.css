@@ -6,7 +6,7 @@
 /* =========================================
    2. GLOBAL STYLES (Định dạng chung)
 ========================================= */
-color {
+:root {
     --color-primary: #9FC131;       /* Xanh lá mạ */
     --color-navy: #042940;          /* Xanh lam đậm */
     --color-teal: #005C53;          /* Xanh mòng két */

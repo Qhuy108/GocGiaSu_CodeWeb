@@ -112,3 +112,85 @@ a:hover {
         width: 100%; /* Nút full viền trên điện thoại */
     }
 }
+
+/* =========================================
+   BỔ SUNG CHO TRANG ĐĂNG KÝ/ĐĂNG NHẬP (WOW)
+========================================= */
+
+/* Sửa lỗi biến màu (Nếu nhóm trưởng viết 'color', bạn hãy sửa thành ':root') */
+:root {
+    --color-dark-green: #2d5a27; /* Màu xanh đậm trong ảnh mẫu */
+}
+
+/* Nền xanh nhạt toàn trang và các icon bay */
+.auth-page {
+    background-color: #e9f2e9;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 40px 0;
+}
+
+/* Icon minh họa mờ (Sách, compa...) */
+.decor-illustration {
+    position: absolute;
+    color: #2d5a27;
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Header màu xanh đậm của Card */
+.auth-header {
+    background-color: var(--color-dark-green);
+    padding: 25px;
+    text-align: center;
+    border-radius: 24px 24px 0 0;
+}
+
+.auth-header h2 {
+    color: #ffffff !important;
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+/* Ô nhập liệu có Icon bên trong */
+.auth-input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.auth-input-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-dark-green);
+    z-index: 5;
+    font-size: 1.2rem;
+}
+
+.auth-input-group .form-control {
+    border: 1.5px solid var(--color-dark-green);
+    border-radius: 12px;
+    padding: 12px 15px 12px 50px;
+    height: 50px;
+}
+
+/* Ghi đè nút bấm giống ảnh */
+.btn-auth {
+    background-color: var(--color-dark-green) !important;
+    color: white !important;
+    border-radius: 12px !important;
+    font-weight: 700;
+    padding: 12px;
+    width: 100%;
+}
+
+.btn-auth:hover {
+    background-color: var(--color-primary) !important;
+    transform: translateY(-2px);
+}

@@ -112,3 +112,116 @@ a:hover {
         width: 100%; /* Nút full viền trên điện thoại */
     }
 }
+
+/* =========================================
+   PHẦN BỔ SUNG ĐĂNG NHẬP
+========================================= */
+
+/* Kích hoạt lại biến màu để máy nhận diện được */
+:root {
+    --color-primary: #9FC131;
+    --color-navy: #042940;
+    --color-teal: #005C53;
+    --color-dark-green: #1a431a; /* Màu xanh đậm từ ảnh mẫu */
+}
+
+/* Nền toàn trang */
+.auth-page-wrapper {
+    background-color: #e9f2e9; 
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Header xanh đậm bo góc cho Card */
+.auth-card-header {
+    background-color: var(--color-dark-green);
+    padding: 20px;
+    text-align: center;
+    border-radius: 24px 24px 0 0;
+}
+
+.auth-card-header h2 {
+    color: #ffffff !important;
+    margin: 0;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+}
+
+/* Ô nhập liệu có icon bên trái */
+.input-auth-group {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.input-auth-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-dark-green);
+    z-index: 10;
+}
+
+.input-auth-group .form-control {
+    padding-left: 45px;
+    border: 1.5px solid var(--color-dark-green);
+    border-radius: 12px;
+    height: 48px;
+}
+
+
+/* Icon trang trí nền */
+.auth-decor {
+    position: absolute;
+    color: var(--color-dark-green);
+    opacity: 0.1;
+    z-index: 0;
+}
+
+/* --- CSS NÂNG CẤP NÚT ĐĂNG NHẬP --- */
+.btn-auth-wow {
+    background: linear-gradient(135deg, #1a431a 0%, #2d5a27 100%);
+    color: white !important;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.btn-auth-wow:hover {
+    background: var(--color-primary); /* Màu xanh mạ của nhóm */
+    color: var(--color-navy) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(159, 193, 49, 0.3);
+}
+
+.auth-subtitle {
+    display: block;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+/* Căn giữa tuyệt đối cho trang Đăng nhập */
+.auth-page-bg {
+    background-color: #e9f2e9; 
+    min-height: 100vh; /* Chiều cao tối thiểu bằng màn hình */
+    display: flex;
+    align-items: center;      /* Căn giữa theo chiều dọc */
+    justify-content: center;   /* Căn giữa theo chiều ngang */
+    position: relative;
+    overflow: hidden;
+    padding: 20px 0; /* Giảm padding để không bị đẩy */
+}
+
+.auth-page-bg .container {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}

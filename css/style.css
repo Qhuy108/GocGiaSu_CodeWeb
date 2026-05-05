@@ -112,3 +112,130 @@ a:hover {
         width: 100%; /* Nút full viền trên điện thoại */
     }
 }
+
+/* =========================================
+   BỔ SUNG CHO TRANG ĐĂNG KÝ/ĐĂNG NHẬP (WOW)
+========================================= */
+
+/* Sửa lỗi biến màu (Nếu nhóm trưởng viết 'color', bạn hãy sửa thành ':root') */
+:root {
+    --color-dark-green: #2d5a27; /* Màu xanh đậm trong ảnh mẫu */
+}
+
+/* Nền xanh nhạt toàn trang và các icon bay */
+.auth-page {
+    background-color: #e9f2e9;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 40px 0;
+}
+
+/* Icon minh họa mờ (Sách, compa...) */
+.decor-illustration {
+    position: absolute;
+    color: #2d5a27;
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Header màu xanh đậm của Card */
+.auth-header {
+    background-color: var(--color-dark-green);
+    padding: 25px;
+    text-align: center;
+    border-radius: 24px 24px 0 0;
+}
+
+.auth-header h2 {
+    color: #ffffff !important;
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+/* Ô nhập liệu có Icon bên trong */
+.auth-input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.auth-input-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-dark-green);
+    z-index: 5;
+    font-size: 1.2rem;
+}
+
+.auth-input-group .form-control {
+    border: 1.5px solid var(--color-dark-green);
+    border-radius: 12px;
+    padding: 12px 15px 12px 50px;
+    height: 50px;
+}
+
+/* Ghi đè nút bấm giống ảnh */
+.btn-auth {
+    background-color: var(--color-dark-green) !important;
+    color: white !important;
+    border-radius: 12px !important;
+    font-weight: 700;
+    padding: 12px;
+    width: 100%;
+}
+
+.btn-auth:hover {
+    background-color: var(--color-primary) !important;
+    transform: translateY(-2px);
+}
+
+/* Trang đăng ký dài nên cần cho phép cuộn trên màn hình nhỏ */
+@media (max-height: 850px) {
+    .auth-page {
+        align-items: flex-start !important;
+        height: auto !important;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+}
+
+/* Làm cho Checkbox có màu xanh Navy cho chuyên nghiệp */
+.form-check-input:checked {
+    background-color: var(--color-navy) !important;
+    border-color: var(--color-navy) !important;
+}
+
+/* Hiệu ứng focus cho các ô nhập liệu của nhóm trưởng thêm mượt */
+.auth-input-group .form-control:focus {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(159, 193, 49, 0.2);
+    outline: none;
+}
+
+/* Ô TÍCH ĐỒNG Ý--- */
+
+.form-check-input {
+    cursor: pointer;
+    border: 2px solid #042940 !important; /* Hiện viền xanh Navy rõ ràng */
+    background-color: #ffffff !important; /* Luôn có nền trắng khi chưa tích */
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.form-check-input:checked {
+    background-color: #042940 !important; /* Khi tích thì nền xanh Navy */
+    border-color: #042940 !important;
+    /* Dưới đây là mã để hiện dấu tích trắng (SVG) */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
+}
+
+/* Đảm bảo mấy cái icon decor không đè lên ô tích */
+.decor-illustration {
+    z-index: -1 !important; 
+}

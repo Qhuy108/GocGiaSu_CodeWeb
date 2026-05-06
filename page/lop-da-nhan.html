@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lớp đã nhận - Góc Gia Sư</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom py-3 sticky-top">
+    <div class="container-fluid px-4">
+        <div class="d-flex align-items-center gap-3">
+            <img src="../assets/graduation.png" alt="Góc Gia Sư" width="48" height="48">
+<a class="navbar-brand fw-bold fs-3 mb-0 text-gocgiasu" href="#">
+        Góc Gia Sư
+    </a>
+        </div>
+        
+        <!-- Thanh tìm kiếm - Chính giữa và có icon kính lúp -->
+        <div class="flex-grow-1 d-flex justify-content-center mx-4">
+            <div class="position-relative" style="max-width: 580px; width: 100%;">
+                <input 
+                    class="form-control form-control-lg rounded-pill ps-5 py-3" 
+                    type="search" 
+                    placeholder="Tìm môn học, khu vực..." 
+                    aria-label="Search">
+                
+                <!-- Icon kính lúp -->
+                <i class="fa-solid fa-magnifying-glass position-absolute top-50 translate-middle-y text-muted"
+                   style="left: 22px; font-size: 1.3rem;"></i>
+            </div>
+        </div>
+        
+                <div class="d-flex align-items-center gap-4 text-white">
+            <i class="fa-solid fa-bell fs-5 cursor-pointer"></i>
+            <i class="fa-solid fa-envelope fs-5 cursor-pointer"></i>
+            
+            <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold">Xin chào, Gia sư</span>
+                <div class="rounded-circle bg-white text-success d-flex align-items-center justify-content-center overflow-hidden"
+                    style="width: 38px; height: 38px; border: 2px solid #fff;">
+    
+                <img src="../assets/teacher.png"
+                     width="20"
+                     height="20"
+                     style="object-fit: contain;">
+         
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-2 sidebar py-4 px-3">
+            <div class="nav flex-column">
+               <a href="#" class="nav-link"><i class="fa-solid fa-table me-3"></i> Bảng tin</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-user me-3"></i> Hồ sơ của tôi</a>
+               <a href="#" class="nav-link active"><i class="fa-solid fa-clipboard-check me-3"></i> Lớp đã nhận</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-gear me-3"></i> Cài đặt</a>
+            </div>
+        </div>
+
+       <!-- Nội dung chính -->
+        <div class="col-lg-7 py-4" style="max-height: calc(100vh - 85px); overflow-y: auto;">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold text-teal mb-0">Lớp đã nhận <span class="text-muted fs-5">(3 lớp)</span></h4>
+                <select class="form-select w-auto">
+                    <option>Tất cả trạng thái</option>
+                    <option>Đang dạy</option>
+                    <option>Sắp kết thúc</option>
+                    <option>Đã hoàn thành</option>
+                </select>
+            </div>
+
+            <!-- Card 1 -->
+            <div class="card card-tutor mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="avatar-circle fs-4">A</div>
+                            <div>
+                                <h5 class="mb-1">Toán lớp 12 - Nguyễn Thị Bích Ngọc</h5>
+                                <small class="text-muted">Lớp 12A1 • Quận 7, TP.HCM</small>
+                            </div>
+                        </div>
+                        <span class="badge bg-success rounded-pill px-3 py-2">Đang dạy</span>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <strong>    Lịch học</strong><br>
+                            <small>Thứ 3 & Thứ 6 (18:00 - 20:00)</small>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>    Học phí</strong><br>
+                            <span class="text-success fw-bold">250.000đ / buổi</span>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>    Tiến độ</strong><br>
+                            <small>12/24 buổi</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 d-flex gap-2">
+                        <button class="btn btn-outline-success flex-fill">Xem lịch học</button>
+                        <button class="btn btn-success flex-fill">Chi tiết lớp</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card card-tutor mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="avatar-circle fs-4">B</div>
+                            <div>
+                                <h5 class="mb-1">Ngữ Văn lớp 10 - Lê Hoàng Minh</h5>
+                                <small class="text-muted">Lớp 10A3 • Bình Thạnh, TP.HCM</small>
+                            </div>
+                        </div>
+                        <span class="badge bg-warning rounded-pill px-3 py-2 text-dark">Sắp kết thúc</span>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <strong>    Lịch học</strong><br>
+                            <small>Thứ 2, 4, 6 (17:00 - 19:00)</small>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>    Học phí</strong><br>
+                            <span class="text-success fw-bold">180.000đ / buổi</span>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>    Tiến độ</strong><br>
+                            <small>8/12 buổi</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 d-flex gap-2">
+                        <button class="btn btn-outline-success flex-fill">Xem lịch học</button>
+                        <button class="btn btn-success flex-fill">Chi tiết lớp</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card card-tutor">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="avatar-circle fs-4">C</div>
+                            <div>
+                                <h5 class="mb-1">Tiếng Anh lớp 8 - Võ Khánh Linh</h5>
+                                <small class="text-muted">Online • Lớp 8A2</small>
+                            </div>
+                        </div>
+                        <span class="badge bg-secondary rounded-pill px-3 py-2">Đã hoàn thành</span>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <strong>    Lịch học</strong><br>
+                            <small>Thứ 4 & Chủ Nhật (19:00 - 20:30)</small>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>    Học phí</strong><br>
+                            <span class="text-success fw-bold">220.000đ / buổi</span>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>    Tiến độ</strong><br>
+                            <small>24/24 buổi</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 d-flex gap-2">
+                        <button class="btn btn-outline-success flex-fill">Xem lịch học</button>
+                        <button class="btn btn-success flex-fill">Chi tiết lớp</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar phải -->
+        <div class="col-lg-3 py-4">
+            <h5 class="section-title">Thống kê nhanh</h5>
+            <div class="bg-white p-4 rounded-4 shadow-sm mb-4 text-center">
+                <h3 class="text-success mb-1">3</h3>
+                <p class="text-muted mb-0">Lớp đang dạy</p>
+            </div>
+            <div class="bg-white p-4 rounded-4 shadow-sm text-center">
+                <h3 class="text-teal mb-1">1.450.000đ</h3>
+                <p class="text-muted mb-0">Thu nhập tháng này</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

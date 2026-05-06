@@ -1,47 +1,119 @@
-/* style.css - Quy tắc của team: Xanh lá mạ & Navy */
 :root {
-    --navy: #042940;
-    --green-ma: #9FC131;
-    --teal: #005C53;
+    --dark-green: #3D7044;
+    --light-green-bg: #E1F0D7;
+    --text-main: #1a1a1a;
+    --white: #ffffff;
     --beige: #D6D58E;
+    --navy: #042940;
 }
 
-body {
+body, html {
+    height: 100%;
+    margin: 0;
     font-family: 'Roboto', sans-serif !important;
-    background-color: #fcfdfa;
 }
 
-.sidebar {
-    background-color: var(--navy) !important;
-    color: white !important;
+.container-fluid {
+    height: 100%;
+    padding: 0 !important;
+}
+
+.profile-wrapper {
+    display: flex;
     min-height: 100vh;
-    padding: 50px 25px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Sidebar chiếm 30% chiều ngang */
+.sidebar {
+    background-color: var(--dark-green) !important;
+    color: var(--white) !important;
+    width: 30%;
+    padding: 60px 40px;
+    z-index: 2;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+}
+
+/* Nội dung chính chiếm 70% chiều ngang */
+.main-content {
+    background-color: var(--light-green-bg);
+    width: 70%;
+    padding: 80px 100px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Hình tròn xanh mờ ở góc trên bên phải */
+.main-content::before {
+    content: "";
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 450px;
+    height: 450px;
+    background-color: #CDE4B9;
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* Ngôi sao lớn ẩn phía dưới góc phải */
+.main-content::after {
+    content: "★";
+    position: absolute;
+    bottom: -50px;
+    right: 50px;
+    font-size: 250px;
+    color: var(--white);
+    opacity: 0.3;
+    z-index: -1;
+    transform: rotate(15deg);
 }
 
 .profile-img {
-    width: 170px;
-    height: 170px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
-    border: 5px solid var(--green-ma);
+    border: 5px solid rgba(255, 255, 255, 0.2);
     object-fit: cover;
+    margin: 0 auto 25px;
     display: block;
-    margin: 0 auto;
 }
 
 .section-title {
     font-weight: 700;
-    font-size: 1.6rem;
-    border-bottom: 3px solid var(--green-ma);
-    padding-bottom: 8px;
+    font-size: 1.8rem;
+    color: var(--text-main);
     display: flex;
     align-items: center;
+    position: relative;
+    margin-bottom: 30px;
 }
 
-.text-green-ma { color: var(--green-ma) !important; }
-.text-navy { color: var(--navy) !important; }
-.text-teal { color: var(--teal) !important; }
-.text-beige { color: var(--beige) !important; }
-.border-green-ma { border-color: var(--green-ma) !important; }
+/* Ngôi sao nhỏ cạnh tiêu đề */
+.section-title::before {
+    content: "★";
+    position: absolute;
+    top: -40px;
+    left: -25px;
+    font-size: 35px;
+    color: var(--dark-green);
+    opacity: 0.4;
+}
 
+.text-beige { color: var(--beige) !important; }
+.text-navy { color: var(--navy) !important; }
 .text-justify { text-align: justify; }
-ul li { margin-bottom: 8px; }
+
+ul li {
+    margin-bottom: 12px;
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 992px) {
+    .profile-wrapper { flex-direction: column; }
+    .sidebar, .main-content { width: 100% !important; }
+}

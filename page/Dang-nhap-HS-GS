@@ -13,6 +13,55 @@
 <body class="auth-page-bg">
 
     <i class="bi bi-mortarboard-fill auth-decor" style="top: 10%; left: 5%; font-size: 10rem;"></i>
+    <i class="bi bi-journal-bookmark-fill auth-decor" style="bottom: 8%; right: 5%; font-size: 8rem;"></i>
+
+    <div class="container position-relative" style="z-index: 10;">
+        <div class="row justify-content-center">
+            <div class="col-xl-4 col-lg-5 col-md-7 col-sm-9">
+                <div class="role-card shadow-lg bg-white">
+                    
+                    <div class="auth-card-header">
+                        <h2>ĐĂNG NHẬP</h2>
+                    </div>
+
+                    <div class="card-body p-4 p-xl-5">
+                        <p class="text-center text-muted mb-4 small">Chào mừng bạn quay trở lại với <b>GocGiaSu</b></p>
+                        
+                        <form>
+                            <div class="input-auth-group">
+                                <i class="bi bi-person-fill"></i>
+                                <input type="text" class="form-control" placeholder="Email / Số điện thoại / Mã số" required>
+                            </div>
+
+                            <div class="input-auth-group">
+                                <i class="bi bi-lock-fill"></i>
+                                <input type="password" class="form-control" placeholder="Mật khẩu" required>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check d-flex align-items-center gap-2">
+                                    <input type="checkbox" class="form-check-input mt-0" id="rememberMe">
+                                    <label class="form-check-label small text-muted" for="rememberMe" style="cursor: pointer; user-select: none;">Ghi nhớ</label>
+                                </div>
+                                <a href="#" class="text-teal small text-decoration-none fw-bold">Quên mật khẩu?</a>
+                            </div>
+
+                            <button type="submit" class="btn-auth-wow">VÀO HỆ THỐNG</button>
+                            
+                            <div class="text-center pt-2 mt-4 border-top">
+                                <span class="small text-muted">Chưa có tài khoản? Đăng ký làm:</span>
+                                <div class="d-flex justify-content-center gap-3 mt-2">
+                                    <a href="Dang-ky-HS.html" class="text-teal fw-bold small text-decoration-none">[Học sinh]</a>
+                                    <span class="text-muted">|</span>
+                                    <a href="#" class="text-teal fw-bold small text-decoration-none">[Gia sư]</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <i class="bi bi-gear-fill auth-decor" style="top: 20%; right: 45%; font-size: 6rem;"></i>
     <i class="bi bi-journal-bookmark-fill auth-decor" style="bottom: 5%; right: 5%; font-size: 8rem;"></i>
 

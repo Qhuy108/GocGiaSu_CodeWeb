@@ -6,25 +6,26 @@
 /* =========================================
    2. GLOBAL STYLES (Định dạng chung)
 ========================================= */
-color {
+:root {
     --color-primary: #9FC131;       /* Xanh lá mạ */
     --color-navy: #042940;          /* Xanh lam đậm */
     --color-teal: #005C53;          /* Xanh mòng két */
     --color-yellow: #DBF227;        /* Vàng chanh */
     --color-beige: #D6D58E;         /* Vàng Be */
+    --color-dark-green: #1a431a;    /* Xanh đậm từ ảnh mẫu */
     --font-main: 'Roboto', sans-serif;
 }
 
 body {
     font-family: 'Roboto', sans-serif;
-    color: #042940; /* Dùng xanh navy thay cho đen tuyền để dịu mắt */
+    color: #042940; 
     background-color: #fcfdfa;
     line-height: 1.6;
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
-    color: #005C53; /* Tiêu đề dùng màu xanh mòng két cho sang trọng */
+    color: #005C53; 
 }
 
 a {
@@ -34,24 +35,21 @@ a {
 }
 
 a:hover {
-    color: #9FC131; /* Màu xanh lá cây khi hover để nổi bật */
+    color: #9FC131; 
 }
 
 /* =========================================
    3. CUSTOM UTILITIES (Tiện ích tự chế)
 ========================================= */
-/* -- Tiện ích màu chữ -- */
 .text-primary-custom { color: #9FC131 !important; }
 .text-navy { color: #042940 !important; }
 .text-teal { color: #005C53 !important; }
 
-/* -- Tiện ích màu nền -- */
 .bg-navy { background-color: #042940 !important; }
 .bg-teal { background-color: #005C53 !important; }
 .bg-primary-custom { background-color: #9FC131 !important; }
 .bg-beige { background-color: #D6D58E !important; }
 
-/* -- Nút bấm (Buttons) -- */
 .btn-gocgiasu {
     background-color: #9FC131;
     color: #042940;
@@ -66,34 +64,29 @@ a:hover {
     background-color: #DBF227;
     border-color: #DBF227;
     color: #042940;
-    transform: translateY(-2px); /* Hiệu ứng nảy nhẹ lên khi đưa chuột vào */
+    transform: translateY(-2px); 
     box-shadow: 0 4px 12px rgba(159, 193, 49, 0.4);
 }
 
 /* =========================================
    4. COMPONENTS (Thành phần cụ thể)
 ========================================= */
-/* --- Navbar --- */
 .navbar-custom {
-    /* background-color: #ffffff; */
     box-shadow: 0 2px 15px rgba(4, 41, 64, 0.05);
 }
 
-/* --- Hero Section (Khối phân quyền) --- */
 .hero-section {
-    /* Tạo dải màu gradient từ Navy sang Teal cho sang trọng */
     background: linear-gradient(135deg, #042940 0%, #005C53 100%);
     padding: 80px 0;
 }
 
-/* --- Card (Thẻ Gia sư / Học sinh) --- */
 .role-card {
     background-color: #ffffff;
     border: none;
     border-radius: 24px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-bottom: 5px solid #9FC131; /* Nhấn nhá vạch màu dưới đáy */
+    border-bottom: 5px solid #9FC131; 
 }
 
 .role-card:hover {
@@ -109,25 +102,175 @@ a:hover {
         padding: 40px 0;
     }
     .btn-gocgiasu {
-        width: 100%; /* Nút full viền trên điện thoại */
+        width: 100%; 
     }
 }
 
 /* =========================================
-   PHẦN BỔ SUNG ĐĂNG NHẬP
+   6. DANG KY GIA SU (Phần của thành viên khác)
 ========================================= */
-
-/* Kích hoạt lại biến màu để máy nhận diện được */
-:root {
-    --color-primary: #9FC131;
-    --color-navy: #042940;
-    --color-teal: #005C53;
-    --color-dark-green: #1a431a; /* Màu xanh đậm từ ảnh mẫu */
+.step-content {
+    display: none;
+    animation: fadeIn 0.4s;
+}
+.step-content.active {
+    display: block;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.step-indicator {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.step {
+    flex: 1;
+    padding: 12px 20px;
+    background-color: #aed0b0;
+    clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+    margin-left: -20px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.step:first-child {
+    clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0% 50%, 0% 0%);
+    margin-left: 0;
+}
+.step:last-child {
+    clip-path: polygon(100% 0%, 100% 50%, 100% 100%, 0% 100%, 25% 50%, 0% 0%);
+}
+.step.active, .step.completed {
+    background-color: #005C53;
+    z-index: 2;
+}
+.required::after {
+    content: " *";
+    color: red;
+}
+.input-group-text, .form-control, .form-select {
+    border-color: #005C53;
+}
+.form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 0.25rem rgba(0, 92, 83, 0.25);
+    border-color: #005C53;
 }
 
-/* Nền toàn trang */
+/* =========================================
+   7. GIAO DIỆN GIA SƯ - BỔ SUNG
+========================================= */
+.navbar-custom {
+    background-color: #15803d !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.sidebar {
+    background-color: #ffffff;
+    border-right: 1px solid #eee;
+    min-height: 100vh;
+}
+
+.sidebar .nav-link {
+    color: #333;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background-color: #f0f9f0;
+    color: #9FC131;
+    font-weight: 500;
+}
+
+.card-tutor {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.card-tutor:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+.avatar-circle {
+    width: 48px;
+    height: 48px;
+    background-color: #9FC131;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.btn-contact {
+    background-color: #15803d;
+    color: white;
+    border-radius: 50px;
+    padding: 10px 24px;
+    font-weight: 600;
+}
+
+.btn-contact:hover {
+    background-color: #166534;
+    transform: translateY(-2px);
+}
+
+.section-title {
+    font-weight: 700;
+    color: #005C53;
+    margin-bottom: 20px;
+}
+
+.right-sidebar .item {
+    padding: 12px 16px;
+    background-color: white;
+    border-radius: 50px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.text-primary { color: #9FC131 !important; }
+.text-teal { color: #005C53 !important; }
+.text-navy { color: #042940 !important; }
+
+.text-gocgiasu {
+    color: var(--color-primary) !important;    
+    transition: all 0.3s ease;
+}
+
+.text-gocgiasu:hover {
+    color: #DBF227 !important;                 
+    text-shadow: 0 0 8px rgba(159, 193, 49, 0.6);
+}
+
+.btn-call-hover {
+    transition: all 0.3s ease;
+}
+
+.btn-call-hover:hover {
+    background-color: #166534;   
+    color: white !important;     
+    transform: translateY(-4px); 
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+/* ===================================================
+   8. BỔ SUNG CHO TRANG ĐĂNG KÝ/ĐĂNG NHẬP (ĐÃ SỬA LỖI)
+=================================================== */
 .auth-page-wrapper {
     background-color: #e9f2e9; 
+}
+
+.auth-page {
+    background-color: #e9f2e9;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -150,28 +293,27 @@ a:hover {
     text-transform: uppercase;
 }
 
-/* Ô nhập liệu có icon bên trái */
+/* Ô nhập liệu có icon bên trái chuẩn chỉnh */
 .input-auth-group {
-    position: relative;
+    position: relative !important;
     margin-bottom: 15px;
 }
 
 .input-auth-group i {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
+    position: absolute !important;
+    left: 15px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
     color: var(--color-dark-green);
     z-index: 10;
 }
 
 .input-auth-group .form-control {
-    padding-left: 45px;
-    border: 1.5px solid var(--color-dark-green);
-    border-radius: 12px;
-    height: 48px;
+    padding-left: 45px !important;
+    border: 1.5px solid var(--color-dark-green) !important;
+    border-radius: 12px !important;
+    height: 48px !important;
 }
-
 
 /* Icon trang trí nền */
 .auth-decor {
@@ -179,26 +321,36 @@ a:hover {
     color: var(--color-dark-green);
     opacity: 0.1;
     z-index: 0;
+    pointer-events: none;
 }
 
-/* --- CSS NÂNG CẤP NÚT ĐĂNG NHẬP --- */
+/* NÚT ĐĂNG NHẬP WOW: Chống mất chữ khi bấm */
 .btn-auth-wow {
-    background: linear-gradient(135deg, #1a431a 0%, #2d5a27 100%);
+    background: linear-gradient(135deg, #1a431a 0%, #2d5a27 100%) !important;
     color: white !important;
-    border: none;
-    border-radius: 12px;
-    padding: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 14px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    width: 100% !important;
+    display: block !important;
 }
 
 .btn-auth-wow:hover {
-    background: var(--color-primary); /* Màu xanh mạ của nhóm */
+    background: var(--color-primary) !important; 
     color: var(--color-navy) !important;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(159, 193, 49, 0.3);
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(159, 193, 49, 0.3) !important;
+}
+
+.btn-auth-wow:active, .btn-auth-wow:focus {
+    background: #1a431a !important; 
+    color: white !important;         /* Ép chữ luôn màu trắng vĩnh viễn */
+    box-shadow: none !important;
+    transform: scale(0.98) !important;
 }
 
 .auth-subtitle {
@@ -212,16 +364,41 @@ a:hover {
 /* Căn giữa tuyệt đối cho trang Đăng nhập */
 .auth-page-bg {
     background-color: #e9f2e9; 
-    min-height: 100vh; /* Chiều cao tối thiểu bằng màn hình */
+    min-height: 100vh; 
     display: flex;
-    align-items: center;      /* Căn giữa theo chiều dọc */
-    justify-content: center;   /* Căn giữa theo chiều ngang */
+    align-items: center;      
+    justify-content: center;   
     position: relative;
     overflow: hidden;
-    padding: 20px 0; /* Giảm padding để không bị đẩy */
+    padding: 20px 0; 
 }
 
 .auth-page-bg .container {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
+}
+
+.input-auth-group .form-control:focus {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(159, 193, 49, 0.2) !important;
+    outline: none;
+}
+
+/* Ô TÍCH ĐỒNG Ý / GHI NHỚ: Chống mất tích */
+.form-check-input {
+    cursor: pointer;
+    border: 2px solid #042940 !important; 
+    background-color: #ffffff !important; 
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.form-check-input:checked {
+    background-color: #042940 !important; 
+    border-color: #042940 !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
+}
+
+.decor-illustration {
+    z-index: -1 !important; 
 }

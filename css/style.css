@@ -18,13 +18,8 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-<<<<<<< feature/giao-dien-hoc-sinh
-    color: #042940; /* Dùng xanh navy thay cho đen tuyền để dịu mắt */
-    background-color: #ebecebf4;
-=======
-    color: #042940; 
+    color: #042940;
     background-color: #fcfdfa;
->>>>>>> main
     line-height: 1.6;
 }
 
@@ -158,9 +153,6 @@ a:hover {
     }
 }
 
-<<<<<<< feature/giao-dien-hoc-sinh
-
-=======
 /* =========================================
    6. DANG KY GIA SU (Phần của thành viên khác)
 .step-content {
@@ -524,8 +516,10 @@ a:hover {
 /* Ô TÍCH ĐỒNG Ý / GHI NHỚ: Chống mất tích */
 .form-check-input {
     cursor: pointer;
-    border: 2px solid #042940 !important; 
-    background-color: #ffffff !important; 
+    border: 2px solid #042940 !important;
+    background-color: #ffffff !important;
+}
+
 .auth-header h2 {
     color: #ffffff !important;
     margin: 0;
@@ -611,16 +605,5 @@ a:hover {
 }
 
 .decor-illustration {
-    z-index: -1 !important; 
+    z-index: -1 !important;
 }
-    background-color: #042940 !important; /* Khi tích thì nền xanh Navy */
-    border-color: #042940 !important;
-    /* Dưới đây là mã để hiện dấu tích trắng (SVG) */
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
-}
-
-/* Đảm bảo mấy cái icon decor không đè lên ô tích */
-.decor-illustration {
-    z-index: -1 !important; 
-}
->>>>>>> main

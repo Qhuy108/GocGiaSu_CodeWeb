@@ -1,0 +1,146 @@
+<?php
+/**
+ * TutorModel – Thao tác với bảng tutors
+ * NGƯỜI PHỤ TRÁCH: Thành viên 3
+ */
+
+require_once __DIR__ . '/../core/Connect_DataBase.php';
+
+class TutorModel
+{
+    private PDO $db;
+
+    public function __construct()
+    {
+        $this->db = getDB();
+    }
+
+    // Lấy danh sách gia sư đã duyệt (cho trang tìm kiếm)
+    public function getApproved(array $filters = [], int $limit = 12, int $offset = 0): array
+    {
+        $where  = ["t.Status = 'approved'"];
+        $params = [];
+
+        if (!empty($filters['mon_hoc'])) {
+            $where[]           = 's.Name LIKE :subject';
+            $params[':subject'] = '%' . $filters['mon_hoc'] . '%';
+        }
+        if (!empty($filters['khu_vuc'])) {
+            $where[]            = 't.Location LIKE :location';
+            $params[':location'] = '%' . $filters['khu_vuc'] . '%';
+        }
+
+        $whereClause = implode(' AND ', $where);
+
+        $sql = "SELECT t.*, u.Name, u.Avatar,
+                       COALESCE(AVG(r.Rating), 0) AS diem_tb,
+                       COUNT(r.Id) AS so_danh_gia,
+                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc
+                FROM tutors t
+                JOIN users u ON u.Id = t.User_id
+                LEFT JOIN tutor_subjects ts ON ts.Tutor_id = t.Id
+                LEFT JOIN subjects s ON s.Id = ts.Subject_id
+                LEFT JOIN bookings b ON b.Tutor_id = t.Id
+                LEFT JOIN reviews r ON r.Booking_id = b.Id
+                WHERE $whereClause
+                GROUP BY t.Id
+                ORDER BY diem_tb DESC
+                LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->db->prepare($sql);
+        foreach ($params as $k => $v) {
+            $stmt->bindValue($k, $v);
+        }
+        $stmt->bindValue(':limit',  $limit,  PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    // Lấy chi tiết 1 gia sư theo ID
+    public function findById(int $id): array|false
+    {
+        $sql = "SELECT t.*, u.Name, u.Email, u.Phone, u.Avatar,
+                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc
+                FROM tutors t
+                JOIN users u ON u.Id = t.User_id
+                LEFT JOIN tutor_subjects ts ON ts.Tutor_id = t.Id
+                LEFT JOIN subjects s ON s.Id = ts.Subject_id
+                WHERE t.Id = ?
+                GROUP BY t.Id
+                LIMIT 1";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch();
+    }
+
+    // Tìm hồ sơ gia sư theo User_id (dùng trong dashboard)
+    public function findByUserId(int $userId): array|false
+    {
+        $stmt = $this->db->prepare('SELECT * FROM tutors WHERE User_id = ? LIMIT 1');
+        $stmt->execute([$userId]);
+        return $stmt->fetch();
+    }
+
+    // Tạo hồ sơ gia sư (khi đăng ký)
+    public function create(array $data): int
+    {
+        $sql = 'INSERT INTO tutors
+                    (User_id, Bio, Experience, Qualifications, Location, Hourly_rate, Status)
+                VALUES
+                    (:User_id, :Bio, :Experience, :Qualifications, :Location, :Hourly_rate, :Status)';
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            ':User_id'        => $data['User_id'],
+            ':Bio'            => $data['Bio']            ?? '',
+            ':Experience'     => $data['Experience']     ?? '',
+            ':Qualifications' => $data['Qualifications'] ?? '',
+            ':Location'       => $data['Location']       ?? '',
+            ':Hourly_rate'    => $data['Hourly_rate']    ?? 0,
+            ':Status'         => 'pending',
+        ]);
+
+        return (int)$this->db->lastInsertId();
+    }
+
+    // Cập nhật thông tin hồ sơ gia sư
+    public function update(int $id, array $data): bool
+    {
+        $fields = [];
+        $params = [':id' => $id];
+
+        foreach ($data as $col => $val) {
+            $fields[] = "$col = :$col";
+            $params[":$col"] = $val;
+        }
+
+        $sql  = 'UPDATE tutors SET ' . implode(', ', $fields) . ' WHERE Id = :id';
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($params);
+    }
+
+    // Lấy top N gia sư nổi bật (cho trang chủ)
+    public function getFeatured(int $limit = 4): array
+    {
+        $sql = "SELECT t.Id, u.Name, u.Avatar,
+                       COALESCE(AVG(r.Rating), 0) AS diem_tb,
+                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc
+                FROM tutors t
+                JOIN users u ON u.Id = t.User_id
+                LEFT JOIN tutor_subjects ts ON ts.Tutor_id = t.Id
+                LEFT JOIN subjects s ON s.Id = ts.Subject_id
+                LEFT JOIN bookings b ON b.Tutor_id = t.Id
+                LEFT JOIN reviews r ON r.Booking_id = b.Id
+                WHERE t.Status = 'approved'
+                GROUP BY t.Id
+                ORDER BY diem_tb DESC
+                LIMIT ?";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$limit]);
+        return $stmt->fetchAll();
+    }
+}

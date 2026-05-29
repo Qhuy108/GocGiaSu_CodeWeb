@@ -78,7 +78,7 @@ switch ($page) {
     // ── Dashboard Học sinh ───────────────────────────────────────────────────
     case 'student':
         requireLogin();
-        requireRole('hoc_sinh');
+        requireRole('student');
         loadController('Booking');
         $controller = new BookingController();
         $controller->$action();
@@ -87,7 +87,7 @@ switch ($page) {
     // ── Dashboard Gia sư ─────────────────────────────────────────────────────
     case 'tutor_dashboard':
         requireLogin();
-        requireRole('gia_su');
+        requireRole('tutor');
         loadController('Tutor');
         $controller = new TutorController();
         $controller->dashboard();

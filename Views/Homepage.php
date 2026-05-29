@@ -95,19 +95,19 @@ require_once __DIR__ . '/partials/header.php';
                 <?php foreach ($featuredTutors as $tutor): ?>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="card border-0 rounded-4 shadow-sm p-2 h-100">
-                            <img src="<?= htmlspecialchars($tutor['anh_dai_dien'] ?? $assetPath . 'avt.jpg') ?>"
+                            <img src="<?= htmlspecialchars($tutor['Avatar'] ?? $assetPath . 'avt.jpg') ?>"
                                  class="card-img-top rounded-3"
                                  style="height:200px;object-fit:cover;"
-                                 alt="<?= htmlspecialchars($tutor['ho_ten']) ?>">
+                                 alt="<?= htmlspecialchars($tutor['Name']) ?>">
                             <div class="card-body d-flex flex-column text-center p-3">
-                                <h5 class="card-title text-navy fw-bold mb-1"><?= htmlspecialchars($tutor['ho_ten']) ?></h5>
+                                <h5 class="card-title text-navy fw-bold mb-1"><?= htmlspecialchars($tutor['Name']) ?></h5>
                                 <p class="card-text text-teal fw-medium mb-2 small"><?= htmlspecialchars($tutor['mon_hoc']) ?></p>
                                 <div class="mb-3 small">
                                     <i class="bi bi-star-fill text-warning"></i>
                                     <span class="fw-bold"><?= number_format($tutor['diem_tb'] ?? 0, 1) ?></span>
                                     <span class="text-muted">/5</span>
                                 </div>
-                                <a href="/index.php?page=tutor_profile&id=<?= (int)$tutor['id'] ?>"
+                                <a href="/index.php?page=tutor_profile&id=<?= (int)$tutor['Id'] ?>"
                                    class="btn btn-gocgiasu mt-auto w-100 rounded-pill">Xem hồ sơ</a>
                             </div>
                         </div>

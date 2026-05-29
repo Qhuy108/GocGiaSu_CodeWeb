@@ -1,0 +1,9 @@
+Options -Indexes
+RewriteEngine On
+
+# Cho phép truy cập trực tiếp file/thư mục thật
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Mọi request còn lại đều qua index.php
+RewriteRule ^(.*)$ index.php [QSA,L]

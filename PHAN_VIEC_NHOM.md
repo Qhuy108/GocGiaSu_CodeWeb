@@ -127,7 +127,7 @@ DB_PASS=
 └─────────────────────────────────────────────────────────┘
 
 1. Lấy code mới nhất về:
-   git pull origin feature/back-end-dev
+   git pull origin main
 
 2. Làm việc, sửa code...
 

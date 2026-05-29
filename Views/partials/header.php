@@ -26,14 +26,14 @@ $cssPath    = $cssPath    ?? '../css/style.css';
 $assetPath  = $assetPath  ?? '../assets/';
 
 $isLoggedIn = isset($_SESSION['user_id']);
-$userName   = $_SESSION['ho_ten'] ?? '';
-$userRole   = $_SESSION['vai_tro'] ?? ''; // 'hoc_sinh' | 'gia_su' | 'admin'
+$userName   = $_SESSION['name'] ?? '';
+$userRole   = $_SESSION['role'] ?? ''; // 'student' | 'tutor' | 'admin'
 
 // Xác định link dashboard tuỳ vai trò
 $dashboardLink = '#';
-if ($userRole === 'gia_su')    $dashboardLink = '/Views/GiaoDien_GS.php';
-elseif ($userRole === 'hoc_sinh') $dashboardLink = '/Views/giao_dien_hoc_sinh.php';
-elseif ($userRole === 'admin')    $dashboardLink = '/Views/admin/dashboard.php';
+if ($userRole === 'tutor')       $dashboardLink = '/index.php?page=tutor_dashboard';
+elseif ($userRole === 'student') $dashboardLink = '/index.php?page=student';
+elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
 ?>
 <!DOCTYPE html>
 <html lang="vi">

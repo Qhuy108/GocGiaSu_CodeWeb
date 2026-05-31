@@ -59,7 +59,7 @@
                     <h1 class="text-white display-6 mb-1"><b>DẠY KÈM HIỆU QUẢ !</b></h1>
                     <h2 style="color: #DBF227;" class="fw-bold display-5 mb-3">-20% OFF</h2>
                     
-                    <a href="#" class="btn btn-gocgiasu mt-auto">Tìm Gia Sư Ngay</a>
+                    <a href="/index.php?page=tutors" class="btn btn-gocgiasu mt-auto">Tìm Gia Sư Ngay</a>
                 </div>
 
             </div>

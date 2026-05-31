@@ -58,6 +58,11 @@
                         </a>
                     </li>
                     <li class="mb-2">
+                        <a href="/Views/DangNhap.php" class="text-decoration-none footer-link">
+                            <i class="bi bi-chevron-right me-1"></i>Đăng nhập
+                        </a>
+                    </li>
+                    <li class="mb-2">
                         <a href="/index.php?page=register" class="text-decoration-none footer-link">
                             <i class="bi bi-chevron-right me-1"></i>Đăng ký dạy
                         </a>

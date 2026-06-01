@@ -41,7 +41,7 @@ require_once __DIR__ . '/partials/header.php';
                     <p class="text-navy mb-4 flex-grow-1">
                         Trở thành đối tác giảng dạy, linh hoạt thời gian và gia tăng thu nhập cho bản thân.
                     </p>
-                    <a href="/index.php?page=register_tutor" class="btn btn-gocgiasu mt-auto">Đăng Ký Dạy</a>
+                    <a href="/Views/DangKy_GS.php" class="btn btn-gocgiasu mt-auto">Đăng Ký Dạy</a>
                 </div>
             </div>
         </div>

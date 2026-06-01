@@ -39,10 +39,23 @@ require_once __DIR__ . '/partials/header.php';
                         <p class="text-center text-muted mb-4 small"><i>Chào mừng bạn quay trở lại với Góc Gia Sư</i></p>
 
                         <form method="POST" action="/index.php?page=login">
-                            
+                            <?php if (!empty($_GET['registered']) && $_GET['registered'] === '1'): ?>
+                                <div class="alert alert-success mb-4">
+                                    Đăng ký thành công! Vui lòng đăng nhập để tiếp tục.
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if (!empty($errors)): ?>
+                                <div class="alert alert-danger mb-4">
+                                    <?php foreach ($errors as $error): ?>
+                                        <div><?= htmlspecialchars($error) ?></div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+
                             <div class="auth-input-group">
                                 <i class="bi bi-person-circle"></i>
-                                <input type="text" name="email" class="form-control" placeholder="Email hoặc Số điện thoại" required>
+                                <input type="text" name="email" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" class="form-control" placeholder="Email hoặc Số điện thoại" required>
                             </div>
 
                             <div class="auth-input-group">
@@ -65,7 +78,7 @@ require_once __DIR__ . '/partials/header.php';
                                 <div class="d-flex justify-content-center gap-3 mt-2">
                                     <a href="/index.php?page=register" class="text-teal fw-bold small text-decoration-none">[Học sinh]</a>
                                     <span class="text-muted">|</span>
-                                    <a href="/Views/DangKy_GS.php" class="text-teal fw-bold small text-decoration-none">[Gia sư]</a>
+                                    <a href="/index.php?page=register_tutor" class="text-teal fw-bold small text-decoration-none">[Gia sư]</a>
                                 </div>
                             </div>
                         </form>

@@ -28,20 +28,33 @@ class AdminController
     // Trang tổng quan (dashboard)
     public function index(): void
     {
-        // TODO: Thành viên 6 viết phần này
-        // Thống kê: tổng học sinh (Role='student'), tổng gia sư (Role='tutor'),
-        //           tổng booking, gia sư chờ duyệt (Status='pending')
-        // require_once __DIR__ . '/../Views/admin/dashboard.php';
-        echo '<h2 style="text-align:center;margin-top:50px;">Admin Dashboard – Đang xây dựng</h2>';
+        $db    = getDB();
+        $stats = [
+            'tong_hoc_sinh' => (int)$db->query("SELECT COUNT(*) FROM users WHERE Role='student'")->fetchColumn(),
+            'tong_gia_su'   => (int)$db->query("SELECT COUNT(*) FROM users WHERE Role='tutor'")->fetchColumn(),
+            'tong_booking'  => (int)$db->query("SELECT COUNT(*) FROM bookings")->fetchColumn(),
+            'cho_duyet'     => (int)$db->query("SELECT COUNT(*) FROM tutors WHERE Status='pending'")->fetchColumn(),
+            'da_duyet'      => (int)$db->query("SELECT COUNT(*) FROM tutors WHERE Status='approved'")->fetchColumn(),
+            'doanh_thu'     => (float)$db->query("SELECT COALESCE(SUM(Total_price),0) FROM bookings WHERE Status='done' AND Payment_status='paid'")->fetchColumn(),
+        ];
+        require_once __DIR__ . '/../Views/admin/dashboard.php';
     }
 
     // Danh sách gia sư chờ duyệt hồ sơ
     public function pendingTutors(): void
     {
-        // TODO: Thành viên 6 viết phần này
-        // 1. Lấy danh sách gia sư có Status = 'pending'
-        // 2. Hiển thị bảng với các nút Duyệt / Từ chối
-        echo '<p>Chức năng duyệt gia sư – đang xây dựng</p>';
+        $db   = getDB();
+        $stmt = $db->query("
+            SELECT t.Id, t.Bio, t.Experience, t.Qualifications,
+                   t.Location, t.Hourly_rate, t.Status,
+                   u.Name, u.Email, u.Phone, u.Avatar, u.Created_at
+            FROM tutors t
+            JOIN users u ON u.Id = t.User_id
+            WHERE t.Status = 'pending'
+            ORDER BY u.Created_at DESC
+        ");
+        $pendingTutors = $stmt->fetchAll();
+        require_once __DIR__ . '/../Views/admin/pending_tutors.php';
     }
 
     // Duyệt hoặc từ chối hồ sơ gia sư
@@ -55,13 +68,14 @@ class AdminController
         $tutorId = (int)($_POST['tutor_id'] ?? 0);
         $action  = $_POST['action'] ?? '';   // 'approve' | 'reject'
 
-        // TODO: Thành viên 6 viết phần này
-        // 1. Validate tutorId và action hợp lệ
-        // 2. Cập nhật Status trong bảng tutors:
-        //    - 'approve' → Status = 'approved'
-        //    - 'reject'  → Status = 'rejected'
-        // 3. (Tuỳ chọn) Gửi email thông báo cho gia sư
-        // 4. Redirect về danh sách chờ duyệt
+        if ($tutorId > 0 && in_array($action, ['approve', 'reject'])) {
+            $status = $action === 'approve' ? 'approved' : 'rejected';
+            $db     = getDB();
+            $db->prepare("UPDATE tutors SET Status = ? WHERE Id = ?")->execute([$status, $tutorId]);
+        }
+
+        header('Location: /index.php?page=admin&action=pendingTutors');
+        exit;
     }
 
     // Quản lý tất cả người dùng
@@ -69,9 +83,66 @@ class AdminController
     {
         $role  = $_GET['role'] ?? '';
         $users = $this->userModel->getAll($role);
+        require_once __DIR__ . '/../Views/admin/users.php';
+    }
 
-        // TODO: Thành viên 6 tạo Views/admin/users.php
-        // require_once __DIR__ . '/../Views/admin/users.php';
-        echo '<pre>' . print_r($users, true) . '</pre>';
+    // Xóa người dùng
+    public function deleteUser(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /index.php?page=admin&action=users');
+            exit;
+        }
+
+        $userId  = (int)($_POST['user_id'] ?? 0);
+        $current = currentUser();
+
+        // Không cho xóa chính mình
+        if ($userId > 0 && $userId !== (int)$current['id']) {
+            $db = getDB();
+            $db->prepare("DELETE FROM users WHERE Id = ?")->execute([$userId]);
+        }
+
+        header('Location: /index.php?page=admin&action=users');
+        exit;
+    }
+
+    // Trang báo cáo thống kê
+    public function report(): void
+    {
+        $db = getDB();
+
+        // Booking theo tháng (6 tháng gần nhất)
+        $bookingByMonth = $db->query("
+            SELECT DATE_FORMAT(Date, '%Y-%m') AS thang,
+                   COUNT(*) AS so_booking,
+                   COALESCE(SUM(Total_price), 0) AS doanh_thu
+            FROM bookings
+            WHERE Date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+            GROUP BY thang
+            ORDER BY thang ASC
+        ")->fetchAll();
+
+        // Top 5 gia sư có nhiều booking nhất
+        $topTutors = $db->query("
+            SELECT u.Name, COUNT(b.Id) AS so_booking,
+                   COALESCE(AVG(r.Rating), 0) AS diem_tb
+            FROM bookings b
+            JOIN tutors t ON t.Id = b.Tutor_id
+            JOIN users u ON u.Id = t.User_id
+            LEFT JOIN reviews r ON r.Booking_id = b.Id
+            GROUP BY t.Id
+            ORDER BY so_booking DESC
+            LIMIT 5
+        ")->fetchAll();
+
+        // Thống kê booking theo trạng thái
+        $bookingStatus = $db->query("
+            SELECT Status, COUNT(*) AS so_luong
+            FROM bookings
+            GROUP BY Status
+        ")->fetchAll();
+
+        require_once __DIR__ . '/../Views/admin/report.php';
     }
 }

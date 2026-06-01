@@ -1,32 +1,26 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng ký Học sinh | GocGiaSu</title>
+<?php
+$pageTitle  = 'Đăng ký Học sinh | Góc Gia Sư';
+$activePage = '';
+$cssPath    = '../css/style.css';
+$assetPath  = '../assets/';
+require_once __DIR__ . '/partials/header.php';
+?>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body class="auth-page">
-
-    <i class="bi bi-pencil-fill decor-illustration" style="top: 10%; right: 5%; font-size: 10rem;"></i>
-    <i class="bi bi-mortarboard decor-illustration" style="bottom: 5%; left: 5%; font-size: 8rem;"></i>
+<main class="auth-page py-5" style="min-height: calc(100vh - 130px); position: relative;">
+    <i class="bi bi-pencil-fill decor-illustration" style="top: 8%; right: 4%; font-size: 10rem;"></i>
+    <i class="bi bi-mortarboard decor-illustration" style="bottom: 6%; left: 4%; font-size: 8rem;"></i>
 
     <div class="container position-relative" style="z-index: 1;">
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8">
                 <div class="role-card shadow-lg bg-white">
-                    
                     <div class="auth-header">
                         <h2>ĐĂNG KÝ HỌC SINH</h2>
                     </div>
 
                     <div class="card-body p-4 p-xl-5">
-                        <p class="text-center text-muted mb-4 small"><i>Cùng GocGiaSu chinh phục tri thức mỗi ngày</i></p>
-                        
+                        <p class="text-center text-muted mb-4 small"><i>Cùng Góc Gia Sư chinh phục tri thức mỗi ngày</i></p>
+
                         <form>
                             <div class="auth-input-group">
                                 <i class="bi bi-person-circle"></i>
@@ -67,5 +61,6 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+</main>
+
+<?php require_once __DIR__ . '/partials/footer.php'; ?>

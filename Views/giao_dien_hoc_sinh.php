@@ -1,3 +1,12 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (!isset($_SESSION['user_id'])) {
+    header('Location: /index.php?page=login');
+    exit;
+}
+$studentName = $_SESSION['name'] ?? 'Học sinh';
+?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -19,7 +28,7 @@
             
             <div class="d-flex align-items-center" style="width:300px;">
                 <img src="../assets/graduation.png" width="50" class="me-2">
-                <a class="navbar-brand ms-1 fw-bold text-teal" href="index.html">Góc Gia Sư</a>
+                <a class="navbar-brand ms-1 fw-bold text-teal" href="/index.php">Góc Gia Sư</a>
             </div>
 
            <div class="flex-grow-1 d-flex justify-content-center">
@@ -65,6 +74,26 @@
             </div>
         </section>
     </div>
+
+    <div class="container mt-4">
+    <h3 class="text-navy fw-bold">Lịch học của bạn</h3>
+    <div class="row g-3">
+        <?php if (!empty($bookings)): ?>
+            <?php foreach ($bookings as $b): ?>
+                <div class="col-md-4">
+                    <div class="card p-3 shadow-sm border-0">
+                        <p><b>Môn:</b> <?= htmlspecialchars($b['subject_name'] ?? 'Chưa rõ') ?></p>
+                        <p><b>Ngày:</b> <?= htmlspecialchars($b['Date'] ?? '') ?></p>
+                        <p><b>Trạng thái:</b> <?= htmlspecialchars($b['Status'] ?? '') ?></p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Hiện tại bạn chưa có lịch học nào.</p>
+        <?php endif; ?>
+    </div>
+</div>
+
     <div class="container mt-5 mb-5">
     <div class="row g-4"> <aside class="col-lg-3">
             <div class="bg-white rounded-4 shadow-sm p-4 border-0">
@@ -383,7 +412,7 @@
             <div class="modal-body p-4">
                 <div class="d-flex align-items-center mb-4">
                     <div class="rounded-circle me-3 shadow-sm" style="width: 65px; height: 65px; background-color: #9de3c5;"></div>
-                        <h4 class="fw-bold m-0 text-navy text-uppercase" style="letter-spacing: 1px;">YOUR NAME</h4>
+                        <h4 class="fw-bold m-0 text-navy text-uppercase" style="letter-spacing: 1px;"><?= htmlspecialchars($studentName) ?></h4>
                         <button type="button" class="btn-close ms-auto shadow-none" data-bs-dismiss="modal"></button>
                     </div>
 

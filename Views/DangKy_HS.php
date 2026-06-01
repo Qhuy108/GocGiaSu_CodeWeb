@@ -21,29 +21,42 @@ require_once __DIR__ . '/partials/header.php';
                     <div class="card-body p-4 p-xl-5">
                         <p class="text-center text-muted mb-4 small"><i>Cùng Góc Gia Sư chinh phục tri thức mỗi ngày</i></p>
 
-                        <form>
+                        <form method="POST" action="/index.php?page=register">
+                            <?php if (!empty($errors)): ?>
+                                <div class="alert alert-danger mb-4">
+                                    <?php foreach ($errors as $error): ?>
+                                        <div><?= htmlspecialchars($error) ?></div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+
                             <div class="auth-input-group">
                                 <i class="bi bi-person-circle"></i>
-                                <input type="text" class="form-control" placeholder="Họ và tên học sinh" required>
+                                <input type="text" name="name" class="form-control" placeholder="Họ và tên học sinh" required value="<?= htmlspecialchars($oldData['Name'] ?? '') ?>">
                             </div>
 
                             <div class="auth-input-group">
                                 <i class="bi bi-envelope-at-fill"></i>
-                                <input type="text" class="form-control" placeholder="Email hoặc Số điện thoại" required>
+                                <input type="email" name="email" class="form-control" placeholder="Email" required value="<?= htmlspecialchars($oldData['Email'] ?? '') ?>">
+                            </div>
+
+                            <div class="auth-input-group">
+                                <i class="bi bi-phone-fill"></i>
+                                <input type="text" name="phone" class="form-control" placeholder="Số điện thoại (tùy chọn)" value="<?= htmlspecialchars($oldData['Phone'] ?? '') ?>">
                             </div>
 
                             <div class="auth-input-group">
                                 <i class="bi bi-lock-fill"></i>
-                                <input type="password" class="form-control" placeholder="Mật khẩu" required>
+                                <input type="password" name="password" class="form-control" placeholder="Mật khẩu" required>
                             </div>
 
                             <div class="auth-input-group">
                                 <i class="bi bi-shield-check-fill"></i>
-                                <input type="password" class="form-control" placeholder="Xác nhận mật khẩu" required>
+                                <input type="password" name="confirm_password" class="form-control" placeholder="Xác nhận mật khẩu" required>
                             </div>
 
                             <div class="mb-4 form-check d-flex align-items-center justify-content-center gap-2">
-                                <input type="checkbox" class="form-check-input mt-0" id="terms" required>
+                                <input type="checkbox" name="terms" class="form-check-input mt-0" id="terms" required>
                                 <label class="form-check-label small text-muted" for="terms" style="cursor: pointer;">
                                     Tôi đồng ý với điều khoản của hệ thống
                                 </label>
@@ -53,7 +66,7 @@ require_once __DIR__ . '/partials/header.php';
 
                             <div class="text-center mt-4">
                                 <span class="small">Bạn đã có tài khoản? </span>
-                                <a href="Dang-nhap-HS-GS.html" class="text-teal fw-bold small text-decoration-none">[Đăng nhập]</a>
+                                <a href="/index.php?page=login" class="text-teal fw-bold small text-decoration-none">[Đăng nhập]</a>
                             </div>
                         </form>
                     </div>

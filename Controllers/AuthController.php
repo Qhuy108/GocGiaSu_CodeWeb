@@ -16,38 +16,98 @@ class AuthController
         $this->userModel = new UserModel();
     }
 
-    // ── Hiển thị form đăng nhập / xử lý POST ─────────────────────────────────
+    // ── Hiển thị form đăng nhập / xử lý POST ────────────────────────────
+
     public function login(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email    = trim($_POST['email']    ?? '');
-            $password = trim($_POST['password'] ?? '');
+        $errors = [];
 
-            // TODO: Thành viên 2 viết phần này
-            // 1. Validate email, password không rỗng
-            // 2. Gọi $this->userModel->findByEmail($email)
-            // 3. Dùng password_verify($password, $user['Password']) để so sánh
-            // 4. Nếu đúng → setUserSession($user) → redirect theo $user['Role']:
-            //      'student' → trang học sinh
-            //      'tutor'   → trang gia sư
-            //      'admin'   → trang admin
-            // 5. Nếu sai → báo lỗi ra view
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $identifier = trim($_POST['email']    ?? '');
+            $password   = trim($_POST['password'] ?? '');
+
+            if ($identifier === '' || $password === '') {
+                $errors[] = 'Email/số điện thoại và mật khẩu không được để trống.';
+            }
+
+            if (!$errors) {
+                $user = $this->userModel->findByEmail($identifier);
+
+                if (!$user || !password_verify($password, $user['Password'])) {
+                    $errors[] = 'Email/số điện thoại hoặc mật khẩu không đúng.';
+                } else {
+                    setUserSession($user);
+
+                    switch ($user['Role']) {
+                        case 'student':
+                            header('Location: /index.php?page=student');
+                            break;
+                        case 'tutor':
+                            header('Location: /index.php?page=tutor_dashboard');
+                            break;
+                        case 'admin':
+                            header('Location: /index.php?page=admin');
+                            break;
+                        default:
+                            header('Location: /index.php?page=home');
+                    }
+                    exit;
+                }
+            }
         }
 
         require_once __DIR__ . '/../Views/DangNhap.php';
     }
 
     // ── Đăng ký Học sinh ─────────────────────────────────────────────────────
+        // ── Đăng ký Học sinh ─────────────────────────────────────────────────────
     public function registerStudent(): void
     {
+        $errors  = [];
+        $oldData = [];
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // TODO: Thành viên 2 viết phần này
-            // 1. Lấy dữ liệu từ $_POST (Name, Email, Password, xac_nhan_mat_khau)
-            // 2. Validate: không rỗng, email đúng định dạng, 2 mật khẩu khớp
-            // 3. Kiểm tra email chưa tồn tại: $this->userModel->findByEmail($email)
-            // 4. Hash mật khẩu: password_hash($password, PASSWORD_DEFAULT)
-            // 5. Gọi $this->userModel->create([...]) với Role = 'student'
-            // 6. Redirect đến trang đăng nhập với thông báo thành công
+            $oldData['Name']         = trim($_POST['name']             ?? '');
+            $oldData['Email']        = trim($_POST['email']            ?? '');
+            $oldData['Phone']        = trim($_POST['phone']            ?? '');
+            $password                = trim($_POST['password']         ?? '');
+            $confirmPassword         = trim($_POST['confirm_password'] ?? '');
+            $acceptedTerms           = isset($_POST['terms']);
+
+            if ($oldData['Name'] === '' || $oldData['Email'] === '' || $password === '' || $confirmPassword === '') {
+                $errors[] = 'Vui lòng điền đầy đủ thông tin bắt buộc.';
+            }
+
+            if ($oldData['Email'] !== '' && !filter_var($oldData['Email'], FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Email không đúng định dạng.';
+            }
+
+            if ($password !== $confirmPassword) {
+                $errors[] = 'Mật khẩu và xác nhận mật khẩu phải giống nhau.';
+            }
+
+            if (!$acceptedTerms) {
+                $errors[] = 'Bạn phải đồng ý với điều khoản sử dụng.';
+            }
+
+            if (!$errors && $this->userModel->findByEmail($oldData['Email'])) {
+                $errors[] = 'Email này đã được đăng ký. Vui lòng sử dụng email khác.';
+            }
+
+            if (!$errors) {
+                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                $this->userModel->create([
+                    'Name'     => $oldData['Name'],
+                    'Email'    => $oldData['Email'],
+                    'Password' => $hashedPassword,
+                    'Phone'    => $oldData['Phone'] ?: null,
+                    'Role'     => 'student',
+                ]);
+
+                header('Location: /index.php?page=login&registered=1');
+                exit;
+            }
         }
 
         require_once __DIR__ . '/../Views/DangKy_HS.php';
@@ -72,7 +132,7 @@ class AuthController
     public function logout(): void
     {
         destroySession();
-        header('Location: /index.php?page=login');
+        header('Location: /index.php');
         exit;
     }
 }

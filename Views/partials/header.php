@@ -117,7 +117,7 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
                             </li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <a class="dropdown-item text-danger" href="/index.php?action=logout">
+                                <a class="dropdown-item text-danger" href="/index.php?page=logout">
                                     <i class="bi bi-box-arrow-right me-2"></i>Đăng xuất
                                 </a>
                             </li>

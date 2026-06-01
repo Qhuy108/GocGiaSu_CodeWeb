@@ -15,11 +15,11 @@ class UserModel
         $this->db = getDB();
     }
 
-    // Tìm user theo email (dùng khi đăng nhập)
-    public function findByEmail(string $email): array|false
+    // Tìm user theo email hoặc số điện thoại (dùng khi đăng nhập)
+    public function findByEmail(string $identifier): array|false
     {
-        $stmt = $this->db->prepare('SELECT * FROM users WHERE Email = ? LIMIT 1');
-        $stmt->execute([$email]);
+        $stmt = $this->db->prepare('SELECT * FROM users WHERE Email = ? OR Phone = ? LIMIT 1');
+        $stmt->execute([$identifier, $identifier]);
         return $stmt->fetch();
     }
 

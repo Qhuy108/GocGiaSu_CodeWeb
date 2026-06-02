@@ -183,5 +183,13 @@ public function countApproved(array $filters = []): int
 
     return (int)$stmt->fetchColumn();
 }
+// Lấy danh sách lớp học của gia sư
+    public function getClassesByTutorId(int $tutorId): array
+    {
+        $sql = "SELECT * FROM classes WHERE tutor_id = :tutor_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':tutor_id' => $tutorId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 

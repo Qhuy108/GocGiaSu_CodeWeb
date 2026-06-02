@@ -85,11 +85,27 @@ public function profile(): void
     require_once __DIR__ . '/../Views/TutorProfile.php';
 }
 // Trong TutorController.php
-public function myClasses() {
-    $tutorId = $_SESSION['user_id']; // Lấy ID gia sư từ session
-    $classes = $this->db->query("SELECT * FROM classes WHERE tutor_id = $tutorId")->fetchAll();
+// Trong Controllers/TutorController.php
+
+public function myClasses(): void
+{
+    requireLogin(); // Kiểm tra đăng nhập
+    requireRole('tutor'); // Kiểm tra quyền gia sư
+
+    // Lấy ID từ session
+    $tutorId = $_SESSION['user_id']; 
     
-    // Gọi view hiển thị danh sách
+    // Gọi Model thay vì gọi trực tiếp $this->db
+    $classes = $this->tutorModel->getClassesByTutorId($tutorId);
+    
+    // Gọi view
     require_once __DIR__ . '/../Views/Tutor/MyClasses.php';
+}
+// Trong Models/TutorModel.php
+public function getClassesByTutorId($tutorId) {
+    // Giả sử $this->db là kết nối PDO của bạn
+    $stmt = $this->db->prepare("SELECT * FROM classes WHERE tutor_id = ?");
+    $stmt->execute([$tutorId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 }

@@ -5,15 +5,18 @@
  */
 
 require_once __DIR__ . '/../Models/UserModel.php';
+require_once __DIR__ . '/../Models/TutorModel.php';
 require_once __DIR__ . '/../core/session.php';
 
 class AuthController
 {
     private UserModel $userModel;
+    private TutorModel $tutorModel;
 
     public function __construct()
     {
-        $this->userModel = new UserModel();
+        $this->userModel  = new UserModel();
+        $this->tutorModel = new TutorModel();
     }
 
     // ── Hiển thị form đăng nhập / xử lý POST ────────────────────────────
@@ -36,6 +39,19 @@ class AuthController
                 if (!$user || !password_verify($password, $user['Password'])) {
                     $errors[] = 'Email/số điện thoại hoặc mật khẩu không đúng.';
                 } else {
+                    if ($user['Role'] === 'tutor') {
+                        $tutor = $this->tutorModel->findByUserId((int)$user['Id']);
+                        if (!$tutor) {
+                            $errors[] = 'Hồ sơ gia sư chưa tồn tại. Vui lòng hoàn tất đăng ký.';
+                        } elseif ($tutor['Status'] === 'pending') {
+                            $errors[] = 'Tài khoản của bạn đang chờ Admin duyệt.';
+                        } elseif ($tutor['Status'] === 'rejected') {
+                            $errors[] = 'Hồ sơ của bạn đã bị từ chối.';
+                        }
+                    }
+                }
+
+                if (!$errors) {
                     setUserSession($user);
 
                     switch ($user['Role']) {
@@ -116,13 +132,157 @@ class AuthController
     // ── Đăng ký Gia sư ───────────────────────────────────────────────────────
     public function registerTutor(): void
     {
+        $errors  = [];
+        $oldData = [];
+        $isAjax  = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // TODO: Thành viên 2 viết phần này
-            // 1. Lấy dữ liệu từ $_POST + $_FILES
-            // 2. Validate dữ liệu
-            // 3. Tạo user với Role = 'tutor'
-            // 4. Lưu thông tin vào bảng tutors với Status = 'pending'
-            // 5. Redirect về trang thông báo chờ admin duyệt
+            $oldData['name']         = trim($_POST['name'] ?? '');
+            $oldData['email']        = trim($_POST['email'] ?? '');
+            $oldData['phone']        = trim($_POST['phone'] ?? '');
+            $oldData['password']     = trim($_POST['password'] ?? '');
+            $oldData['location']     = trim($_POST['location'] ?? '');
+            $oldData['bio']          = trim($_POST['bio'] ?? '');
+            $oldData['experience']   = trim($_POST['experience'] ?? '');
+            $oldData['hourly_rate']  = trim($_POST['hourly_rate'] ?? '');
+            $oldData['subjects']     = $_POST['subjects'] ?? [];
+
+            if (!is_array($oldData['subjects'])) {
+                $oldData['subjects'] = [];
+            }
+            $selectedSubjectIds = array_values(array_filter(array_map('intval', $oldData['subjects']), fn($id) => $id > 0));
+            $oldData['subjects'] = $selectedSubjectIds;
+
+            if ($oldData['name'] === '' || $oldData['email'] === '' || $oldData['phone'] === '' || $oldData['password'] === '') {
+                $errors[] = 'Vui lòng điền đầy đủ thông tin bắt buộc ở bước 1.';
+            }
+            if ($oldData['location'] === '' || $oldData['bio'] === '' || $oldData['experience'] === '' || $oldData['hourly_rate'] === '') {
+                $errors[] = 'Vui lòng điền đầy đủ thông tin ở bước 2 và bước 3.';
+            }
+            if (!filter_var($oldData['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors[] = 'Email không đúng định dạng.';
+            }
+            if (!is_numeric($oldData['hourly_rate']) || (float)$oldData['hourly_rate'] <= 0) {
+                $errors[] = 'Học phí phải là một số dương.';
+            }
+            if (empty($oldData['subjects']) || !is_array($oldData['subjects'])) {
+                $errors[] = 'Vui lòng chọn ít nhất một môn học.';
+            }
+
+            if (!$errors) {
+                $pdo = getDB();
+                if (count($oldData['subjects']) > 0) {
+                    $placeholders = implode(',', array_fill(0, count($oldData['subjects']), '?'));
+                    $stmt = $pdo->prepare("SELECT Id FROM subjects WHERE Id IN ($placeholders)");
+                    $stmt->execute($oldData['subjects']);
+                    $foundSubjects = $stmt->fetchAll(PDO::FETCH_COLUMN);
+                    $missing = array_diff($oldData['subjects'], array_map('intval', $foundSubjects));
+
+                    if ($missing) {
+                        $errors[] = 'Một hoặc nhiều môn học lựa chọn không hợp lệ.';
+                    }
+                }
+            }
+
+            if ($this->userModel->findByEmail($oldData['email'])) {
+                $errors[] = 'Email này đã được đăng ký. Vui lòng sử dụng email khác.';
+            }
+
+            $qualificationPath = null;
+            if (isset($_FILES['certificateFile']) && $_FILES['certificateFile']['error'] !== UPLOAD_ERR_NO_FILE) {
+                $file = $_FILES['certificateFile'];
+                if ($file['error'] !== UPLOAD_ERR_OK) {
+                    $errors[] = 'Lỗi tải file chứng chỉ. Vui lòng thử lại.';
+                } else {
+                    $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                    if (!in_array($file['type'], $allowedTypes, true)) {
+                        $errors[] = 'Chỉ cho phép tập tin ảnh JPG, PNG, WEBP.';
+                    }
+                    if ($file['size'] > 5 * 1024 * 1024) {
+                        $errors[] = 'File chứng chỉ không được lớn hơn 5MB.';
+                    }
+                }
+            }
+
+            if (empty($errors)) {
+                $pdo = getDB();
+                $pdo->beginTransaction();
+
+                try {
+                    $hashedPassword = password_hash($oldData['password'], PASSWORD_DEFAULT);
+
+                    $userId = $this->userModel->create([
+                        'Name'     => $oldData['name'],
+                        'Email'    => $oldData['email'],
+                        'Password' => $hashedPassword,
+                        'Phone'    => $oldData['phone'],
+                        'Role'     => 'tutor',
+                    ]);
+
+                    if (isset($file) && $file['error'] === UPLOAD_ERR_OK) {
+                        $uploadDir = __DIR__ . '/../assets/uploads/certificates';
+                        if (!is_dir($uploadDir)) {
+                            mkdir($uploadDir, 0755, true);
+                        }
+
+                        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+                        $safeName  = preg_replace('/[^A-Za-z0-9_\-\.]/', '_', pathinfo($file['name'], PATHINFO_FILENAME));
+                        $targetFile = sprintf('%s/%s_%s.%s', $uploadDir, $safeName, uniqid(), strtolower($extension));
+
+                        if (!move_uploaded_file($file['tmp_name'], $targetFile)) {
+                            throw new RuntimeException('Không thể lưu file chứng chỉ.');
+                        }
+
+                        $qualificationPath = 'assets/uploads/certificates/' . basename($targetFile);
+                    }
+
+                    $tutorId = $this->tutorModel->create([
+                        'User_id'        => $userId,
+                        'Bio'            => $oldData['bio'],
+                        'Experience'     => $oldData['experience'],
+                        'Qualifications' => $qualificationPath,
+                        'Location'       => $oldData['location'],
+                        'Hourly_rate'    => (float)$oldData['hourly_rate'],
+                    ]);
+
+                    $stmtSubject = $pdo->prepare('INSERT INTO tutor_subjects (Tutor_id, Subject_id) VALUES (?, ?)');
+                    foreach ($oldData['subjects'] as $subjectId) {
+                        $stmtSubject->execute([$tutorId, (int)$subjectId]);
+                    }
+
+                    $pdo->commit();
+
+                    if ($isAjax) {
+                        header('Content-Type: application/json; charset=utf-8');
+                        echo json_encode(['status' => 'success']);
+                        exit;
+                    }
+
+                    header('Location: /index.php?page=login&registered_tutor=1');
+                    exit;
+                } catch (Exception $e) {
+                    $pdo->rollBack();
+                    error_log('Tutor registration error: ' . $e->getMessage());
+
+                    if ($isAjax) {
+                        header('Content-Type: application/json; charset=utf-8');
+                        echo json_encode([
+                            'status' => 'error',
+                            'message' => 'Đăng ký gia sư thất bại. Vui lòng thử lại sau.',
+                            'detail'  => $e->getMessage(),
+                        ]);
+                        exit;
+                    }
+
+                    $errors[] = 'Đăng ký gia sư thất bại. Vui lòng thử lại sau.';
+                }
+            }
+
+            if ($isAjax && !empty($errors)) {
+                header('Content-Type: application/json; charset=utf-8');
+                echo json_encode(['status' => 'error', 'message' => implode(' ', $errors)]);
+                exit;
+            }
         }
 
         require_once __DIR__ . '/../Views/DangKy_GS.php';

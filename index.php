@@ -113,6 +113,14 @@ case 'get_tutor_contact':
         $controller->$action();
         break;
 
+    //----Lop nhan-------
+        case 'my_classes':
+    requireLogin();
+    loadController('Tutor');
+    $controller = new TutorController();
+    $controller->myClasses();
+    break;
+
     // ── 404 ──────────────────────────────────────────────────────────────────
     default:
         http_response_code(404);

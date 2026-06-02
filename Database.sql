@@ -87,7 +87,15 @@ CREATE TABLE `subjects` (
 INSERT INTO `subjects` (`Id`, `Name`, `Category`) VALUES
 (1, 'Toán lớp 12', 'Tự nhiên'),
 (2, 'Ngữ văn lớp 10', 'Xã hội'),
-(3, 'Tiếng Anh giao tiếp', 'Ngoại ngữ');
+(3, 'Tiếng Anh giao tiếp', 'Ngoại ngữ'),
+(4, 'Toán Cấp 1', 'Tự nhiên'),
+(5, 'Toán Cấp 2', 'Tự nhiên'),
+(6, 'Toán Cấp 3', 'Tự nhiên'),
+(7, 'Văn', 'Xã hội'),
+(8, 'Toeic', 'Ngoại ngữ'),
+(9, 'IELTS', 'Ngoại ngữ'),
+(10, 'Thi vào 10', 'Ôn thi'),
+(11, 'Thi THPT Quốc Gia', 'Ôn thi');
 
 -- --------------------------------------------------------
 

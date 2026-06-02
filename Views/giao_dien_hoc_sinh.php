@@ -1,5 +1,18 @@
+
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
+require_once __DIR__ . '/../Models/TutorModel.php';
+
+$tutorModel = new TutorModel();
+$subjects = $tutorModel->getSubjects();
+
+$filters = [
+    'mon_hoc' => $_GET['mon_hoc'] ?? null,
+    'khu_vuc' => $_GET['khu_vuc'] ?? null
+];
+
+$tutors = $tutorModel->getApproved($filters);
+
 if (!isset($_SESSION['user_id'])) {
     header('Location: /index.php?page=login');
     exit;
@@ -62,16 +75,17 @@ require_once __DIR__ . '/partials/header.php';
                         <h4 class="text-teal fw-bold mt-1">TÌM GIA SƯ PHÙ HỢP</h4>
                     </div>
 
-                    <form>
+                    <form method="GET">
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-navy">Môn học</label>
-                            <select class="form-select bg-teal text-white border-0 rounded-3 py-2 small shadow-none">
-                                <option selected>Toán</option>
-                                <option value="1">Lý</option>
-                                <option value="2">Ngữ Văn</option>
-                                <option value="3">Tiếng Anh</option>
-                                <option value="4">Hóa</option>
-                                <option value="other">Khác...</option>
+                            <select name="mon_hoc" class="form-select bg-teal text-white border-0 rounded-3 py-2 small shadow-none">
+                                <option value="">-- Chọn môn học --</option>
+
+                                <?php foreach ($subjects as $s): ?>
+                                <option value="<?= $s['Id'] ?>">
+                                <?= htmlspecialchars($s['Name']) ?>
+                                </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
 
@@ -88,7 +102,7 @@ require_once __DIR__ . '/partials/header.php';
 
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-navy">Khu vực</label>
-                            <select class="form-select bg-teal text-white border-0 rounded-3 py-2 small shadow-none">
+                            <select name="khu_vuc" class="form-select bg-teal text-white border-0 rounded-3 py-2 small shadow-none">
                                 <option selected>Thủ Đức</option>
                                 <option value="1">Tp Hồ Chí Minh</option>
                                 <option value="2">Bình Dương</option>
@@ -130,81 +144,62 @@ require_once __DIR__ . '/partials/header.php';
             </aside>
 
             <div class="col-lg-9">
-                <div class="row g-4">
-                    <div class="col-md-6 col-xl-3">
-                        <div class="card border-0 shadow-sm rounded-4 h-100 role-card bg-white p-2">
-                            <img src="../assets/avt.jpg" class="card-img-top rounded-4 object-fit-cover" style="height: 150px;" alt="Gia sư">
-                            <div class="card-body pt-3 text-center px-1">
-                                <h6 class="fw-bold text-navy mb-2">Hoàng Văn An</h6>
-                                <div class="d-flex justify-content-center gap-1 mb-2">
-                                    <span class="badge rounded-pill bg-light text-teal border" style="font-size: 10px;">Toán</span>
-                                    <span class="badge rounded-pill bg-light text-teal border" style="font-size: 10px;">Hóa</span>
-                                </div>
-                                <p class="text-muted small mb-3"><i class="bi bi-geo-alt-fill"></i> Quận 1, Tp.HCM</p>
-                                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                                    <span class="small fw-bold text-navy"><i class="bi bi-star-fill text-warning"></i> 4.5/5</span>
-                                    <button class="btn btn-gocgiasu btn-sm rounded-pill px-3 py-1 fw-bold" style="font-size: 10px;">Chi tiết</button>
-                                </div>
-                            </div>
-                        </div>
+    <div class="row g-4">
+
+        <?php foreach ($tutors as $tutor): ?>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100 role-card bg-white p-2">
+
+                <img src="<?= htmlspecialchars($tutor['Avatar'] ?? '../assets/avt.jpg') ?>"
+                     class="card-img-top rounded-4 object-fit-cover"
+                     style="height: 150px;"
+                     alt="Gia sư">
+
+                <div class="card-body pt-3 text-center px-1">
+
+                    <h6 class="fw-bold text-navy mb-2">
+                        <?= htmlspecialchars($tutor['Name']) ?>
+                    </h6>
+
+                    <!-- môn học -->
+                    <div class="d-flex justify-content-center gap-1 mb-2">
+                        <span class="badge rounded-pill bg-light text-teal border"
+                              style="font-size: 10px;">
+                            <?= htmlspecialchars($tutor['mon_hoc'] ?? 'Chưa có môn') ?>
+                        </span>
                     </div>
 
-                    <div class="col-md-6 col-xl-3">
-                        <div class="card border-0 shadow-sm rounded-4 h-100 role-card bg-white p-2">
-                            <img src="../assets/avt.jpg" class="card-img-top rounded-4 object-fit-cover" style="height: 150px;" alt="Gia sư">
-                            <div class="card-body pt-3 text-center px-1">
-                                <h6 class="fw-bold text-navy mb-2">Nguyễn Thị Oanh</h6>
-                                <div class="d-flex justify-content-center gap-1 mb-2">
-                                    <span class="badge rounded-pill bg-light text-teal border" style="font-size: 10px;">Tiếng Anh</span>
-                                </div>
-                                <p class="text-muted small mb-3"><i class="bi bi-geo-alt-fill"></i> Quận 8, Tp.HCM</p>
-                                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                                    <span class="small fw-bold text-navy"><i class="bi bi-star-fill text-warning"></i> 4.5/5</span>
-                                    <button class="btn btn-gocgiasu btn-sm rounded-pill px-3 py-1 fw-bold" style="font-size: 10px;">Chi tiết</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- khu vực -->
+                    <p class="text-muted small mb-3">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <?= htmlspecialchars($tutor['Location'] ?? 'Chưa cập nhật') ?>
+                    </p>
 
-                    <div class="col-md-6 col-xl-3">
-                        <div class="card border-0 shadow-sm rounded-4 h-100 role-card bg-white p-2">
-                            <img src="../assets/avt.jpg" class="card-img-top rounded-4 object-fit-cover" style="height: 150px;" alt="Gia sư">
-                            <div class="card-body pt-3 text-center px-1">
-                                <h6 class="fw-bold text-navy mb-2">Trần Minh Tâm</h6>
-                                <div class="d-flex justify-content-center gap-1 mb-2">
-                                    <span class="badge rounded-pill bg-light text-teal border" style="font-size: 10px;">Vật Lý</span>
-                                </div>
-                                <p class="text-muted small mb-3"><i class="bi bi-geo-alt-fill"></i> Thủ Đức, Tp.HCM</p>
-                                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                                    <span class="small fw-bold text-navy"><i class="bi bi-star-fill text-warning"></i> 4.8/5</span>
-                                    <button class="btn btn-gocgiasu btn-sm rounded-pill px-3 py-1 fw-bold" style="font-size: 10px;">Chi tiết</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- rating + button -->
+                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
 
-                    <div class="col-md-6 col-xl-3">
-                        <div class="card border-0 shadow-sm rounded-4 h-100 role-card bg-white p-2">
-                            <img src="../assets/avt.jpg" class="card-img-top rounded-4 object-fit-cover" style="height: 150px;" alt="Gia sư">
-                            <div class="card-body pt-3 text-center px-1">
-                                <h6 class="fw-bold text-navy mb-2">Lê Hải Yến</h6>
-                                <div class="d-flex justify-content-center gap-1 mb-2">
-                                    <span class="badge rounded-pill bg-light text-teal border" style="font-size: 10px;">Ngữ Văn</span>
-                                </div>
-                                <p class="text-muted small mb-3"><i class="bi bi-geo-alt-fill"></i> Quận 3, Tp.HCM</p>
-                                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                                    <span class="small fw-bold text-navy"><i class="bi bi-star-fill text-warning"></i> 4.9/5</span>
-                                    <button class="btn btn-gocgiasu btn-sm rounded-pill px-3 py-1 fw-bold" style="font-size: 10px;">Chi tiết</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <span class="small fw-bold text-navy">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <?= number_format($tutor['diem_tb'], 1) ?>/5
+                        </span>
 
-                    <!-- Additional cards omitted for brevity -->
+                        <a href="tutor_detail.php?id=<?= $tutor['Id'] ?>"
+                           class="btn btn-gocgiasu btn-sm rounded-pill px-3 py-1 fw-bold"
+                           style="font-size: 10px;">
+                            Chi tiết
+                        </a>
+
+                    </div>
 
                 </div>
             </div>
         </div>
+
+        <?php endforeach; ?>
+
+    </div>
+</div>
 
         <button type="button" class="btn btn-gocgiasu rounded-pill shadow-lg d-flex align-items-center p-2 pe-3 fab-custom"
             data-bs-toggle="modal" 

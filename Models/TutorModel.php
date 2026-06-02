@@ -147,7 +147,7 @@ class TutorModel
         $stmt->execute([$limit]);
         return $stmt->fetchAll();
     }
- //Lay mon hoc
+// Lay mon hoc
     public function getSubjects(): array
     {
         $sql = "SELECT Id, Name FROM subjects";
@@ -155,5 +155,36 @@ class TutorModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-}
 
+    public function countApproved(array $filters = []): int
+    {
+        $where  = ["t.Status = 'approved'"];
+        $params = [];
+
+        if (!empty($filters['mon_hoc'])) {
+            $where[] = 's.Name LIKE :subject';
+            $params[':subject'] = '%' . $filters['mon_hoc'] . '%';
+        }
+
+        if (!empty($filters['khu_vuc'])) {
+            $where[] = 't.Location LIKE :location';
+            $params[':location'] = '%' . $filters['khu_vuc'] . '%';
+        }
+
+        $whereClause = implode(' AND ', $where);
+
+        $sql = "
+            SELECT COUNT(DISTINCT t.Id)
+            FROM tutors t
+            JOIN users u ON u.Id = t.User_id
+            LEFT JOIN tutor_subjects ts ON ts.Tutor_id = t.Id
+            LEFT JOIN subjects s ON s.Id = ts.Subject_id
+            WHERE $whereClause
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+
+        return (int)$stmt->fetchColumn();
+    }
+}

@@ -14,7 +14,7 @@ require_once __DIR__ . '/partials/header.php';
     <a href="#" class="nav-link active">
         <i class="fa-solid fa-table me-3"></i> Bảng tin
     </a>
-<a href="/index.php?page=tutor_profile&id=<?= $tutor['Id'] ?>" class="nav-link">
+<a href="/index.php?page=tutor_profile&id=<?= $tutor['Id'] ?? '' ?>" class="nav-link">
     <i class="fa-solid fa-user me-3"></i> Hồ sơ của tôi
 </a>
     <a href="#" class="nav-link">

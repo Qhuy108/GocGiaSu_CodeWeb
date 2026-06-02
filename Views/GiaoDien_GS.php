@@ -165,31 +165,23 @@ require_once __DIR__ . '/partials/header.php';
 <script>
 // Đảm bảo chỉ khởi tạo khi document sẵn sàng
 document.addEventListener('DOMContentLoaded', function() {
-    var modalElement = document.getElementById('contactTutorModal');
+var modalElement = document.getElementById('contactTutorModal');
+modalElement.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    var id = button.getAttribute('data-id');
+    var contentDiv = document.getElementById('contact-modal-content');
     
-    if (modalElement) {
-        modalElement.addEventListener('show.bs.modal', function (event) {
-            // Lấy nút đã kích hoạt modal
-            var button = event.relatedTarget;
-            // Chỉ chạy nếu button tồn tại (tránh việc modal "BẠN LÀ?" tự mở gây lỗi)
-            if (button) {
-                var id = button.getAttribute('data-id');
-                var contentDiv = document.getElementById('contact-modal-content');
-                
-                contentDiv.innerHTML = '<div class="modal-body text-center">Đang tải...</div>';
+    // Xóa nội dung cũ và hiện trạng thái tải
+    contentDiv.innerHTML = '<div class="p-5 text-center"><div class="spinner-border text-primary"></div></div>';
 
-                // Thay đổi dòng fetch này:
-fetch('index.php?page=get_tutor_contact&id=' + id)
-    .then(response => response.text())
-    .then(html => {
-        document.getElementById('contact-modal-content').innerHTML = html;
-    });
-                    .catch(err => {
-                        contentDiv.innerHTML = '<div class="modal-body text-center text-danger">Có lỗi xảy ra!</div>';
-                    });
-            }
+    fetch('index.php?page=get_tutor_contact&id=' + id)
+        .then(response => response.text())
+        .then(html => {
+            contentDiv.innerHTML = html; // Đổ code HTML sạch vào
+        })
+        .catch(err => {
+            contentDiv.innerHTML = '<div class="p-3 text-danger">Lỗi tải dữ liệu.</div>';
         });
-    }
 });
 </script>
 </body>

@@ -163,19 +163,32 @@ require_once __DIR__ . '/partials/header.php';
 </div>
 
 <script>
+// Đảm bảo chỉ khởi tạo khi document sẵn sàng
 document.addEventListener('DOMContentLoaded', function() {
-    var contactModal = document.getElementById('contactTutorModal'); // ID mới
-    contactModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var id = button.getAttribute('data-id');
+    var modalElement = document.getElementById('contactTutorModal');
+    
+    if (modalElement) {
+        modalElement.addEventListener('show.bs.modal', function (event) {
+            // Lấy nút đã kích hoạt modal
+            var button = event.relatedTarget;
+            // Chỉ chạy nếu button tồn tại (tránh việc modal "BẠN LÀ?" tự mở gây lỗi)
+            if (button) {
+                var id = button.getAttribute('data-id');
+                var contentDiv = document.getElementById('contact-modal-content');
+                
+                contentDiv.innerHTML = '<div class="modal-body text-center">Đang tải...</div>';
 
-        // Gửi request tới file xử lý
-        fetch('thong-tin-lien-he-hoc-sinh.php?id=' + id)
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('contact-modal-content').innerHTML = data; // ID mới
-            });
-    });
+                fetch('thong-tin-lien-he-hoc-sinh.php?id=' + id)
+                    .then(response => response.text())
+                    .then(html => {
+                        contentDiv.innerHTML = html;
+                    })
+                    .catch(err => {
+                        contentDiv.innerHTML = '<div class="modal-body text-center text-danger">Có lỗi xảy ra!</div>';
+                    });
+            }
+        });
+    }
 });
 </script>
 </body>

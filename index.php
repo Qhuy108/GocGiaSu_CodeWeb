@@ -26,6 +26,11 @@ $page   = $_GET['page']   ?? 'home';
 $action = $_GET['action'] ?? 'index';
 
 switch ($page) {
+    // Thêm vào trong switch ($page)
+case 'get_tutor_contact':
+    // Không cần require_once header.php, không cần login
+    require_once __DIR__ . '/thong-tin-lien-he-hoc-sinh.php';
+    exit; // Dừng lại ở đây, không load thêm bất kỳ thứ gì khác
 
     // ── Trang công khai ──────────────────────────────────────────────────────
     case 'home':

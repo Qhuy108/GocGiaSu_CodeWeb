@@ -64,11 +64,10 @@ require_once __DIR__ . '/partials/header.php';
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mt-3"> 
-                       <button class="btn btn-success"
+     <button class="btn btn-success"
         data-bs-toggle="modal"
-        data-bs-target="#contactModal"
+        data-bs-target="#contactTutorModal" 
         data-id="1">
-    <img src="/assets/phone-call.png" width="18" height="18" alt="">
     Liên hệ ngay
 </button>
                     </div>
@@ -99,8 +98,8 @@ require_once __DIR__ . '/partials/header.php';
             
 <button class="btn btn-success"
         data-bs-toggle="modal"
-        data-bs-target="#contactModal"
-        data-id="2">
+        data-bs-target="#contactTutorModal" 
+        data-id="1">
     Liên hệ ngay
 </button>
                     
@@ -156,25 +155,25 @@ require_once __DIR__ . '/partials/header.php';
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<div class="modal fade" id="contactModal" tabindex="-1">
+<div class="modal fade" id="contactTutorModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" id="modal-content">
+        <div class="modal-content" id="contact-modal-content">
             </div>
     </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    var contactModal = document.getElementById('contactModal');
+    var contactModal = document.getElementById('contactTutorModal'); // ID mới
     contactModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget;
         var id = button.getAttribute('data-id');
 
-        // Gửi yêu cầu đến file thông tin liên hệ kèm theo ID
+        // Gửi request tới file xử lý
         fetch('thong-tin-lien-he-hoc-sinh.php?id=' + id)
             .then(response => response.text())
             .then(data => {
-                document.getElementById('modal-content').innerHTML = data;
+                document.getElementById('contact-modal-content').innerHTML = data; // ID mới
             });
     });
 });

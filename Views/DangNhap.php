@@ -45,6 +45,12 @@ require_once __DIR__ . '/partials/header.php';
                                 </div>
                             <?php endif; ?>
 
+                            <?php if (!empty($_GET['reset']) && $_GET['reset'] === '1'): ?>
+                                <div class="alert alert-success mb-4">
+                                    Mật khẩu mới đã được cập nhật. Vui lòng đăng nhập lại.
+                                </div>
+                            <?php endif; ?>
+
                             <?php if (!empty($errors)): ?>
                                 <div class="alert alert-danger mb-4">
                                     <?php foreach ($errors as $error): ?>
@@ -68,7 +74,7 @@ require_once __DIR__ . '/partials/header.php';
                                     <input type="checkbox" class="form-check-input mt-0" id="rememberMe" style="cursor: pointer;">
                                     <label class="form-check-label small text-muted" for="rememberMe" style="cursor: pointer; user-select: none;">Ghi nhớ</label>
                                 </div>
-                                <a href="#" class="text-teal small text-decoration-none fw-bold">Quên mật khẩu?</a>
+                                <a href="/index.php?page=forgot_password" class="text-teal small text-decoration-none fw-bold">Quên mật khẩu?</a>
                             </div>
 
                             <button type="submit" class="btn-auth">ĐĂNG NHẬP NGAY</button>

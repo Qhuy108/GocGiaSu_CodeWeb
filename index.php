@@ -114,9 +114,12 @@ case 'get_tutor_contact':
         break;
 
     //----Lop nhan-------
-        case 'my_classes':
+case 'my_classes':
     requireLogin();
+    requireRole('tutor');
+
     loadController('Tutor');
+
     $controller = new TutorController();
     $controller->myClasses();
     break;

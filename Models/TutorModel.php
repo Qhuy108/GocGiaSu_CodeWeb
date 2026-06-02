@@ -184,12 +184,16 @@ public function countApproved(array $filters = []): int
     return (int)$stmt->fetchColumn();
 }
 // Lấy danh sách lớp học của gia sư
-    public function getClassesByTutorId(int $tutorId): array
-    {
-        $sql = "SELECT * FROM classes WHERE tutor_id = :tutor_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([':tutor_id' => $tutorId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+   // Sửa trong file Models/TutorModel.php
+public function getClassesByTutorId(int $tutorId): array
+{
+    // Giả sử bảng của bạn là 'bookings' và cột là 'Tutor_id'
+    // Bạn nên kiểm tra lại trong phpMyAdmin tên cột chính xác
+    $sql = "SELECT * FROM bookings WHERE Tutor_id = :tutor_id";
+    
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([':tutor_id' => $tutorId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }
 

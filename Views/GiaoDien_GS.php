@@ -17,8 +17,10 @@ require_once __DIR__ . '/partials/header.php';
 <a href="/index.php?page=tutor_profile&id=<?= $tutor['Id'] ?? '' ?>" class="nav-link">
     <i class="fa-solid fa-user me-3"></i> Hồ sơ của tôi
 </a>
-    <a href="/index.php?page=my_classes" class="nav-link <?= ($page == 'my_classes') ? 'active' : '' ?>">
-    <i class="fa-solid fa-clipboard-check me-3"></i> Lớp đã nhận
+    <a href="/index.php?page=my_classes"
+   class="nav-link <?= ($page == 'my_classes') ? 'active' : '' ?>">
+    <i class="fa-solid fa-clipboard-check me-3"></i>
+    Lớp đã nhận
 </a>
     <a href="#" class="nav-link">
         <i class="fa-solid fa-gear me-3"></i> Cài đặt tài khoản

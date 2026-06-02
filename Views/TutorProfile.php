@@ -5,7 +5,14 @@ require_once __DIR__ . '/partials/header.php';
 
 <div class="container py-5">
     <div class="row">
-  <div class="col-lg-4">
+<div class="col-lg-4">
+    <!-- Nút quay lại đặt ngay trên thẻ profile để dễ thấy -->
+    <div class="mb-3">
+        <a href="javascript:history.back()" class="btn btn-sm btn-outline-secondary rounded-pill">
+            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+        </a>
+    </div>
+
     <div class="profile-card card border-0 shadow-lg p-4 mb-4 text-center">
         <div class="avatar-wrapper mb-3">
             <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto border border-4 border-white shadow-sm" 

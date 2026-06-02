@@ -5,7 +5,11 @@ require_once __DIR__ . '/partials/header.php';
 
 <div class="container py-5">
     <h3 class="mb-4 fw-bold"><i class="fa-solid fa-clipboard-list text-success me-2"></i> Danh sách lớp đã nhận</h3>
-
+<div class="mb-4">
+    <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-pill px-4">
+        <i class="fa-solid fa-arrow-left me-2"></i> Quay lại
+    </a>
+</div>
     <?php if (empty($classes)): ?>
         <div class="alert alert-info">Bạn chưa nhận lớp nào.</div>
     <?php else: ?>

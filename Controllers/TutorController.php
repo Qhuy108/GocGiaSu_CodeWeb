@@ -71,4 +71,16 @@ public function contact() {
     // Đẩy dữ liệu qua View
     require_once 'Views/GiaoDien_GS.php'; 
 }
+public function profile(): void
+{
+    $id = (int)($_GET['id'] ?? 0);
+
+    $tutor = $this->tutorModel->findById($id);
+
+    if (!$tutor) {
+        die('Không tìm thấy gia sư');
+    }
+
+    require_once __DIR__ . '/../Views/TutorProfile.php';
+}
 }

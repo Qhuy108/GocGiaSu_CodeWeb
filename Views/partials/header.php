@@ -124,14 +124,10 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
                         </ul>
                     </li>
                 <?php else: ?>
-                    <!-- Chưa đăng nhập: nút Đăng nhập + Đăng ký -->
+                    <!-- Chưa đăng nhập: nút Đăng nhập -->
                     <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
-                        <a class="btn btn-outline-success rounded-pill px-4 fw-bold me-2"
-                           href="/Views/DangNhap.php">Đăng nhập</a>
-                    </li>
-                    <li class="nav-item mt-2 mt-lg-0">
-                        <a class="btn btn-gocgiasu rounded-pill px-4"
-                           href="/index.php?page=register">Đăng ký</a>
+                        <a class="btn btn-gocgiasu rounded-pill px-4 fw-bold"
+                           href="/index.php?page=login">Đăng nhập</a>
                     </li>
                 <?php endif; ?>
 

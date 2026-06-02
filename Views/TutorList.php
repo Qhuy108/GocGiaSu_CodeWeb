@@ -5,7 +5,7 @@ require_once __DIR__ . '/partials/header.php';
 
 <h2>Tìm Gia Sư</h2>
 
-<form method="GET" action="/index.php">
+<form method="GET" action="index.php">
 
     <input type="hidden"
            name="page"
@@ -45,7 +45,7 @@ require_once __DIR__ . '/partials/header.php';
         ⭐ <?= number_format($tutor['diem_tb'],1) ?>
     </p>
 
-    <a href="/index.php?page=tutor_profile&id=<?= $tutor['Id'] ?>">
+    <a href="index.php?page=tutor_profile&id=<?= $tutor['Id'] ?>">
         Xem hồ sơ
     </a>
 

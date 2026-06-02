@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 require_once __DIR__ . '/../Models/TutorModel.php';
 
 $tutorModel = new TutorModel();
+$subjects = $tutorModel->getSubjects();
 
 $filters = [
     'mon_hoc' => $_GET['mon_hoc'] ?? null,
@@ -78,12 +79,13 @@ require_once __DIR__ . '/partials/header.php';
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-navy">Môn học</label>
                             <select name="mon_hoc" class="form-select bg-teal text-white border-0 rounded-3 py-2 small shadow-none">
-                                <option selected>Toán</option>
-                                <option value="1">Lý</option>
-                                <option value="2">Ngữ Văn</option>
-                                <option value="3">Tiếng Anh</option>
-                                <option value="4">Hóa</option>
-                                <option value="other">Khác...</option>
+                                <option value="">-- Chọn môn học --</option>
+
+                                <?php foreach ($subjects as $s): ?>
+                                <option value="<?= $s['Id'] ?>">
+                                <?= htmlspecialchars($s['Name']) ?>
+                                </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
 

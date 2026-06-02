@@ -21,9 +21,9 @@ class TutorModel
         $where  = ["t.Status = 'approved'"];
         $params = [];
 
-        if (!empty($filters['mon_hoc'])) {
-            $where[]           = 's.Name LIKE :subject';
-            $params[':subject'] = '%' . $filters['mon_hoc'] . '%';
+       if (!empty($filters['mon_hoc'])) {
+             $where[] = 's.Id = :subject_id';
+            $params[':subject_id'] = $filters['mon_hoc'];
         }
         if (!empty($filters['khu_vuc'])) {
             $where[]            = 't.Location LIKE :location';
@@ -143,4 +143,13 @@ class TutorModel
         $stmt->execute([$limit]);
         return $stmt->fetchAll();
     }
+
+    //Lay mon hoc
+    public function getSubjects(): array
+{
+    $sql = "SELECT Id, Name FROM subjects";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }

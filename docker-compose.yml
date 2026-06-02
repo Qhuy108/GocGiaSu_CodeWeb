@@ -7,27 +7,4 @@ services:
       - .:/var/www/html
     env_file:
       - .env
-    depends_on:
-      db:
-        condition: service_healthy
     restart: unless-stopped
-
-  db:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: Gocgiasu@Vip6
-      MYSQL_DATABASE: DB_GocGiaSu
-      MYSQL_USER: gocgiasu_user
-      MYSQL_PASSWORD: gocgiasu@6
-    volumes:
-      - db_data:/var/lib/mysql
-      - ./Database.sql:/docker-entrypoint-initdb.d/init.sql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pGocgiasu@Vip6"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    restart: unless-stopped
-
-volumes:
-  db_data:

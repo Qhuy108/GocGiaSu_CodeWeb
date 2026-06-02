@@ -55,21 +55,142 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
 
     <!-- CSS chính của nhóm -->
     <link rel="stylesheet" href="<?= htmlspecialchars($cssPath) ?>">
+
+    <style>
+        /* Navbar chuyên nghiệp với gradient */
+        .navbar-professional {
+            background: linear-gradient(135deg, #042940 0%, #005C53 100%);
+            box-shadow: 0 4px 20px rgba(4, 41, 64, 0.15);
+            padding: 12px 0 !important;
+        }
+
+        /* Brand name nổi bật */
+        .brand-professional {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #DBF227 !important;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .brand-professional:hover {
+            color: #E8FF00 !important;
+            text-shadow: 0 2px 12px rgba(219, 242, 39, 0.4);
+        }
+
+        /* Logo với border chuyên nghiệp */
+        .logo-professional {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #9FC131 0%, #DBF227 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(159, 193, 49, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .logo-professional:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 16px rgba(159, 193, 49, 0.4);
+        }
+
+        .logo-professional img {
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+        }
+
+        /* Navigation links màu nhạt cho contrast tốt */
+        .nav-link-professional {
+            color: #E8F0F8 !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link-professional:hover,
+        .nav-link-professional.active {
+            color: #DBF227 !important;
+        }
+
+        .nav-link-professional.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #DBF227;
+            border-radius: 2px;
+        }
+
+        /* Dropdown menu nâng cao */
+        .dropdown-menu-professional {
+            background: linear-gradient(135deg, #f8fafb 0%, #f0f3f7 100%);
+            border: 1px solid #e0e7f1;
+            box-shadow: 0 8px 24px rgba(4, 41, 64, 0.12);
+        }
+
+        .dropdown-menu-professional .dropdown-item {
+            color: #042940;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            padding-left: 12px;
+        }
+
+        .dropdown-menu-professional .dropdown-item:hover {
+            background-color: #E8F0F8;
+            border-left-color: #9FC131;
+            color: #005C53;
+        }
+
+        /* Hamburger menu color */
+        .navbar-toggler {
+            border-color: #DBF227 !important;
+        }
+
+        .navbar-toggler .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23DBF227' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        @media (max-width: 991px) {
+            .brand-professional {
+                font-size: 1.2rem;
+            }
+
+            .navbar-collapse {
+                background: rgba(4, 41, 64, 0.95);
+                padding: 16px;
+                margin-top: 12px;
+                border-radius: 12px;
+            }
+
+            .nav-item {
+                margin: 8px 0 !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <!-- ===== HEADER / NAVBAR ===== -->
-<nav class="navbar navbar-expand-lg navbar-light navbar-custom bg-white sticky-top py-3">
+<nav class="navbar navbar-expand-lg navbar-professional sticky-top">
     <div class="container">
 
-        <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-teal" href="/index.php">
-            <img src="<?= htmlspecialchars($assetPath) ?>graduation.png" width="44" height="44" alt="Logo Góc Gia Sư">
-            Góc Gia Sư
+        <!-- Logo + Brand Name -->
+        <a class="navbar-brand d-flex align-items-center gap-3 text-decoration-none" href="/index.php">
+            <div class="logo-professional">
+                <img src="<?= htmlspecialchars($assetPath) ?>graduation.png" alt="Logo Góc Gia Sư">
+            </div>
+            <span class="brand-professional">Góc Gia Sư</span>
         </a>
 
-        <!-- Nút hamburger (mobile) -->
-        <button class="navbar-toggler border-0" type="button"
+        <!-- Hamburger Menu -->
+        <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarMain"
                 aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -77,33 +198,33 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
 
         <!-- Menu chính -->
         <div class="collapse navbar-collapse" id="navbarMain">
-            <ul class="navbar-nav ms-auto fw-medium align-items-center">
+            <ul class="navbar-nav ms-auto fw-medium align-items-center gap-2">
 
-                <li class="nav-item mx-2">
-                    <a class="nav-link text-navy <?= $activePage === 'home' ? 'active fw-bold' : '' ?>"
+                <li class="nav-item">
+                    <a class="nav-link nav-link-professional <?= $activePage === 'home' ? 'active' : '' ?>"
                        href="/index.php">Trang chủ</a>
                 </li>
 
-                <li class="nav-item mx-2">
-                    <a class="nav-link text-navy <?= $activePage === 'about' ? 'active fw-bold' : '' ?>"
+                <li class="nav-item">
+                    <a class="nav-link nav-link-professional <?= $activePage === 'about' ? 'active' : '' ?>"
                        href="/index.php?page=about">Giới thiệu</a>
                 </li>
 
-                <li class="nav-item mx-2">
-                    <a class="nav-link text-navy <?= $activePage === 'tutors' ? 'active fw-bold' : '' ?>"
+                <li class="nav-item">
+                    <a class="nav-link nav-link-professional <?= $activePage === 'tutors' ? 'active' : '' ?>"
                        href="/index.php?page=tutors">Tìm gia sư</a>
                 </li>
 
                 <?php if ($isLoggedIn): ?>
-                    <!-- Đã đăng nhập: hiển thị dropdown tên + avatar -->
+                    <!-- Đã đăng nhập: dropdown user -->
                     <li class="nav-item dropdown ms-lg-3">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 text-navy fw-bold"
+                        <a class="nav-link nav-link-professional dropdown-toggle d-flex align-items-center gap-2"
                            href="#" id="userDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle fs-5"></i>
+                            <i class="bi bi-person-circle"></i>
                             <?= htmlspecialchars($userName) ?>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3"
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-professional"
                             aria-labelledby="userDropdown">
                             <li>
                                 <a class="dropdown-item" href="<?= htmlspecialchars($dashboardLink) ?>">
@@ -124,14 +245,10 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
                         </ul>
                     </li>
                 <?php else: ?>
-                    <!-- Chưa đăng nhập: nút Đăng nhập + Đăng ký -->
+                    <!-- Chưa đăng nhập: nút Đăng nhập -->
                     <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
-                        <a class="btn btn-outline-success rounded-pill px-4 fw-bold me-2"
-                           href="/Views/DangNhap.php">Đăng nhập</a>
-                    </li>
-                    <li class="nav-item mt-2 mt-lg-0">
-                        <a class="btn btn-gocgiasu rounded-pill px-4"
-                           href="/index.php?page=register">Đăng ký</a>
+                        <a class="btn btn-gocgiasu rounded-pill px-4 fw-bold"
+                           href="/index.php?page=login">Đăng nhập</a>
                     </li>
                 <?php endif; ?>
 

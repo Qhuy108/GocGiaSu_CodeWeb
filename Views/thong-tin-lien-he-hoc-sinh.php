@@ -1,26 +1,30 @@
 <?php
 // thong-tin-lien-he-hoc-sinh.php
 $id = (int)($_GET['id'] ?? 0);
-
-// Giả sử bạn lấy dữ liệu (đây là ví dụ, hãy dùng $tutorModel->findById($id) nếu có database)
-$data = [
-    1 => ['name' => 'Chu Thành Đức', 'phone' => '0901234567', 'email' => 'ducthanh@gmail.com'],
-    2 => ['name' => 'Nguyễn Hương Mai', 'phone' => '0987654321', 'email' => 'huongmai@gmail.com']
-];
-
-$tutor = $data[$id] ?? null;
-
-if ($tutor) {
-    echo '<div class="modal-header bg-success text-white">
-            <h5 class="modal-title">Thông tin liên hệ</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body text-center p-4">
-            <h4 class="fw-bold mb-3">'.$tutor['name'].'</h4>
-            <p><i class="fa-solid fa-phone text-success"></i> <strong>SĐT:</strong> '.$tutor['phone'].'</p>
-            <p><i class="fa-solid fa-envelope text-danger"></i> <strong>Email:</strong> '.$tutor['email'].'</p>
-          </div>';
-} else {
-    echo '<div class="modal-body text-center">Không tìm thấy thông tin gia sư.</div>';
-}
+// Sau này bạn query $tutor từ DB ở đây
 ?>
+
+<div class="modal-header">
+    <h5 class="modal-title">Thông tin liên hệ</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <div class="text-center mb-3">
+        <div class="avatar-circle mx-auto bg-primary text-white d-flex align-items-center justify-content-center" 
+             style="width: 70px; height: 70px; font-size: 24px; border-radius: 50%;">T</div>
+        <h5 class="fw-bold mt-2">Nguyễn Hương Mai</h5>
+    </div>
+    
+    <div class="mb-3">
+        <strong>Số điện thoại:</strong> 09xx xxx xxx
+    </div>
+    
+    <div class="alert alert-warning small">
+        Vui lòng liên hệ ngoài giờ hành chính.
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+</div>

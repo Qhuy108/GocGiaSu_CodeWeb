@@ -84,4 +84,12 @@ public function profile(): void
 
     require_once __DIR__ . '/../Views/TutorProfile.php';
 }
+// Trong TutorController.php
+public function myClasses() {
+    $tutorId = $_SESSION['user_id']; // Lấy ID gia sư từ session
+    $classes = $this->db->query("SELECT * FROM classes WHERE tutor_id = $tutorId")->fetchAll();
+    
+    // Gọi view hiển thị danh sách
+    require_once __DIR__ . '/../Views/Tutor/MyClasses.php';
+}
 }

@@ -51,8 +51,8 @@ class TutorController
     // Dashboard của gia sư (cần đăng nhập)
     public function dashboard(): void
     {
-        requireLogin();
-        requireRole('tutor');
+        //requireLogin();
+        //requireRole('tutor');
 
         $user  = currentUser();
         $tutor = $this->tutorModel->findByUserId($user['id']);

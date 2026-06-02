@@ -75,28 +75,13 @@ class TutorModel
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
-<<<<<<< HEAD
 
-    public function findByUserId(int $userId): array|false
-{
-    $sql = "SELECT t.*, u.Name, u.Email, u.Phone, u.Avatar
-            FROM tutors t
-            JOIN users u ON u.Id = t.User_id
-            WHERE t.User_id = ?
-            LIMIT 1";
-
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute([$userId]);
-=======
-    
     public function findByUserId(int $userId): array|false
 {
     $sql = "SELECT * FROM tutors WHERE User_id = ? LIMIT 1";
 
     $stmt = $this->db->prepare($sql);
     $stmt->execute([$userId]);
-
->>>>>>> 1287d4c (Bổ sung findByUserId trong TutorModel)
     return $stmt->fetch();
 }
     // Tạo hồ sơ gia sư (khi đăng ký)
@@ -121,7 +106,6 @@ class TutorModel
         return (int)$this->db->lastInsertId();
     }
 
-
     // Cập nhật thông tin hồ sơ gia sư
     public function update(int $id, array $data): bool
     {
@@ -137,7 +121,6 @@ class TutorModel
         $stmt = $this->db->prepare($sql);
         return $stmt->execute($params);
     }
-
 
     // Lấy top N gia sư nổi bật (cho trang chủ)
     public function getFeatured(int $limit = 4): array
@@ -167,7 +150,7 @@ public function getSubjects(): array
     $stmt = $this->db->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}\
+}
 
 public function countApproved(array $filters = []): int
 {
@@ -201,4 +184,4 @@ public function countApproved(array $filters = []): int
     return (int)$stmt->fetchColumn();
 }
 }
->>>>>>> 1287d4c (Bổ sung findByUserId trong TutorModel)
+

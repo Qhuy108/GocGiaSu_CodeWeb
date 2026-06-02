@@ -178,11 +178,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 contentDiv.innerHTML = '<div class="modal-body text-center">Đang tải...</div>';
 
-                fetch('thong-tin-lien-he-hoc-sinh.php?id=' + id)
-                    .then(response => response.text())
-                    .then(html => {
-                        contentDiv.innerHTML = html;
-                    })
+                // Thay đổi dòng fetch này:
+fetch('index.php?page=get_tutor_contact&id=' + id)
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById('contact-modal-content').innerHTML = html;
+    });
                     .catch(err => {
                         contentDiv.innerHTML = '<div class="modal-body text-center text-danger">Có lỗi xảy ra!</div>';
                     });

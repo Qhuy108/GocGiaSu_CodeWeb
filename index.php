@@ -57,6 +57,12 @@ switch ($page) {
         $controller->login();
         break;
 
+    case 'forgot_password':
+        loadController('Auth');
+        $controller = new AuthController();
+        $controller->forgotPassword();
+        break;
+
     case 'register':
         loadController('Auth');
         $controller = new AuthController();

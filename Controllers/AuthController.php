@@ -75,6 +75,114 @@ class AuthController
         require_once __DIR__ . '/../Views/DangNhap.php';
     }
 
+    // ── Quên mật khẩu / reset password ──────────────────────────────────────
+    public function forgotPassword(): void
+    {
+        $errors   = [];
+        $success  = '';
+        $oldData  = [];
+        $step     = $_POST['step'] ?? $_GET['step'] ?? 'email';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ($step === 'email') {
+                $email = trim($_POST['email'] ?? '');
+                $oldData['Email'] = $email;
+
+                if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $errors[] = 'Vui lòng nhập email hợp lệ.';
+                }
+
+                if (!$errors) {
+                    $user = $this->userModel->findByEmail($email);
+                    if (!$user) {
+                        $errors[] = 'Email này chưa được đăng ký trên hệ thống.';
+                    }
+                }
+
+                if (!$errors) {
+                    $code = (string)random_int(100000, 999999);
+
+                    $_SESSION['password_reset'] = [
+                        'email'      => $email,
+                        'code'       => $code,
+                        'expires_at' => time() + 900,
+                        'verified'   => false,
+                    ];
+
+                    $step    = 'verify';
+                    $success = 'Mã xác nhận đã được tạo. Vui lòng kiểm tra email và nhập mã 6 chữ số.';
+                }
+            } elseif ($step === 'verify') {
+                if (!$this->hasValidPasswordResetSession()) {
+                    $errors[] = 'Phiên xác nhận đã hết hạn. Vui lòng thử lại.';
+                    $this->clearPasswordResetSession();
+                    $step = 'email';
+                } else {
+                    $code = trim($_POST['code'] ?? '');
+
+                    if ($code === '') {
+                        $errors[] = 'Vui lòng nhập mã xác nhận.';
+                    } elseif ($code !== $_SESSION['password_reset']['code']) {
+                        $errors[] = 'Mã xác nhận không đúng. Vui lòng thử lại.';
+                    }
+
+                    if (!$errors) {
+                        $_SESSION['password_reset']['verified'] = true;
+                        $step = 'reset';
+                        $success = 'Mã xác nhận hợp lệ. Vui lòng thiết lập mật khẩu mới.';
+                    }
+                }
+            } elseif ($step === 'reset') {
+                if (!$this->hasValidPasswordResetSession() || empty($_SESSION['password_reset']['verified'])) {
+                    $errors[] = 'Bạn cần xác nhận mã trước khi đổi mật khẩu.';
+                    $this->clearPasswordResetSession();
+                    $step = 'email';
+                } else {
+                    $password = trim($_POST['password'] ?? '');
+                    $confirm  = trim($_POST['confirm_password'] ?? '');
+
+                    if ($password === '' || $confirm === '') {
+                        $errors[] = 'Vui lòng nhập mật khẩu mới và xác nhận mật khẩu.';
+                    } elseif ($password !== $confirm) {
+                        $errors[] = 'Mật khẩu mới và xác nhận phải giống nhau.';
+                    } elseif (strlen($password) < 8) {
+                        $errors[] = 'Mật khẩu phải ít nhất 8 ký tự.';
+                    }
+
+                    if (!$errors) {
+                        $user = $this->userModel->findByEmail($_SESSION['password_reset']['email']);
+
+                        if (!$user) {
+                            $errors[] = 'Không tìm thấy tài khoản. Vui lòng thử lại.';
+                        }
+                    }
+
+                    if (!$errors) {
+                        $this->userModel->update($user['Id'], [
+                            'Password' => password_hash($password, PASSWORD_DEFAULT),
+                        ]);
+                        $this->clearPasswordResetSession();
+                        header('Location: /index.php?page=login&reset=1');
+                        exit;
+                    }
+                }
+            }
+        }
+
+        require_once __DIR__ . '/../Views/QuenMatKhau.php';
+    }
+
+    private function hasValidPasswordResetSession(): bool
+    {
+        return isset($_SESSION['password_reset']['email'], $_SESSION['password_reset']['code'], $_SESSION['password_reset']['expires_at'])
+            && time() <= $_SESSION['password_reset']['expires_at'];
+    }
+
+    private function clearPasswordResetSession(): void
+    {
+        unset($_SESSION['password_reset']);
+    }
+
     // ── Đăng ký Học sinh ─────────────────────────────────────────────────────
         // ── Đăng ký Học sinh ─────────────────────────────────────────────────────
     public function registerStudent(): void

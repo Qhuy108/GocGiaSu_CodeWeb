@@ -45,11 +45,33 @@ switch ($page) {
         break;
 
     case 'tutor_profile':
-    loadController('Tutor');
-    $controller = new TutorController();
-    $controller->profile(); // Bỏ (int)($_GET['id'] ?? 0) đi
-    break;
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->profile(); // Bỏ (int)($_GET['id'] ?? 0) đi
+        break;
+    case 'tutor_edit':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->editProfile();
+        break;
 
+    case 'tutor_update':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->updateProfile();
+        break;
+
+    case 'tutor_delete':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->deleteProfile();
+        break;
     // ── Xác thực (Auth) ──────────────────────────────────────────────────────
     case 'login':
         loadController('Auth');

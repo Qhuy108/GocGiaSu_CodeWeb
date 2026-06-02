@@ -183,5 +183,10 @@ public function countApproved(array $filters = []): int
 
     return (int)$stmt->fetchColumn();
 }
+public function delete(int $id): bool
+{
+    $stmt = $this->db->prepare('DELETE FROM tutors WHERE Id = ?');
+    return $stmt->execute([$id]);
+}
 }
 

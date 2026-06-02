@@ -84,4 +84,56 @@ public function profile(): void
 
     require_once __DIR__ . '/../Views/TutorProfile.php';
 }
+public function editProfile(): void
+{
+    $user = currentUser();
+    $tutor = $this->tutorModel->findByUserId($user['id']);
+
+    if (!$tutor) {
+        die('Không tìm thấy hồ sơ gia sư.');
+    }
+
+    require_once __DIR__ . '/../Views/TutorEditProfile.php';
+}
+
+public function updateProfile(): void
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: index.php?page=tutor_dashboard');
+        exit;
+    }
+
+    $user = currentUser();
+    $tutor = $this->tutorModel->findByUserId($user['id']);
+
+    if (!$tutor) {
+        die('Không tìm thấy hồ sơ gia sư.');
+    }
+
+    $this->tutorModel->update((int)$tutor['Id'], [
+        'Bio' => trim($_POST['Bio'] ?? ''),
+        'Experience' => trim($_POST['Experience'] ?? ''),
+        'Qualifications' => trim($_POST['Qualifications'] ?? ''),
+        'Location' => trim($_POST['Location'] ?? ''),
+        'Hourly_rate' => (float)($_POST['Hourly_rate'] ?? 0),
+    ]);
+
+    header('Location: index.php?page=tutor_profile&id=' . (int)$tutor['Id']);
+    exit;
+}
+
+public function deleteProfile(): void
+{
+    $user = currentUser();
+    $tutor = $this->tutorModel->findByUserId($user['id']);
+
+    if (!$tutor) {
+        die('Không tìm thấy hồ sơ gia sư.');
+    }
+
+    $this->tutorModel->delete((int)$tutor['Id']);
+
+    header('Location: index.php?page=logout');
+    exit;
+}
 }

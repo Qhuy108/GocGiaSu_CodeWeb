@@ -144,10 +144,27 @@ $qualifications = htmlspecialchars($tutor['Qualifications'] ?? 'Chưa cập nh�
                         <?= $bio ?>
                     </p>
                 </div>
+                <div class="d-grid gap-2 mt-4">
 
-                <a href="index.php?page=tutors" class="btn btn-gocgiasu mt-4">
-                    Quay lại danh sách
-                </a>
+                    <a href="index.php?page=tutors" class="btn btn-success">
+                        <i class="bi bi-arrow-left"></i>
+                        Quay lại danh sách
+                    </a>
+
+                    <a href="index.php?page=tutor_edit&id=<?= urlencode($tutor['Tutor_ID'] ?? $tutor['Id'] ?? 0) ?>"
+                    class="btn btn-outline-warning">
+                        <i class="bi bi-pencil-square"></i>
+                        Sửa hồ sơ
+                    </a>
+
+                    <a href="index.php?page=tutor_delete&id=<?= urlencode($tutor['Tutor_ID'] ?? $tutor['Id'] ?? 0) ?>"
+                    class="btn btn-outline-danger"
+                    onclick="return confirm('Bạn có chắc muốn xóa hồ sơ này không?');">
+                        <i class="bi bi-trash3"></i>
+                        Xóa hồ sơ
+                    </a>
+
+                </div>
             </div>
 
             <div class="col-md-8 col-lg-9 profile-main">

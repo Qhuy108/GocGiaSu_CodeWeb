@@ -66,9 +66,9 @@ require_once __DIR__ . '/partials/header.php';
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mt-3"> 
-     <button class="btn btn-success"
+   <button class="btn btn-success"
         data-bs-toggle="modal"
-        data-bs-target="#contactTutorModal" 
+        data-bs-target="#contactTutorModal"
         data-id="1">
     Liên hệ ngay
 </button>
@@ -100,8 +100,8 @@ require_once __DIR__ . '/partials/header.php';
             
 <button class="btn btn-success"
         data-bs-toggle="modal"
-        data-bs-target="#contactTutorModal" 
-        data-id="1">
+        data-bs-target="#contactTutorModal"
+        data-id="2">
     Liên hệ ngay
 </button>
                     
@@ -184,6 +184,7 @@ modalElement.addEventListener('show.bs.modal', function (event) {
         .catch(err => {
             contentDiv.innerHTML = '<div class="p-3 text-danger">Lỗi tải dữ liệu.</div>';
         });
+});
 });
 </script>
 </body>

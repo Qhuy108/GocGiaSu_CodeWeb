@@ -45,10 +45,10 @@ switch ($page) {
         break;
 
     case 'tutor_profile':
-        loadController('Tutor');
-        $controller = new TutorController();
-        $controller->profile((int)($_GET['id'] ?? 0));
-        break;
+    loadController('Tutor');
+    $controller = new TutorController();
+    $controller->profile(); // Bỏ (int)($_GET['id'] ?? 0) đi
+    break;
 
     // ── Xác thực (Auth) ──────────────────────────────────────────────────────
     case 'login':

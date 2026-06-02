@@ -48,29 +48,30 @@ class TutorController
 
     require_once __DIR__ . '/../Views/TutorList.php';
 }
+
     // Dashboard của gia sư (cần đăng nhập)
-    public function dashboard(): void
-    {
-        //requireLogin();
-        //requireRole('tutor');
+   // Trong Controllers/TutorController.php
+public function dashboard(): void
+{
+    requireLogin();
+    requireRole('tutor');
 
-        $user  = currentUser();
-        $tutor = $this->tutorModel->findByUserId($user['id']);
+    $user = currentUser();
+    // Lấy thông tin gia sư từ database dựa trên User_id của người đang đăng nhập
+    $tutor = $this->tutorModel->findByUserId($user['id']);
 
-        // TODO: Thành viên 3 render GiaoDien_GS.php
-        require_once __DIR__ . '/../Views/GiaoDien_GS.php';
-    }
-    // Trong TutorController.php
-public function contact() {
-    $id = $_GET['id']; // Nhận ID từ URL
-    
-    // Gọi Model để lấy thông tin đúng người đó
-    $tutorModel = new TutorModel(); 
-    $student = $tutorModel->getTutorById($id);
-    
-    // Đẩy dữ liệu qua View
-    require_once 'Views/GiaoDien_GS.php'; 
+    // Truyền biến $tutor này sang view GiaoDien_GS.php
+    require_once __DIR__ . '/../Views/GiaoDien_GS.php';
 }
+
+    // Trong TutorController.php
+public function contact()
+{
+    http_response_code(404);
+    echo "Not used";
+    exit;
+}
+
 public function profile(): void
 {
     $id = (int)($_GET['id'] ?? 0);

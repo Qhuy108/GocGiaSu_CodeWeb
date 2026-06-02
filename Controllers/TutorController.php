@@ -25,36 +25,29 @@ class TutorController
 
     // Trang danh sách gia sư + bộ lọc tìm kiếm
     public function index(): void
-    {
-        $filters = [
-            'mon_hoc' => $_GET['mon_hoc'] ?? '',
-            'khu_vuc' => $_GET['khu_vuc'] ?? '',
-        ];
+{
+    $filters = [
+        'mon_hoc' => $_GET['mon_hoc'] ?? '',
+        'khu_vuc' => $_GET['khu_vuc'] ?? '',
+    ];
 
-        $limit  = 12;
-        $trang  = max(1, (int)($_GET['trang'] ?? 1));
-        $offset = ($trang - 1) * $limit;
+    $limit  = 12;
+    $trang  = max(1, (int)($_GET['trang'] ?? 1));
+    $offset = ($trang - 1) * $limit;
 
-        $tutors = $this->tutorModel->getApproved($filters, $limit, $offset);
+    $tutors = $this->tutorModel->getApproved(
+        $filters,
+        $limit,
+        $offset
+    );
 
-        // TODO: Thành viên 3 tạo file Views/TutorList.php
-        require_once __DIR__ . '/../Views/TutorList.php';
-    }
+    $tongTrang = ceil(
+        $this->tutorModel->countApproved($filters)
+        / $limit
+    );
 
-    // Trang chi tiết profile 1 gia sư
-    public function profile(int $id): void
-    {
-        $tutor = $this->tutorModel->findById($id);
-
-        if (!$tutor) {
-            http_response_code(404);
-            die('Không tìm thấy gia sư.');
-        }
-
-        // TODO: Thành viên 3 tạo Views/TutorProfile.php
-        require_once __DIR__ . '/../Views/TutorProfile.php';
-    }
-
+    require_once __DIR__ . '/../Views/TutorList.php';
+}
     // Dashboard của gia sư (cần đăng nhập)
     public function dashboard(): void
     {

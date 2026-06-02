@@ -67,4 +67,15 @@ class TutorController
         // TODO: Thành viên 3 render GiaoDien_GS.php
         require_once __DIR__ . '/../Views/GiaoDien_GS.php';
     }
+    // Trong TutorController.php
+public function contact() {
+    $id = $_GET['id']; // Nhận ID từ URL
+    
+    // Gọi Model để lấy thông tin đúng người đó
+    $tutorModel = new TutorModel(); 
+    $student = $tutorModel->getTutorById($id);
+    
+    // Đẩy dữ liệu qua View
+    require_once 'Views/GiaoDien_GS.php'; 
+}
 }

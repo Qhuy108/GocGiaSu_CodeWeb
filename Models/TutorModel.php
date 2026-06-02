@@ -76,14 +76,18 @@ class TutorModel
         return $stmt->fetch();
     }
 
-    // Tìm hồ sơ gia sư theo User_id (dùng trong dashboard)
     public function findByUserId(int $userId): array|false
-    {
-        $stmt = $this->db->prepare('SELECT * FROM tutors WHERE User_id = ? LIMIT 1');
-        $stmt->execute([$userId]);
-        return $stmt->fetch();
-    }
+{
+    $sql = "SELECT t.*, u.Name, u.Email, u.Phone, u.Avatar
+            FROM tutors t
+            JOIN users u ON u.Id = t.User_id
+            WHERE t.User_id = ?
+            LIMIT 1";
 
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$userId]);
+    return $stmt->fetch();
+}
     // Tạo hồ sơ gia sư (khi đăng ký)
     public function create(array $data): int
     {
@@ -143,13 +147,13 @@ class TutorModel
         $stmt->execute([$limit]);
         return $stmt->fetchAll();
     }
-
-    //Lay mon hoc
+ //Lay mon hoc
     public function getSubjects(): array
-{
-    $sql = "SELECT Id, Name FROM subjects";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    {
+        $sql = "SELECT Id, Name FROM subjects";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
-}
+

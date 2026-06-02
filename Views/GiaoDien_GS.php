@@ -63,10 +63,12 @@ require_once __DIR__ . '/partials/header.php';
                             <p class="text-muted small">Mô tả: Tìm giáo viên dạy toán quanh khu vực tân bình</p>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end mt-3">
-                        <button class="btn btn-success rounded-pill px-4" 
-        data-bs-toggle="modal" 
-        data-bs-target="#contactThanhDuc">
+                    <div class="d-flex justify-content-end mt-3"> 
+                       <button class="btn btn-success"
+        data-bs-toggle="modal"
+        data-bs-target="#contactModal"
+        data-id="1">
+    <img src="/assets/phone-call.png" width="18" height="18" alt="">
     Liên hệ ngay
 </button>
                     </div>
@@ -94,11 +96,14 @@ require_once __DIR__ . '/partials/header.php';
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mt-3">
-                        <button class="btn btn-success rounded-pill px-4" 
-        data-bs-toggle="modal" 
-        data-bs-target="#contactHuongMai">
+            
+<button class="btn btn-success"
+        data-bs-toggle="modal"
+        data-bs-target="#contactModal"
+        data-id="2">
     Liên hệ ngay
 </button>
+                    
                     </div>
                 </div>
             </div>
@@ -151,37 +156,28 @@ require_once __DIR__ . '/partials/header.php';
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0">
-      <div class="modal-body p-0">
-        <div class="card contact-card shadow-lg rounded-4 p-4 text-center">
-            <h6 class="contact-title mb-3">Thông tin liên hệ</h6>
-            <div class="avatar-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 28px;">T</div>
-            <h5 class="fw-bold mb-1">Nguyễn Hương Mai</h5>
-            
-            <div class="text-start mt-3">
-                <div class="mb-3">
-                    <strong>Số điện thoại</strong>
-                    <p class="fs-5 text-success mb-0"><i class="fa-solid fa-phone me-2"></i> +84 9xx xxx xxx</p>
-                </div>
-                <div class="mb-3">
-                    <strong>Zalo</strong>
-                    <a href="#" class="btn btn-outline-success w-100 text-start mt-1"><i class="fa-solid fa-comment-dots me-2"></i> zalo.me/nguyenhuongmai</a>
-                </div>
-                <a href="#" class="btn btn-success w-100 py-3 rounded-pill fw-bold mt-2">
-                    <i class="fa-solid fa-phone me-2"></i> Gọi điện ngay
-                </a>
+<div class="modal fade" id="contactModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" id="modal-content">
             </div>
-        </div>
-      </div>
     </div>
-  </div>
 </div>
-<div class="modal fade" id="contactThanhDuc" tabindex="-1" ...>
-   </div>
 
-<div class="modal fade" id="contactHuongMai" tabindex="-1" ...>
-   </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var contactModal = document.getElementById('contactModal');
+    contactModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var id = button.getAttribute('data-id');
+
+        // Gửi yêu cầu đến file thông tin liên hệ kèm theo ID
+        fetch('thong-tin-lien-he-hoc-sinh.php?id=' + id)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('modal-content').innerHTML = data;
+            });
+    });
+});
+</script>
 </body>
 </html>

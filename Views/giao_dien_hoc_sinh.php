@@ -54,9 +54,35 @@ require_once __DIR__ . '/partials/header.php';
                 <?php foreach ($bookings as $b): ?>
                     <div class="col-md-4">
                         <div class="card p-3 shadow-sm border-0">
+                            <p><b>Gia sư:</b> <?= htmlspecialchars($b['ten_gia_su'] ?? '') ?></p>
                             <p><b>Môn:</b> <?= htmlspecialchars($b['subject_name'] ?? 'Chưa rõ') ?></p>
                             <p><b>Ngày:</b> <?= htmlspecialchars($b['Date'] ?? '') ?></p>
-                            <p><b>Trạng thái:</b> <?= htmlspecialchars($b['Status'] ?? '') ?></p>
+                            <p><b>Giờ:</b> <?= htmlspecialchars($b['Time'] ?? '') ?></p>
+                            <p><b>Trạng thái:</b>
+                                <?php
+                                $statusMap = [
+                                    'pending'   => '<span class="badge bg-warning text-dark">Chờ xác nhận</span>',
+                                    'confirmed' => '<span class="badge bg-success">Đã xác nhận</span>',
+                                    'cancelled' => '<span class="badge bg-secondary">Đã hủy</span>',
+                                    'done'      => '<span class="badge bg-primary">Hoàn thành</span>',
+                                ];
+                                echo $statusMap[$b['Status']] ?? htmlspecialchars($b['Status']);
+                                ?>
+                            </p>
+
+                            <?php if ($b['Status'] === 'pending'): ?>
+                            <form method="POST" action="/index.php?page=student&action=cancel"
+                                  onsubmit="return confirm('Bạn có chắc muốn hủy lịch này không?')">
+                                <input type="hidden" name="booking_id" value="<?= (int)$b['Id'] ?>">
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill w-100">
+                                    Hủy lịch
+                                </button>
+                            </form>
+                            <?php elseif ($b['Status'] === 'confirmed'): ?>
+                            <button class="btn btn-sm btn-outline-secondary rounded-pill w-100" disabled>
+                                Không thể hủy
+                            </button>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -75,7 +101,8 @@ require_once __DIR__ . '/partials/header.php';
                         <h4 class="text-teal fw-bold mt-1">TÌM GIA SƯ PHÙ HỢP</h4>
                     </div>
 
-                    <form method="GET">
+                    <form method="GET" action="/index.php">
+                        <input type="hidden" name="page" value="student">
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-navy">Môn học</label>
                             <select name="mon_hoc" class="form-select bg-teal text-white border-0 rounded-3 py-2 small shadow-none">

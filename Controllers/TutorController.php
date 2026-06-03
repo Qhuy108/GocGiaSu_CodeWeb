@@ -252,8 +252,4 @@ public function myClasses(): void
 
     require_once __DIR__ . '/../Views/lop-da-nhan.php';
 }
-public function settings()
-{
-    require_once __DIR__ . '/../Views/cai_dat_tai_khoan.php';
-}
 }

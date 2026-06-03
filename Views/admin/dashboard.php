@@ -83,6 +83,21 @@ require_once __DIR__ . '/../partials/header.php';
                 </div>
             </div>
 
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100 <?= $stats['cho_thanh_toan'] > 0 ? 'border-info border-2' : '' ?>">
+                    <div class="card-body d-flex align-items-center gap-3 p-4">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center"
+                             style="width:56px;height:56px;background-color:#e0f7fa;">
+                            <i class="bi bi-credit-card-2-front fs-4" style="color:#00838f;"></i>
+                        </div>
+                        <div>
+                            <div class="fs-2 fw-bold" style="color:#00838f;"><?= $stats['cho_thanh_toan'] ?></div>
+                            <div class="text-muted small">Thanh toán chờ duyệt</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- Dòng thứ hai: doanh thu + gia sư đã duyệt -->
@@ -162,6 +177,21 @@ require_once __DIR__ . '/../partials/header.php';
                             <i class="bi bi-bar-chart-line fs-2 mb-2 d-block" style="color:#2e7d32;"></i>
                             <div class="fw-semibold" style="color:#2e7d32;">Báo cáo & Thống kê</div>
                             <small class="text-muted">Xem báo cáo booking và doanh thu</small>
+                        </a>
+                    </div>
+
+                    <div class="col-md-4 mt-3">
+                        <a href="/index.php?page=admin&action=pendingPayments"
+                           class="d-block text-decoration-none p-3 rounded-3 text-center h-100 position-relative"
+                           style="background-color:#e0f7fa;border:1px solid #b2ebf2;">
+                            <?php if ($stats['cho_thanh_toan'] > 0): ?>
+                                <span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-danger m-2">
+                                    <?= $stats['cho_thanh_toan'] ?>
+                                </span>
+                            <?php endif; ?>
+                            <i class="bi bi-credit-card-2-front fs-2 mb-2 d-block" style="color:#00838f;"></i>
+                            <div class="fw-semibold" style="color:#00838f;">Duyệt thanh toán</div>
+                            <small class="text-muted">Kiểm tra minh chứng chuyển khoản</small>
                         </a>
                     </div>
 

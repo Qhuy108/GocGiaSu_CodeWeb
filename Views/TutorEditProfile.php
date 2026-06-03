@@ -122,9 +122,31 @@ $tutorSubjects = $tutorSubjects ?? [];
                     <!-- Bằng cấp -->
                     <div>
                         <h6 class="fw-bold" style="color:#042940;">Bằng cấp / Chứng chỉ</h6>
-                        <p class="text-muted mb-0">
-                            <?= nl2br(htmlspecialchars($tutor['Qualifications'] ?? 'Chưa cập nhật.')) ?>
-                        </p>
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <?php 
+                            $certs = array_filter(explode(',', $tutor['Qualifications'] ?? ''));
+                            if (!empty($certs)):
+                                foreach ($certs as $cert): 
+                                    $cert = trim($cert);
+                                    if (str_contains($cert, 'assets/uploads/')):
+                            ?>
+                                        <div class="border rounded p-1 shadow-sm bg-white" style="width: 100px; height: 100px;">
+                                            <img src="/<?= htmlspecialchars($cert) ?>" 
+                                                 class="w-100 h-100 object-fit-cover rounded" 
+                                                 alt="Chứng chỉ"
+                                                 style="cursor: pointer;"
+                                                 onclick="window.open(this.src, '_blank')">
+                                        </div>
+                            <?php   
+                                    else:
+                                        echo '<p class="text-muted mb-0">' . nl2br(htmlspecialchars($cert)) . '</p>';
+                                    endif;
+                                endforeach; 
+                            else:
+                            ?>
+                                <p class="text-muted mb-0">Chưa cập nhật.</p>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -136,17 +158,19 @@ $tutorSubjects = $tutorSubjects ?? [];
 
                     <!-- Ảnh đại diện -->
                     <div class="mb-4 text-center">
-                        <img src="<?= $avatarSrc ?>"
-                             id="preview-avatar"
-                             class="rounded-circle border shadow-sm mb-2"
-                             style="width:100px; height:100px; object-fit:cover;">
-                        <div>
-                            <label class="form-label fw-medium d-block">Ảnh đại diện</label>
-                            <input type="file" name="avatar" id="avatar-input"
-                                   class="form-control rounded-3"
-                                   accept="image/jpeg,image/png,image/webp">
-                            <small class="text-muted">JPG, PNG, WEBP – tối đa 2MB</small>
+                        <div class="position-relative d-inline-block">
+                            <img src="<?= $avatarSrc ?>"
+                                 id="preview-avatar"
+                                 class="rounded-circle border border-4 border-white shadow-sm mb-2"
+                                 style="width:120px; height:120px; object-fit:cover;">
+                            <label for="avatar-input" class="position-absolute bottom-0 end-0 bg-success text-white rounded-circle d-flex align-items-center justify-content-center shadow" 
+                                   style="width: 32px; height: 32px; cursor: pointer; margin-bottom: 10px; margin-right: 5px;">
+                                <i class="fa-solid fa-camera small"></i>
+                            </label>
                         </div>
+                        <input type="file" name="avatar" id="avatar-input" class="d-none" accept="image/jpeg,image/png,image/webp">
+                        <h6 class="fw-bold mb-0">Ảnh đại diện</h6>
+                        <small class="text-muted">Nhấp vào icon máy ảnh để thay đổi</small>
                     </div>
                     <hr class="mb-4">
 
@@ -163,9 +187,15 @@ $tutorSubjects = $tutorSubjects ?? [];
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-medium">Bằng cấp / Chứng chỉ</label>
+                        <label class="form-label fw-medium">Bằng cấp / Chứng chỉ (Văn bản)</label>
                         <textarea name="Qualifications" class="form-control rounded-3" rows="2"
                                   placeholder="Vd: Cử nhân Sư phạm Toán, Chứng chỉ IELTS 7.0..."><?= htmlspecialchars($tutor['Qualifications'] ?? '') ?></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">Tải lên chứng chỉ mới (Ảnh)</label>
+                        <input type="file" name="certificates[]" class="form-control rounded-3" multiple accept="image/*">
+                        <small class="text-muted">Bạn có thể chọn nhiều ảnh cùng lúc</small>
                     </div>
 
                     <div class="row g-3 mb-4">

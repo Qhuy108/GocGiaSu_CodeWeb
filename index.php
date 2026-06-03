@@ -120,6 +120,22 @@ case 'get_tutor_contact':
         $controller->$action();
         break;
 
+    case 'payment':
+        requireLogin();
+        requireRole('student');
+        loadController('Booking');
+        $controller = new BookingController();
+        $controller->payment();
+        break;
+
+    case 'process_payment':
+        requireLogin();
+        requireRole('student');
+        loadController('Booking');
+        $controller = new BookingController();
+        $controller->processPayment();
+        break;
+
     // ── Dashboard Gia sư ─────────────────────────────────────────────────────
     case 'tutor_dashboard':
         requireLogin();
@@ -187,15 +203,6 @@ case 'my_classes':
     $controller->myClasses();
     break;
 
-case 'settings':
-    requireLogin();
-    requireRole('tutor');
-
-    loadController('Tutor');
-
-    $controller = new TutorController();
-    $controller->settings();
-    break;
     // ── 404 ──────────────────────────────────────────────────────────────────
     default:
         http_response_code(404);

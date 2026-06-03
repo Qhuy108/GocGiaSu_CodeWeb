@@ -10,6 +10,17 @@ require_once __DIR__ . '/partials/header.php';
     <div class="row">
 
         <div class="col-lg-2 sidebar py-4 px-3">
+            <div class="text-center mb-4 pb-3 border-bottom">
+                <div class="position-relative d-inline-block">
+                    <img src="<?= !empty($_SESSION['avatar']) ? '/assets/uploads/' . htmlspecialchars($_SESSION['avatar']) : '/assets/avt.jpg' ?>" 
+                         class="rounded-circle border border-3 border-white shadow-sm" 
+                         style="width: 80px; height: 80px; object-fit: cover;">
+                    <span class="position-absolute bottom-0 end-0 bg-success border border-2 border-white rounded-circle" 
+                          style="width: 15px; height: 15px;"></span>
+                </div>
+                <h6 class="mt-2 mb-0 fw-bold" style="color: #042940;"><?= htmlspecialchars($_SESSION['name'] ?? 'Gia sư') ?></h6>
+                <p class="small text-muted mb-0">Tài khoản Gia sư</p>
+            </div>
             <div class="nav flex-column">
     <a href="#" class="nav-link active">
         <i class="fa-solid fa-table me-3"></i> Bảng tin
@@ -22,8 +33,8 @@ require_once __DIR__ . '/partials/header.php';
     <i class="fa-solid fa-clipboard-check me-3"></i>
     Lớp đã nhận
 </a>
-<a href="/index.php?page=settings"
-   class="nav-link <?= ($page == 'settings') ? 'active' : '' ?>">
+<a href="/index.php?page=tutor_settings"
+   class="nav-link <?= ($page == 'tutor_settings') ? 'active' : '' ?>">
     <i class="fas fa-cog me-3"></i>
     Cài đặt tài khoản
 </a>

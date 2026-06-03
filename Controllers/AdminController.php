@@ -36,6 +36,7 @@ class AdminController
             'tong_booking'  => (int)$db->query("SELECT COUNT(*) FROM bookings")->fetchColumn(),
             'cho_duyet'     => (int)$db->query("SELECT COUNT(*) FROM tutors WHERE Status='pending'")->fetchColumn(),
             'da_duyet'      => (int)$db->query("SELECT COUNT(*) FROM tutors WHERE Status='approved'")->fetchColumn(),
+            'cho_thanh_toan' => (int)$db->query("SELECT COUNT(*) FROM bookings WHERE Payment_status='pending_approval'")->fetchColumn(),
             'doanh_thu'     => (float)$db->query("SELECT COALESCE(SUM(Total_price),0) FROM bookings WHERE Status='done' AND Payment_status='paid'")->fetchColumn(),
         ];
         require_once __DIR__ . '/../Views/admin/dashboard.php';
@@ -56,6 +57,49 @@ class AdminController
         ");
         $pendingTutors = $stmt->fetchAll();
         require_once __DIR__ . '/../Views/admin/pending_tutors.php';
+    }
+
+    // Danh sách thanh toán chờ duyệt
+    public function pendingPayments(): void
+    {
+        $db = getDB();
+        $stmt = $db->query("
+            SELECT b.*, u.Name AS ten_hoc_sinh, t_u.Name AS ten_gia_su, s.Name AS subject_name
+            FROM bookings b
+            JOIN users u ON u.Id = b.Student_id
+            JOIN tutors t ON t.Id = b.Tutor_id
+            JOIN users t_u ON t_u.Id = t.User_id
+            LEFT JOIN subjects s ON s.Id = b.Subject_id
+            WHERE b.Payment_status = 'pending_approval'
+            ORDER BY b.Id DESC
+        ");
+        $pendingPayments = $stmt->fetchAll();
+        require_once __DIR__ . '/../Views/admin/pending_payments.php';
+    }
+
+    // Duyệt hoặc từ chối thanh toán
+    public function approvePayment(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /index.php?page=admin&action=pendingPayments');
+            exit;
+        }
+
+        $bookingId = (int)($_POST['booking_id'] ?? 0);
+        $action    = $_POST['action'] ?? ''; // 'approve' | 'reject'
+
+        if ($bookingId > 0 && in_array($action, ['approve', 'reject'])) {
+            $db = getDB();
+            if ($action === 'approve') {
+                $db->prepare("UPDATE bookings SET Payment_status = 'paid' WHERE Id = ?")->execute([$bookingId]);
+            } else {
+                // Nếu từ chối thanh toán, có thể xóa booking hoặc chuyển trạng thái
+                $db->prepare("UPDATE bookings SET Status = 'cancelled', Payment_status = 'unpaid' WHERE Id = ?")->execute([$bookingId]);
+            }
+        }
+
+        header('Location: /index.php?page=admin&action=pendingPayments');
+        exit;
     }
 
     // Duyệt hoặc từ chối hồ sơ gia sư

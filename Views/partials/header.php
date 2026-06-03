@@ -237,7 +237,13 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
                         <a class="nav-link nav-link-professional dropdown-toggle d-flex align-items-center gap-2"
                            href="#" id="userDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle"></i>
+                            <?php if (!empty($_SESSION['avatar'])): ?>
+                                <img src="/assets/uploads/<?= htmlspecialchars($_SESSION['avatar']) ?>" 
+                                     class="rounded-circle border" 
+                                     style="width: 30px; height: 30px; object-fit: cover;">
+                            <?php else: ?>
+                                <i class="bi bi-person-circle" style="font-size: 1.2rem;"></i>
+                            <?php endif; ?>
                             <?= htmlspecialchars($userName) ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-professional"

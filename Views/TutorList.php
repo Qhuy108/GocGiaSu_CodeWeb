@@ -37,8 +37,14 @@ require_once __DIR__ . '/partials/header.php';
             <div class="card h-100 border-0 shadow-sm p-4 rounded-4 tutor-card transition">
                 <div class="card-body p-0">
                     <div class="d-flex align-items-center mb-3">
-                        <div class="rounded-circle bg-soft-primary text-primary d-flex align-items-center justify-content-center" 
-                             style="width: 50px; height: 50px; font-weight: bold;"><?= substr($tutor['Name'], 0, 1) ?></div>
+                        <?php if (!empty($tutor['Avatar'])): ?>
+                            <img src="/assets/uploads/<?= htmlspecialchars($tutor['Avatar']) ?>" 
+                                 class="rounded-circle object-fit-cover shadow-sm" 
+                                 style="width: 50px; height: 50px;">
+                        <?php else: ?>
+                            <div class="rounded-circle bg-soft-primary text-primary d-flex align-items-center justify-content-center" 
+                                 style="width: 50px; height: 50px; font-weight: bold;"><?= mb_substr(htmlspecialchars($tutor['Name']), 0, 1) ?></div>
+                        <?php endif; ?>
                         <div class="ms-3">
                             <h5 class="fw-bold mb-0"><?= htmlspecialchars($tutor['Name']) ?></h5>
                             <small class="text-success"><i class="fa-solid fa-circle-check"></i> Đã xác thực</small>

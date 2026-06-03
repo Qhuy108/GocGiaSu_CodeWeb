@@ -156,7 +156,10 @@ require_once __DIR__ . '/partials/header.php';
                 <?php foreach ($featuredTutors as $tutor): ?>
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="card border-0 rounded-4 shadow-sm p-2 h-100">
-                            <img src="<?= htmlspecialchars($tutor['Avatar'] ?? $assetPath . 'avt.jpg') ?>"
+                            <?php 
+                                $avatarUrl = !empty($tutor['Avatar']) ? '/assets/uploads/' . $tutor['Avatar'] : $assetPath . 'avt.jpg';
+                            ?>
+                            <img src="<?= htmlspecialchars($avatarUrl) ?>"
                                  class="card-img-top rounded-3"
                                  style="height:200px;object-fit:cover;"
                                  alt="<?= htmlspecialchars($tutor['Name']) ?>">

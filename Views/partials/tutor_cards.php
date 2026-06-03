@@ -9,7 +9,10 @@ if (empty($tutors)): ?>
         <?php foreach ($tutors as $tutor): ?>
             <div class="col-md-6 col-xl-4">
                 <div class="card border-0 shadow-sm rounded-4 h-100 role-card bg-white p-2">
-                    <img src="<?= htmlspecialchars($tutor['Avatar'] ?? '../assets/avt.jpg') ?>"
+                    <?php 
+                        $avatarUrl = !empty($tutor['Avatar']) ? '/assets/uploads/' . $tutor['Avatar'] : '/assets/avt.jpg';
+                    ?>
+                    <img src="<?= htmlspecialchars($avatarUrl) ?>"
                          class="card-img-top rounded-4 object-fit-cover"
                          style="height: 150px;"
                          alt="Gia sư">
@@ -40,11 +43,22 @@ if (empty($tutors)): ?>
                                 <?= number_format($tutor['diem_tb'], 1) ?>/5
                             </span>
 
-                            <a href="/index.php?page=tutor_profile&id=<?= (int)$tutor['Id'] ?>"
-                               class="btn btn-gocgiasu btn-sm rounded-pill px-3 py-1 fw-bold"
-                               style="font-size: 10px;">
-                                Chi tiết
-                            </a>
+                            <div class="d-flex gap-1">
+                                <a href="/index.php?page=tutor_profile&id=<?= (int)$tutor['Id'] ?>"
+                                   class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-1 fw-bold"
+                                   style="font-size: 10px;">
+                                    Chi tiết
+                                </a>
+                                <?php if (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'student'): ?>
+                                    <button class="btn btn-gocgiasu btn-sm rounded-pill px-3 py-1 fw-bold btn-book-tutor"
+                                            style="font-size: 10px;"
+                                            data-tutor-id="<?= (int)$tutor['Id'] ?>"
+                                            data-tutor-name="<?= htmlspecialchars($tutor['Name']) ?>"
+                                            data-subjects='<?= $tutor['subjects_json'] ?? '[]' ?>'>
+                                        Đặt lịch
+                                    </button>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -323,4 +323,45 @@ document.getElementById('reviewModal').addEventListener('show.bs.modal', functio
 });
 </script>
 
+<!-- Real-time tutor filtering with Fetch API + debounce -->
+<script>
+(function(){
+    const form = document.getElementById('filterForm');
+    const container = document.getElementById('tutorListContainer');
+    if (!form || !container) return;
+
+    const debounceMs = 400;
+    let timer = null;
+
+    function fetchAndRender(){
+        const params = new URLSearchParams(new FormData(form));
+        params.set('page', 'student');
+        params.set('action', 'filter_tutors');
+
+        fetch('/index.php?' + params.toString(), {
+            headers: {'X-Requested-With': 'XMLHttpRequest'}
+        })
+        .then(r => r.text())
+        .then(html => { container.innerHTML = html; })
+        .catch(err => { console.error('Filter fetch error', err); });
+    }
+
+    // debounce wrapper for input
+    function debounceFetch(){
+        clearTimeout(timer);
+        timer = setTimeout(fetchAndRender, debounceMs);
+    }
+
+    // Listen selects change
+    form.querySelectorAll('select[name="mon_hoc"], select[name="muc_luong"]').forEach(el => {
+        el.addEventListener('change', fetchAndRender);
+    });
+
+    // Listen khu_vuc input with debounce
+    const khu = form.querySelector('input[name="khu_vuc"]');
+    if (khu) khu.addEventListener('input', debounceFetch);
+
+})();
+</script>
+
 <?php require_once __DIR__ . '/partials/footer.php'; ?>

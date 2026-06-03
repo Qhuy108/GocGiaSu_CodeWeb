@@ -43,7 +43,8 @@ class TutorModel
         $sql = "SELECT t.*, u.Name, u.Avatar,
                        COALESCE(AVG(r.Rating), 0) AS diem_tb,
                        COUNT(r.Id) AS so_danh_gia,
-                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc
+                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc,
+                       CONCAT('[', GROUP_CONCAT(DISTINCT CONCAT('{\"id\":', s.Id, ',\"name\":\"', s.Name, '\"}') SEPARATOR ','), ']') AS subjects_json
                 FROM tutors t
                 JOIN users u ON u.Id = t.User_id
                 LEFT JOIN tutor_subjects ts ON ts.Tutor_id = t.Id
@@ -70,7 +71,8 @@ class TutorModel
     public function findById(int $id): array|false
     {
         $sql = "SELECT t.*, u.Name, u.Email, u.Phone, u.Avatar,
-                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc
+                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc,
+                       CONCAT('[', GROUP_CONCAT(DISTINCT CONCAT('{\"id\":', s.Id, ',\"name\":\"', s.Name, '\"}') SEPARATOR ','), ']') AS subjects_json
                 FROM tutors t
                 JOIN users u ON u.Id = t.User_id
                 LEFT JOIN tutor_subjects ts ON ts.Tutor_id = t.Id
@@ -135,7 +137,8 @@ class TutorModel
     {
         $sql = "SELECT t.Id, u.Name, u.Avatar,
                        COALESCE(AVG(r.Rating), 0) AS diem_tb,
-                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc
+                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc,
+                       CONCAT('[', GROUP_CONCAT(DISTINCT CONCAT('{\"id\":', s.Id, ',\"name\":\"', s.Name, '\"}') SEPARATOR ','), ']') AS subjects_json
                 FROM tutors t
                 JOIN users u ON u.Id = t.User_id
                 LEFT JOIN tutor_subjects ts ON ts.Tutor_id = t.Id

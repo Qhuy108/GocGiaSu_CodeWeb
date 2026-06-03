@@ -82,6 +82,14 @@ require_once __DIR__ . '/partials/header.php';
                             <button class="btn btn-sm btn-outline-secondary rounded-pill w-100" disabled>
                                 Không thể hủy
                             </button>
+                            <?php elseif ($b['Status'] === 'done'): ?>
+                            <button class="btn btn-sm btn-warning rounded-pill w-100 fw-bold"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#reviewModal"
+                                    data-booking-id="<?= (int)$b['Id'] ?>"
+                                    data-tutor-name="<?= htmlspecialchars($b['ten_gia_su'] ?? '') ?>">
+                                <i class="fa-solid fa-star me-1"></i> Đánh giá
+                            </button>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -341,5 +349,60 @@ require_once __DIR__ . '/partials/header.php';
             </div>
         </div>
     </div>
+
+<!-- Modal đánh giá gia sư -->
+<div class="modal fade" id="reviewModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">Đánh giá gia sư</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="/index.php?page=student&action=review">
+                <div class="modal-body">
+                    <input type="hidden" name="booking_id" id="review_booking_id">
+                    <p class="text-muted mb-3">Gia sư: <strong id="review_tutor_name"></strong></p>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">Số sao</label>
+                        <div class="d-flex gap-2">
+                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio"
+                                       name="rating" value="<?= $i ?>"
+                                       id="star<?= $i ?>" required>
+                                <label class="form-check-label" for="star<?= $i ?>">
+                                    <?= $i ?> ⭐
+                                </label>
+                            </div>
+                            <?php endfor; ?>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">Nhận xét</label>
+                        <textarea name="comment" class="form-control rounded-3" rows="3"
+                                  placeholder="Chia sẻ trải nghiệm của bạn..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4"
+                            data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold">
+                        Gửi đánh giá
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('reviewModal').addEventListener('show.bs.modal', function(e) {
+    var btn = e.relatedTarget;
+    document.getElementById('review_booking_id').value = btn.getAttribute('data-booking-id');
+    document.getElementById('review_tutor_name').textContent = btn.getAttribute('data-tutor-name');
+});
+</script>
 
 <?php require_once __DIR__ . '/partials/footer.php'; ?>

@@ -83,6 +83,7 @@ require_once __DIR__ . '/partials/header.php';
                                 Không thể hủy
                             </button>
                             <?php elseif ($b['Status'] === 'done'): ?>
+                            <?php if (empty($b['da_danh_gia'])): ?>
                             <button class="btn btn-sm btn-warning rounded-pill w-100 fw-bold"
                                     data-bs-toggle="modal"
                                     data-bs-target="#reviewModal"
@@ -90,6 +91,11 @@ require_once __DIR__ . '/partials/header.php';
                                     data-tutor-name="<?= htmlspecialchars($b['ten_gia_su'] ?? '') ?>">
                                 <i class="fa-solid fa-star me-1"></i> Đánh giá
                             </button>
+                            <?php else: ?>
+                            <button class="btn btn-sm btn-outline-secondary rounded-pill w-100" disabled>
+                                <i class="fa-solid fa-check me-1"></i> Đã đánh giá
+                            </button>
+                            <?php endif; ?>
                             <?php endif; ?>
                         </div>
                     </div>

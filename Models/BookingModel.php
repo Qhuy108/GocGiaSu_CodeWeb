@@ -40,11 +40,13 @@ class BookingModel
     // Lấy danh sách đặt lịch của 1 học sinh
     public function getByStudent(int $studentId): array
     {
-        $sql = "SELECT b.*, s.Name AS subject_name, u.Name AS ten_gia_su
+        $sql = "SELECT b.*, s.Name AS subject_name, u.Name AS ten_gia_su,
+                       IF(r.Id IS NOT NULL, 1, 0) AS da_danh_gia
                 FROM bookings b
                 JOIN tutors t ON t.Id = b.Tutor_id
                 JOIN users u ON u.Id = t.User_id
                 LEFT JOIN subjects s ON s.Id = b.Subject_id
+                LEFT JOIN reviews r ON r.Booking_id = b.Id
                 WHERE b.Student_id = ?
                 ORDER BY b.Date DESC";
 

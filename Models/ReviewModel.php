@@ -30,6 +30,14 @@ class ReviewModel
         return $stmt->fetchAll();
     }
 
+    // Kiểm tra booking đã được đánh giá chưa
+    public function existsForBooking(int $bookingId): bool
+    {
+        $stmt = $this->db->prepare('SELECT COUNT(*) FROM reviews WHERE Booking_id = ?');
+        $stmt->execute([$bookingId]);
+        return (int)$stmt->fetchColumn() > 0;
+    }
+
     // Tạo đánh giá mới
     public function create(array $data): int
     {

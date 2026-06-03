@@ -155,6 +155,11 @@ class BookingController
             exit;
         }
 
+        if ($this->reviewModel->existsForBooking($bookingId)) {
+            header('Location: /index.php?page=student&error=already_reviewed');
+            exit;
+        }
+
         $this->reviewModel->create([
             'Booking_id' => $bookingId,
             'Rating'     => $rating,

@@ -165,6 +165,16 @@ require_once __DIR__ . '/../partials/header.php';
                         </a>
                     </div>
 
+                    <div class="col-md-4 mt-3">
+                        <a href="/index.php?page=admin&action=posts"
+                           class="d-block text-decoration-none p-3 rounded-3 text-center h-100"
+                           style="background-color:#e3f2fd;border:1px solid #90caf9;">
+                            <i class="bi bi-journal-text fs-2 mb-2 d-block" style="color:#1565c0;"></i>
+                            <div class="fw-semibold" style="color:#1565c0;">Quản lý Blog</div>
+                            <small class="text-muted">Viết và quản lý bài viết học tập</small>
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@
 require_once __DIR__ . '/../Models/UserModel.php';
 require_once __DIR__ . '/../Models/TutorModel.php';
 require_once __DIR__ . '/../Models/BookingModel.php';
+require_once __DIR__ . '/../Models/PostModel.php';
 require_once __DIR__ . '/../core/session.php';
 
 class AdminController
@@ -144,5 +145,95 @@ class AdminController
         ")->fetchAll();
 
         require_once __DIR__ . '/../Views/admin/report.php';
+    }
+
+    public function posts(): void
+    {
+        $postModel = new PostModel();
+        $posts     = $postModel->getAll();
+        require_once __DIR__ . '/../Views/admin/posts.php';
+    }
+
+    public function postCreate(): void
+    {
+        $postModel = new PostModel();
+        $post      = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $user = currentUser();
+            $slug = trim($_POST['Slug'] ?? '');
+
+            if ($postModel->slugExists($slug)) {
+                $slug .= '-' . time();
+            }
+
+            $postModel->create([
+                ':Title'     => trim($_POST['Title']    ?? ''),
+                ':Slug'      => $slug,
+                ':Summary'   => trim($_POST['Summary']  ?? ''),
+                ':Content'   => $_POST['Content']       ?? '',
+                ':Category'  => trim($_POST['Category'] ?? ''),
+                ':Image'     => trim($_POST['Image']    ?? ''),
+                ':Author_id' => $user['id'],
+                ':Status'    => $_POST['Status']        ?? 'draft',
+            ]);
+
+            header('Location: /index.php?page=admin&action=posts&success=created');
+            exit;
+        }
+
+        require_once __DIR__ . '/../Views/admin/post_form.php';
+    }
+
+    public function postEdit(): void
+    {
+        $postModel = new PostModel();
+        $post      = $postModel->findById((int)($_GET['id'] ?? 0));
+
+        if (!$post) {
+            header('Location: /index.php?page=admin&action=posts');
+            exit;
+        }
+
+        require_once __DIR__ . '/../Views/admin/post_form.php';
+    }
+
+    public function postUpdate(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /index.php?page=admin&action=posts');
+            exit;
+        }
+
+        $postModel = new PostModel();
+        $id        = (int)($_POST['post_id'] ?? 0);
+        $slug      = trim($_POST['Slug'] ?? '');
+
+        if ($postModel->slugExists($slug, $id)) {
+            $slug .= '-' . time();
+        }
+
+        $postModel->update($id, [
+            'Title'    => trim($_POST['Title']    ?? ''),
+            'Slug'     => $slug,
+            'Summary'  => trim($_POST['Summary']  ?? ''),
+            'Content'  => $_POST['Content']       ?? '',
+            'Category' => trim($_POST['Category'] ?? ''),
+            'Image'    => trim($_POST['Image']    ?? ''),
+            'Status'   => $_POST['Status']        ?? 'draft',
+        ]);
+
+        header('Location: /index.php?page=admin&action=posts&success=updated');
+        exit;
+    }
+
+    public function postDelete(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $postModel = new PostModel();
+            $postModel->delete((int)($_POST['post_id'] ?? 0));
+        }
+        header('Location: /index.php?page=admin&action=posts&success=deleted');
+        exit;
     }
 }

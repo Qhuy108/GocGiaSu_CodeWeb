@@ -56,11 +56,13 @@ public function dashboard(): void
     requireLogin();
     requireRole('tutor');
 
-    $user = currentUser();
-    // Lấy thông tin gia sư từ database dựa trên User_id của người đang đăng nhập
+    $user  = currentUser();
     $tutor = $this->tutorModel->findByUserId($user['id']);
 
-    // Truyền biến $tutor này sang view GiaoDien_GS.php
+    require_once __DIR__ . '/../Models/BookingModel.php';
+    $bookingModel    = new BookingModel();
+    $pendingBookings = $tutor ? $bookingModel->getByTutor((int)$tutor['Id'], 'pending') : [];
+
     require_once __DIR__ . '/../Views/GiaoDien_GS.php';
 }
 
@@ -86,8 +88,119 @@ public function profile(): void
 
     require_once __DIR__ . '/../Views/TutorProfile.php';
 }
-// Trong TutorController.php
-// Trong Controllers/TutorController.php
+public function accountSettings(): void
+{
+    require_once __DIR__ . '/../Models/UserModel.php';
+    $currentUser = currentUser();
+    $user = (new UserModel())->findById((int)$currentUser['id']);
+    require_once __DIR__ . '/../Views/TutorAccountSettings.php';
+}
+
+public function updateAccountSettings(): void
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: /index.php?page=tutor_settings');
+        exit;
+    }
+
+    require_once __DIR__ . '/../Models/UserModel.php';
+    $userModel   = new UserModel();
+    $currentUser = currentUser();
+    $userId      = (int)$currentUser['id'];
+    $type        = $_GET['type'] ?? '';
+
+    if ($type === 'info') {
+        $name  = trim($_POST['Name']  ?? '');
+        $phone = trim($_POST['Phone'] ?? '');
+
+        $userModel->update($userId, ['Name' => $name, 'Phone' => $phone]);
+
+        // Cập nhật lại session
+        $_SESSION['name'] = $name;
+
+        header('Location: /index.php?page=tutor_settings&success=info');
+        exit;
+    }
+
+    if ($type === 'password') {
+        $current = $_POST['current_password'] ?? '';
+        $new     = $_POST['new_password']     ?? '';
+        $confirm = $_POST['confirm_password'] ?? '';
+
+        $userFull = $userModel->findById($userId);
+
+        if (!password_verify($current, $userFull['Password'])) {
+            header('Location: /index.php?page=tutor_settings&error=wrong_password');
+            exit;
+        }
+        if (strlen($new) < 6) {
+            header('Location: /index.php?page=tutor_settings&error=password_short');
+            exit;
+        }
+        if ($new !== $confirm) {
+            header('Location: /index.php?page=tutor_settings&error=password_mismatch');
+            exit;
+        }
+
+        $userModel->update($userId, ['Password' => password_hash($new, PASSWORD_DEFAULT)]);
+        header('Location: /index.php?page=tutor_settings&success=password');
+        exit;
+    }
+
+    header('Location: /index.php?page=tutor_settings');
+    exit;
+}
+
+public function editProfile(): void
+{
+    $user  = currentUser();
+    $tutor = $this->tutorModel->findByUserId($user['id']);
+    if (!$tutor) die('Không tìm thấy hồ sơ gia sư.');
+    require_once __DIR__ . '/../Views/TutorEditProfile.php';
+}
+
+public function updateProfile(): void
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: /index.php?page=tutor_edit');
+        exit;
+    }
+    $user  = currentUser();
+    $tutor = $this->tutorModel->findByUserId($user['id']);
+    if (!$tutor) die('Không tìm thấy hồ sơ gia sư.');
+
+    $data = [
+        'Bio'            => trim($_POST['Bio']            ?? ''),
+        'Experience'     => trim($_POST['Experience']     ?? ''),
+        'Qualifications' => trim($_POST['Qualifications'] ?? ''),
+        'Location'       => trim($_POST['Location']       ?? ''),
+        'Hourly_rate'    => (float)($_POST['Hourly_rate'] ?? 0),
+    ];
+
+    $this->tutorModel->update((int)$tutor['Id'], $data);
+
+    // Xử lý upload ảnh
+    if (!empty($_FILES['avatar']['name'])) {
+        $file     = $_FILES['avatar'];
+        $allowed  = ['image/jpeg', 'image/png', 'image/webp'];
+        $maxSize  = 2 * 1024 * 1024; // 2MB
+
+        if (in_array($file['type'], $allowed) && $file['size'] <= $maxSize && $file['error'] === 0) {
+            $ext      = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = 'tutor_' . $user['id'] . '_' . time() . '.' . $ext;
+            $dest     = __DIR__ . '/../assets/uploads/' . $filename;
+
+            if (move_uploaded_file($file['tmp_name'], $dest)) {
+                $db = getDB();
+                $db->prepare("UPDATE users SET Avatar = ? WHERE Id = ?")
+                   ->execute([$filename, $user['id']]);
+            }
+        }
+    }
+
+    header('Location: /index.php?page=tutor_edit&success=1');
+    exit;
+}
 
 public function myClasses(): void
 {

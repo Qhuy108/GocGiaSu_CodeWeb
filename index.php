@@ -89,9 +89,8 @@ case 'get_tutor_contact':
         requireLogin();
         $role = $_SESSION['role'] ?? '';
         if ($role === 'tutor') {
-            loadController('Tutor');
-            $controller = new TutorController();
-            $controller->editProfile();
+            header('Location: /index.php?page=tutor_dashboard');
+            exit;
         } elseif ($role === 'student') {
             header('Location: /index.php?page=student');
             exit;
@@ -114,9 +113,47 @@ case 'get_tutor_contact':
     case 'tutor_dashboard':
         requireLogin();
         requireRole('tutor');
+        loadController('Booking');
         loadController('Tutor');
         $controller = new TutorController();
-        $controller->dashboard();
+        if ($action === 'updateStatus') {
+            $bookingController = new BookingController();
+            $bookingController->updateStatus();
+        } else {
+            $controller->dashboard();
+        }
+        break;
+
+    case 'tutor_edit':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->editProfile();
+        break;
+
+    case 'tutor_settings':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->accountSettings();
+        break;
+
+    case 'tutor_settings_update':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->updateAccountSettings();
+        break;
+
+    case 'tutor_update':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->updateProfile();
         break;
 
     // ── Admin Panel ──────────────────────────────────────────────────────────

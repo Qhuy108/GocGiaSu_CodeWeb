@@ -88,8 +88,56 @@ public function profile(): void
 
     require_once __DIR__ . '/../Views/TutorProfile.php';
 }
-// Trong TutorController.php
-// Trong Controllers/TutorController.php
+public function editProfile(): void
+{
+    $user  = currentUser();
+    $tutor = $this->tutorModel->findByUserId($user['id']);
+    if (!$tutor) die('Không tìm thấy hồ sơ gia sư.');
+    require_once __DIR__ . '/../Views/TutorEditProfile.php';
+}
+
+public function updateProfile(): void
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: /index.php?page=tutor_edit');
+        exit;
+    }
+    $user  = currentUser();
+    $tutor = $this->tutorModel->findByUserId($user['id']);
+    if (!$tutor) die('Không tìm thấy hồ sơ gia sư.');
+
+    $data = [
+        'Bio'            => trim($_POST['Bio']            ?? ''),
+        'Experience'     => trim($_POST['Experience']     ?? ''),
+        'Qualifications' => trim($_POST['Qualifications'] ?? ''),
+        'Location'       => trim($_POST['Location']       ?? ''),
+        'Hourly_rate'    => (float)($_POST['Hourly_rate'] ?? 0),
+    ];
+
+    $this->tutorModel->update((int)$tutor['Id'], $data);
+
+    // Xử lý upload ảnh
+    if (!empty($_FILES['avatar']['name'])) {
+        $file     = $_FILES['avatar'];
+        $allowed  = ['image/jpeg', 'image/png', 'image/webp'];
+        $maxSize  = 2 * 1024 * 1024; // 2MB
+
+        if (in_array($file['type'], $allowed) && $file['size'] <= $maxSize && $file['error'] === 0) {
+            $ext      = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = 'tutor_' . $user['id'] . '_' . time() . '.' . $ext;
+            $dest     = __DIR__ . '/../assets/uploads/' . $filename;
+
+            if (move_uploaded_file($file['tmp_name'], $dest)) {
+                $db = getDB();
+                $db->prepare("UPDATE users SET Avatar = ? WHERE Id = ?")
+                   ->execute([$filename, $user['id']]);
+            }
+        }
+    }
+
+    header('Location: /index.php?page=tutor_edit&success=1');
+    exit;
+}
 
 public function myClasses(): void
 {

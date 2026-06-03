@@ -54,5 +54,92 @@ require_once __DIR__ . '/partials/header.php';
             </div>
         </div>
         <?php endforeach; ?>
+
+        <?php if (empty($tutors)): ?>
+        <div class="col-12 text-center py-5">
+            <i class="fa-solid fa-user-slash fa-3x text-muted mb-3"></i>
+            <p class="text-muted fs-5">Không tìm thấy gia sư phù hợp. Thử tìm kiếm khác nhé!</p>
+        </div>
+        <?php endif; ?>
     </div>
+
+    <!-- Phân trang -->
+    <?php if ($tongTrang > 1): ?>
+    <?php
+        $mon_hoc = urlencode($filters['mon_hoc'] ?? '');
+        $khu_vuc = urlencode($filters['khu_vuc'] ?? '');
+        $baseUrl = "/index.php?page=tutors&mon_hoc={$mon_hoc}&khu_vuc={$khu_vuc}&trang=";
+    ?>
+    <nav class="mt-4 d-flex justify-content-center" aria-label="Phân trang">
+        <ul class="pagination pagination-lg gap-1">
+
+            <!-- Nút Previous -->
+            <li class="page-item <?= $trang <= 1 ? 'disabled' : '' ?>">
+                <a class="page-link rounded-pill px-3 border-0 shadow-sm"
+                   href="<?= $baseUrl . ($trang - 1) ?>">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+            </li>
+
+            <?php
+            // Hiển thị tối đa 5 trang, có dấu ... khi cần
+            $range = 2;
+            $start = max(1, $trang - $range);
+            $end   = min($tongTrang, $trang + $range);
+            ?>
+
+            <!-- Trang đầu + dấu ... -->
+            <?php if ($start > 1): ?>
+                <li class="page-item">
+                    <a class="page-link rounded-pill px-3 border-0 shadow-sm" href="<?= $baseUrl . 1 ?>">1</a>
+                </li>
+                <?php if ($start > 2): ?>
+                <li class="page-item disabled">
+                    <span class="page-link border-0 bg-transparent">...</span>
+                </li>
+                <?php endif; ?>
+            <?php endif; ?>
+
+            <!-- Các trang giữa -->
+            <?php for ($i = $start; $i <= $end; $i++): ?>
+            <li class="page-item <?= $i === $trang ? 'active' : '' ?>">
+                <a class="page-link rounded-pill px-3 border-0 shadow-sm
+                   <?= $i === $trang ? '' : '' ?>"
+                   href="<?= $baseUrl . $i ?>"
+                   style="<?= $i === $trang ? 'background:#9FC131; border-color:#9FC131;' : '' ?>">
+                    <?= $i ?>
+                </a>
+            </li>
+            <?php endfor; ?>
+
+            <!-- Dấu ... + trang cuối -->
+            <?php if ($end < $tongTrang): ?>
+                <?php if ($end < $tongTrang - 1): ?>
+                <li class="page-item disabled">
+                    <span class="page-link border-0 bg-transparent">...</span>
+                </li>
+                <?php endif; ?>
+                <li class="page-item">
+                    <a class="page-link rounded-pill px-3 border-0 shadow-sm"
+                       href="<?= $baseUrl . $tongTrang ?>"><?= $tongTrang ?></a>
+                </li>
+            <?php endif; ?>
+
+            <!-- Nút Next -->
+            <li class="page-item <?= $trang >= $tongTrang ? 'disabled' : '' ?>">
+                <a class="page-link rounded-pill px-3 border-0 shadow-sm"
+                   href="<?= $baseUrl . ($trang + 1) ?>">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+    <p class="text-center text-muted small mt-2">
+        Trang <?= $trang ?> / <?= $tongTrang ?>
+    </p>
+    <?php endif; ?>
+
 </div>
+
+<?php require_once __DIR__ . '/partials/footer.php'; ?>

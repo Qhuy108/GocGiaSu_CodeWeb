@@ -28,10 +28,11 @@ function requireRole(string $role): void
 function currentUser(): array
 {
     return [
-        'id'    => $_SESSION['user_id'] ?? null,
-        'name'  => $_SESSION['name']    ?? '',
-        'role'  => $_SESSION['role']    ?? '',
-        'email' => $_SESSION['email']   ?? '',
+        'id'     => $_SESSION['user_id'] ?? null,
+        'name'   => $_SESSION['name']    ?? '',
+        'role'   => $_SESSION['role']    ?? '',
+        'email'  => $_SESSION['email']   ?? '',
+        'avatar' => $_SESSION['avatar']  ?? '',
     ];
 }
 
@@ -41,7 +42,7 @@ function setUserSession(array $user): void
     $_SESSION['name']    = $user['Name'];
     $_SESSION['role']    = $user['Role'];
     $_SESSION['email']   = $user['Email'];
-    $_SESSION['avatar']  = $user['Avatar'] ?? '';
+    $_SESSION['avatar'] = $user['Avatar'] ?? '';
 }
 
 function destroySession(): void

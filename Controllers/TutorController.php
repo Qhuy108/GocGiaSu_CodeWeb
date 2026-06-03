@@ -172,10 +172,43 @@ public function updateProfile(): void
     $data = [
         'Bio'            => trim($_POST['Bio']            ?? ''),
         'Experience'     => trim($_POST['Experience']     ?? ''),
-        'Qualifications' => trim($_POST['Qualifications'] ?? ''),
         'Location'       => trim($_POST['Location']       ?? ''),
         'Hourly_rate'    => (float)($_POST['Hourly_rate'] ?? 0),
     ];
+
+    // Xử lý upload ảnh chứng chỉ bổ sung
+    $newQualifications = [];
+    if (!empty($_FILES['certificates']['name'][0])) {
+        $allowed  = ['image/jpeg', 'image/png', 'image/webp'];
+        $maxSize  = 5 * 1024 * 1024; // 5MB
+        $uploadDir = __DIR__ . '/../assets/uploads/certificates';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        foreach ($_FILES['certificates']['name'] as $key => $name) {
+            $tmp_name = $_FILES['certificates']['tmp_name'][$key];
+            $error    = $_FILES['certificates']['error'][$key];
+            $type     = $_FILES['certificates']['type'][$key];
+            $size     = $_FILES['certificates']['size'][$key];
+
+            if ($error === UPLOAD_ERR_OK && in_array($type, $allowed) && $size <= $maxSize) {
+                $ext      = pathinfo($name, PATHINFO_EXTENSION);
+                $safeName  = preg_replace('/[^A-Za-z0-9_\-\.]/', '_', pathinfo($name, PATHINFO_FILENAME));
+                $filename = sprintf('%s_%s.%s', $safeName, uniqid(), strtolower($ext));
+                $dest     = $uploadDir . '/' . $filename;
+
+                if (move_uploaded_file($tmp_name, $dest)) {
+                    $newQualifications[] = 'assets/uploads/certificates/' . $filename;
+                }
+            }
+        }
+    }
+
+    // Ghép chứng chỉ mới vào chứng chỉ cũ
+    $existingCerts = array_filter(explode(',', $tutor['Qualifications'] ?? ''));
+    $allCerts = array_merge($existingCerts, $newQualifications);
+    $data['Qualifications'] = implode(',', $allCerts);
 
     $this->tutorModel->update((int)$tutor['Id'], $data);
 
@@ -194,6 +227,9 @@ public function updateProfile(): void
                 $db = getDB();
                 $db->prepare("UPDATE users SET Avatar = ? WHERE Id = ?")
                    ->execute([$filename, $user['id']]);
+                
+                // Cập nhật session avatar
+                $_SESSION['avatar'] = $filename;
             }
         }
     }
@@ -215,5 +251,9 @@ public function myClasses(): void
     $classes = $tutor ? $bookingModel->getByTutor((int)$tutor['Id'], 'confirmed') : [];
 
     require_once __DIR__ . '/../Views/lop-da-nhan.php';
+}
+public function settings()
+{
+    require_once __DIR__ . '/../Views/cai_dat_tai_khoan.php';
 }
 }

@@ -22,10 +22,12 @@ require_once __DIR__ . '/partials/header.php';
     <i class="fa-solid fa-clipboard-check me-3"></i>
     Lớp đã nhận
 </a>
-    <a href="/index.php?page=tutor_settings" class="nav-link">
-        <i class="fa-solid fa-gear me-3"></i> Cài đặt tài khoản
-    </a>
-    <a href="/index.php?page=logout" class="nav-link text-danger mt-0">
+<a href="/index.php?page=settings"
+   class="nav-link <?= ($page == 'settings') ? 'active' : '' ?>">
+    <i class="fas fa-cog me-3"></i>
+    Cài đặt tài khoản
+</a>
+    <a href="/index.php?action=logout" class="nav-link text-danger mt-0">
         <i class="fa-solid fa-right-from-bracket me-3"></i> Đăng xuất
     </a>
 </div>

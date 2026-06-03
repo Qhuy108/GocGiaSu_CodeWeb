@@ -94,7 +94,17 @@ require_once __DIR__ . '/../partials/header.php';
                                                 <td class="text-muted small fw-semibold">
                                                     <i class="bi bi-award me-1"></i>Bằng cấp
                                                 </td>
-                                                <td class="small"><?= htmlspecialchars($tutor['Qualifications']) ?></td>
+                                                <td class="small">
+                                                    <?php if ($tutor['Qualifications'] && str_contains($tutor['Qualifications'], 'assets/uploads/')): ?>
+                                                        <button type="button" class="btn btn-sm btn-outline-info rounded-pill py-0" 
+                                                                style="font-size: 0.75rem;"
+                                                                data-bs-toggle="modal" data-bs-target="#certModal_<?= $tutor['Id'] ?>">
+                                                            <i class="bi bi-image me-1"></i> Xem ảnh
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <?= htmlspecialchars($tutor['Qualifications'] ?? 'N/A') ?>
+                                                    <?php endif; ?>
+                                                </td>
                                             </tr>
                                         <?php endif; ?>
                                     </tbody>
@@ -133,6 +143,41 @@ require_once __DIR__ . '/../partials/header.php';
 
                             </div>
                         </div>
+
+                        <!-- Modal xem ảnh chứng chỉ -->
+                        <?php if ($tutor['Qualifications'] && str_contains($tutor['Qualifications'], 'assets/uploads/')): ?>
+                        <div class="modal fade" id="certModal_<?= $tutor['Id'] ?>" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+                                <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+                                    <div class="modal-header border-0 pb-0">
+                                        <h5 class="modal-title fw-bold text-navy">Chứng chỉ: <?= htmlspecialchars($tutor['Name']) ?></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center p-4">
+                                        <div class="d-flex flex-column gap-3 align-items-center">
+                                            <?php 
+                                            $certs = array_filter(explode(',', $tutor['Qualifications']));
+                                            foreach ($certs as $cert):
+                                                if (str_contains($cert, 'assets/uploads/')):
+                                            ?>
+                                                <img src="/<?= htmlspecialchars(trim($cert)) ?>" 
+                                                     alt="Chứng chỉ" 
+                                                     class="img-fluid rounded shadow-sm" 
+                                                     style="max-height: 75vh; border: 1px solid #eee;">
+                                            <?php 
+                                                endif;
+                                            endforeach; 
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer border-0 pt-0 justify-content-center pb-4">
+                                        <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Đóng</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+
                     </div>
                 <?php endforeach; ?>
             </div>

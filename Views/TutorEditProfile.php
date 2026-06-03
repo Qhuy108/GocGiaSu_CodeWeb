@@ -56,8 +56,26 @@ require_once __DIR__ . '/partials/header.php';
 
                     <div class="mb-3">
                         <label class="form-label fw-medium">Bằng cấp / Chứng chỉ</label>
-                        <textarea name="Qualifications" class="form-control rounded-3" rows="3"
-                                  placeholder="Bằng cấp, chứng chỉ liên quan..."><?= htmlspecialchars($tutor['Qualifications'] ?? '') ?></textarea>
+                        <div class="mb-2 d-flex flex-wrap gap-2">
+                            <?php 
+                            $certs = array_filter(explode(',', $tutor['Qualifications'] ?? ''));
+                            if (!empty($certs)):
+                                foreach ($certs as $cert): 
+                                    if (str_contains($cert, 'assets/uploads/')):
+                            ?>
+                                        <div class="border rounded p-1 shadow-sm" style="width: 100px; height: 100px;">
+                                            <img src="/<?= htmlspecialchars(trim($cert)) ?>" class="w-100 h-100 object-fit-cover rounded">
+                                        </div>
+                            <?php   
+                                    endif;
+                                endforeach; 
+                            else:
+                            ?>
+                                <p class="text-muted small w-100 mb-0">Chưa có chứng chỉ nào.</p>
+                            <?php endif; ?>
+                        </div>
+                        <input type="file" name="certificates[]" class="form-control rounded-3" multiple accept="image/jpeg,image/png,image/webp">
+                        <small class="text-muted">Chọn nhiều ảnh để bổ sung thêm chứng chỉ. Các ảnh cũ sẽ được giữ nguyên.</small>
                     </div>
 
                     <div class="row g-3 mb-3">

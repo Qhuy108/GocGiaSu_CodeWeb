@@ -17,7 +17,12 @@ require_once __DIR__ . '/partials/header.php';
         <div class="avatar-wrapper mb-3">
             <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto border border-4 border-white shadow-sm" 
                  style="width: 150px; height: 150px; overflow: hidden; background: #e9ecef;">
-                 <i class="fa-solid fa-user fs-1 text-secondary"></i>
+                 <?php if (!empty($tutor['Avatar'])): ?>
+                    <img src="/assets/uploads/<?= htmlspecialchars($tutor['Avatar']) ?>" 
+                         class="w-100 h-100 object-fit-cover">
+                 <?php else: ?>
+                    <i class="fa-solid fa-user fs-1 text-secondary"></i>
+                 <?php endif; ?>
             </div>
         </div>
 
@@ -56,49 +61,41 @@ require_once __DIR__ . '/partials/header.php';
                     <p class="text-secondary"><?= nl2br(htmlspecialchars($tutor['Experience'])) ?></p>
 
                     <h5 class="mt-4">Bằng cấp</h5>
-                    <p class="text-secondary"><?= nl2br(htmlspecialchars($tutor['Qualifications'])) ?></p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <?php 
+                        $certs = array_filter(explode(',', $tutor['Qualifications'] ?? ''));
+                        if (!empty($certs)):
+                            foreach ($certs as $cert): 
+                                if (str_contains($cert, 'assets/uploads/')):
+                        ?>
+                                    <div class="border rounded p-1 shadow-sm" style="width: 120px; height: 120px;">
+                                        <img src="/<?= htmlspecialchars(trim($cert)) ?>" 
+                                             class="w-100 h-100 object-fit-cover rounded" 
+                                             alt="Chứng chỉ"
+                                             style="cursor: pointer;"
+                                             onclick="window.open(this.src, '_blank')">
+                                    </div>
+                        <?php   
+                                endif;
+                            endforeach; 
+                        else:
+                        ?>
+                            <p class="text-secondary">Chưa có chứng chỉ nào.</p>
+                        <?php endif; ?>
+                    </div>
 
                     <?php if (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'student'): ?>
                     <hr class="my-4">
-                    <h5 class="mt-4 fw-bold" style="color:#042940;">Đặt lịch học</h5>
-                    <form method="POST" action="/index.php?page=student&action=create">
-                        <input type="hidden" name="tutor_id" value="<?= (int)$tutor['Id'] ?>">
-
-                        <div class="mb-3">
-                            <label class="form-label fw-medium">Môn học</label>
-                            <select name="subject_id" class="form-select rounded-3" required>
-                                <option value="">-- Chọn môn --</option>
-                                <?php foreach ($tutorSubjects as $subject): ?>
-                                    <option value="<?= (int)$subject['Id'] ?>">
-                                        <?= htmlspecialchars($subject['Name']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-medium">Ngày học</label>
-                                <input type="date" name="date" class="form-control rounded-3"
-                                       min="<?= date('Y-m-d', strtotime('+1 day')) ?>" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-medium">Giờ học</label>
-                                <input type="time" name="time" class="form-control rounded-3" required>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-medium">Ghi chú</label>
-                            <textarea name="note" class="form-control rounded-3" rows="3"
-                                      placeholder="Ví dụ: Tôi muốn ôn tập chương..."></textarea>
-                        </div>
-
-                        <button type="submit" class="btn w-100 fw-bold rounded-pill py-2"
-                                style="background:#9FC131; color:#fff;">
-                            Gửi yêu cầu đặt lịch
+                    <div class="p-4 bg-light rounded-4 text-center">
+                        <h5 class="fw-bold text-navy mb-2">Bạn muốn học cùng gia sư này?</h5>
+                        <p class="text-muted small mb-4">Nhấn nút bên dưới để chọn môn học và thời gian phù hợp.</p>
+                        <button class="btn btn-gocgiasu btn-lg rounded-pill px-5 fw-bold btn-book-tutor shadow-sm"
+                                data-tutor-id="<?= (int)$tutor['Id'] ?>"
+                                data-tutor-name="<?= htmlspecialchars($tutor['Name']) ?>"
+                                data-subjects='<?= $tutor['subjects_json'] ?? '[]' ?>'>
+                            <i class="fa-solid fa-calendar-check me-2"></i> Đặt lịch học ngay
                         </button>
-                    </form>
+                    </div>
                     <?php elseif (!isset($_SESSION['user_id'])): ?>
                     <hr class="my-4">
                     <div class="text-center py-3">

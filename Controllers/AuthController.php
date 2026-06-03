@@ -305,7 +305,9 @@ if (!$user) {
             }
 
             $qualificationPath = null;
-            if (isset($_FILES['certificateFile']) && $_FILES['certificateFile']['error'] !== UPLOAD_ERR_NO_FILE) {
+            if (!isset($_FILES['certificateFile']) || $_FILES['certificateFile']['error'] === UPLOAD_ERR_NO_FILE) {
+                $errors[] = 'Vui lòng tải lên ảnh chứng chỉ / bằng cấp hoặc thẻ sinh viên.';
+            } else {
                 $file = $_FILES['certificateFile'];
                 if ($file['error'] !== UPLOAD_ERR_OK) {
                     $errors[] = 'Lỗi tải file chứng chỉ. Vui lòng thử lại.';

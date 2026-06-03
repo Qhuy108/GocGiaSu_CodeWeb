@@ -14,10 +14,11 @@ require_once __DIR__ . '/partials/header.php';
 <!-- Hero Section -->
 <section class="hero-section">
     <div class="container text-center">
-        <h1 class="mb-5 fw-bold" style="color:#DBF227; font-size: 2.8rem;">BẠN LÀ?</h1>
 
+    <?php if (!$isLoggedIn): ?>
+        <!-- Chưa đăng nhập: hiện BẠN LÀ? -->
+        <h1 class="mb-5 fw-bold" style="color:#DBF227; font-size: 2.8rem;">BẠN LÀ?</h1>
         <div class="row justify-content-center g-4 mt-2">
-            <!-- Học sinh -->
             <div class="col-md-5 col-lg-4">
                 <div class="card role-card p-4 h-100 d-flex flex-column">
                     <div class="mb-4 mt-2">
@@ -27,11 +28,9 @@ require_once __DIR__ . '/partials/header.php';
                     <p class="text-navy mb-4 flex-grow-1">
                         Tìm kiếm gia sư uy tín, chất lượng để cải thiện thành tích học tập một cách hiệu quả nhất.
                     </p>
-                    <a href="/Views/DangKy_HS.php" class="btn btn-gocgiasu mt-auto">Tìm Gia Sư Ngay</a>
+                    <a href="/index.php?page=tutors" class="btn btn-gocgiasu mt-auto">Tìm Gia Sư Ngay</a>
                 </div>
             </div>
-
-            <!-- Gia sư -->
             <div class="col-md-5 col-lg-4">
                 <div class="card role-card p-4 h-100 d-flex flex-column">
                     <div class="mb-4 mt-2">
@@ -41,10 +40,72 @@ require_once __DIR__ . '/partials/header.php';
                     <p class="text-navy mb-4 flex-grow-1">
                         Trở thành đối tác giảng dạy, linh hoạt thời gian và gia tăng thu nhập cho bản thân.
                     </p>
-                    <a href="/Views/DangKy_GS.php" class="btn btn-gocgiasu mt-auto">Đăng Ký Dạy</a>
+                    <a href="/index.php?page=register_tutor" class="btn btn-gocgiasu mt-auto">Đăng Ký Dạy</a>
                 </div>
             </div>
         </div>
+
+    <?php elseif ($userRole === 'student'): ?>
+        <!-- Học sinh đã đăng nhập -->
+        <h1 class="fw-bold mb-2" style="color:#DBF227; font-size:2.4rem;">
+            Chào mừng trở lại, <?= htmlspecialchars($userName) ?>! 👋
+        </h1>
+        <p class="mb-5" style="color:#E8F0F8; font-size:1.1rem;">Hôm nay bạn muốn học gì?</p>
+        <div class="row justify-content-center g-4">
+            <div class="col-md-4">
+                <div class="card role-card p-4 h-100 d-flex flex-column">
+                    <div class="mb-3"><img src="<?= $assetPath ?>findtutor.png" alt="" width="80"></div>
+                    <h5 class="text-teal fw-bold mb-2">Tìm gia sư</h5>
+                    <p class="text-navy small flex-grow-1">Khám phá hàng trăm gia sư chất lượng phù hợp với bạn.</p>
+                    <a href="/index.php?page=tutors" class="btn btn-gocgiasu mt-auto">Tìm ngay</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card role-card p-4 h-100 d-flex flex-column">
+                    <div class="mb-3"><img src="<?= $assetPath ?>student.png" alt="" width="80"></div>
+                    <h5 class="text-teal fw-bold mb-2">Lịch học của tôi</h5>
+                    <p class="text-navy small flex-grow-1">Xem và quản lý các buổi học đã đặt.</p>
+                    <a href="/index.php?page=student" class="btn btn-gocgiasu mt-auto">Xem lịch</a>
+                </div>
+            </div>
+        </div>
+
+    <?php elseif ($userRole === 'tutor'): ?>
+        <!-- Gia sư đã đăng nhập -->
+        <h1 class="fw-bold mb-2" style="color:#DBF227; font-size:2.4rem;">
+            Chào mừng trở lại, <?= htmlspecialchars($userName) ?>! 👋
+        </h1>
+        <p class="mb-5" style="color:#E8F0F8; font-size:1.1rem;">Hãy xem các yêu cầu mới từ học sinh.</p>
+        <div class="row justify-content-center g-4">
+            <div class="col-md-4">
+                <div class="card role-card p-4 h-100 d-flex flex-column">
+                    <div class="mb-3"><img src="<?= $assetPath ?>teacher.png" alt="" width="80"></div>
+                    <h5 class="text-teal fw-bold mb-2">Bảng tin</h5>
+                    <p class="text-navy small flex-grow-1">Xem yêu cầu đặt lịch và quản lý lớp học.</p>
+                    <a href="/index.php?page=tutor_dashboard" class="btn btn-gocgiasu mt-auto">Vào dashboard</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card role-card p-4 h-100 d-flex flex-column">
+                    <div class="mb-3"><img src="<?= $assetPath ?>graduation.png" alt="" width="80"></div>
+                    <h5 class="text-teal fw-bold mb-2">Lớp đã nhận</h5>
+                    <p class="text-navy small flex-grow-1">Quản lý các lớp đang dạy của bạn.</p>
+                    <a href="/index.php?page=my_classes" class="btn btn-gocgiasu mt-auto">Xem lớp</a>
+                </div>
+            </div>
+        </div>
+
+    <?php elseif ($userRole === 'admin'): ?>
+        <!-- Admin đã đăng nhập -->
+        <h1 class="fw-bold mb-2" style="color:#DBF227; font-size:2.4rem;">
+            Xin chào Admin <?= htmlspecialchars($userName) ?>!
+        </h1>
+        <p class="mb-5" style="color:#E8F0F8;">Quản lý toàn bộ hệ thống Góc Gia Sư.</p>
+        <a href="/index.php?page=admin" class="btn btn-gocgiasu btn-lg px-5 rounded-pill fw-bold">
+            Vào Admin Panel
+        </a>
+    <?php endif; ?>
+
     </div>
 </section>
 

@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gia Sư - Trần Hoàng Nam</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../../css/style.css">
+<?php
+$pageTitle = 'Gia Sư - Trần Hoàng Nam';
+require_once __DIR__ . '/../partials/header.php';
+?>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -93,14 +87,12 @@
             text-align: center; 
         }
     </style>
-</head>
-<body>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4 col-lg-3 sidebar p-4 text-center text-md-start">
                 <div class="star-decor">★</div>
                 <div class="text-center mb-5 mt-4">
-                    <img src="../assets/nam1.png" alt="Avatar" class="profile-img mb-3">
+                    <img src="../../assets/nam1.png" alt="Avatar" class="profile-img mb-3">
                     <h2 class="fw-bold" style="font-size: 2.5rem;">Trần Hoàng Nam</h2>
                     <p class="fs-3">Gia sư Toán & Lý</p>
                 </div>
@@ -154,5 +146,4 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+<?php require_once __DIR__ . '/../partials/footer.php'; ?>

@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gia Sư - Nguyễn Hải Yến</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../../css/style.css">
+<?php
+$pageTitle = 'Gia Sư - Lê Bảo Ngọc';
+require_once __DIR__ . '/../partials/header.php';
+?>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -41,6 +35,7 @@
         .section-title i {
             color: #9FC131;
         }
+
         .star-decor { 
             position: absolute; 
             top: 20px; 
@@ -79,7 +74,6 @@
             position: relative; 
             z-index: 5; 
         }
-
         .info-list p { 
             margin-bottom: 20px; 
             display: flex; 
@@ -92,27 +86,25 @@
             text-align: center; 
         }
     </style>
-</head>
-<body>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4 col-lg-3 sidebar p-4 text-center text-md-start">
                 <div class="star-decor">★</div>
                 <div class="text-center mb-5 mt-4">
-                    <img src="../assets/nu2.png" alt="Avatar" class="profile-img mb-3">
-                    <h2 class="fw-bold" style="font-size: 2.5rem;">Nguyễn Hải Yến</h2>
-                    <p class="fs-3">Gia sư Tiếng Anh</p>
+                    <img src="../../assets/nu1.png" alt="Avatar" class="profile-img mb-3">
+                    <h2 class="fw-bold" style="font-size: 2.5rem;">Lê Bảo Ngọc</h2>
+                    <p class="fs-3">Gia sư Tiểu học</p>
                 </div>
                 <div class="mt-5 info-list">
-                    <p><i class="bi bi-telephone-fill"></i> 0909 123 456</p>
-                    <p><i class="bi bi-envelope-fill"></i> haiyen.ielts@uit.edu.vn</p>
-                    <p><i class="bi bi-house-door-fill"></i> Quận 1, Tp.HCM</p>
-                    <p><i class="bi bi-calendar-event"></i> 15/08/2002</p>
+                    <p><i class="bi bi-telephone-fill"></i> 0912 345 678</p>
+                    <p><i class="bi bi-envelope-fill"></i> ngoc.le@gmail.com</p>
+                    <p><i class="bi bi-house-door-fill"></i> Gò Vấp, Tp.HCM</p>
+                    <p><i class="bi bi-calendar-event"></i> 12/12/2003</p>
                     <p><i class="bi bi-gender-ambiguous"></i> Nữ</p>
                 </div>
                 <div class="mt-5">
                     <h4 class="fw-bold border-bottom pb-2">Mục tiêu nghề nghiệp</h4>
-                    <p style="text-align: justify;">Truyền cảm hứng học ngoại ngữ thông qua các phương pháp tương tác hiện đại, giúp học viên không chỉ đạt điểm IELTS kỳ vọng mà còn tự tin giao tiếp trong môi trường quốc tế.</p>
+                    <p style="text-align: justify;">Kiên nhẫn và tận tâm trong việc rèn luyện nề nếp, giúp các em học sinh tiểu học nắm chắc kiến thức cơ bản và phát triển tư duy sáng tạo.</p>
                 </div>
             </div>
             <div class="col-md-8 col-lg-9 main-content">
@@ -123,45 +115,32 @@
                     <div class="ms-5 mt-4">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
-                                <h5 class="fw-bold text-uppercase fs-4">ĐH Khoa học Xã hội & Nhân văn</h5>
-                                <p class="fs-5">Chuyên ngành: Ngôn ngữ Anh</p>
-                                <p class="fw-bold">*Thành tích nổi bật:</p>
+                                <h5 class="fw-bold text-uppercase fs-4">Đại học Sư Phạm TP.HCM</h5>
+                                <p class="fs-5">Chuyên ngành: Giáo dục Tiểu học</p>
                                 <ul>
-                                    <li>Chứng chỉ IELTS Academic 8.5 (Speaking 8.5)</li>
-                                    <li>Giải Nhất Olympic Tiếng Anh sinh viên toàn quốc 2024</li>
-                                    <li>Học bổng trao đổi văn hóa toàn phần tại Singapore</li>
-                                </ul>
-                            </div>
-                            <div class="fw-bold fs-5">2022 - Nay</div>
-                        </div>
-                    </div>
-                    <div class="section-title mt-5"><i class="bi bi-briefcase-fill"></i> KINH NGHIỆM LÀM VIỆC</div>
-                    <div class="ms-5 mt-4">
-                        <div class="d-flex justify-content-between align-items-start mb-4">
-                            <div>
-                                <h5 class="fw-bold text-uppercase fs-4">Gia sư IELTS Online & Offline</h5>
-                                <ul>
-                                    <li>Thiết kế lộ trình học cá nhân hóa cho hơn 50 học viên đạt mục tiêu 6.5+.</li>
-                                    <li>Biên soạn bộ tài liệu chuyên sâu về kỹ năng Writing và Speaking Task 2.</li>
-                                    <li>90% học viên tăng từ 1.0 - 1.5 band điểm sau 3 tháng ôn luyện.</li>
+                                    <li>Sinh viên xuất sắc đạt học bổng khuyến khích 2023</li>
+                                    <li>Chứng chỉ nghiệp vụ sư phạm loại Giỏi</li>
                                 </ul>
                             </div>
                             <div class="fw-bold fs-5">2021 - Nay</div>
                         </div>
+                    </div>
+                    <div class="section-title mt-5"><i class="bi bi-briefcase-fill"></i> KINH NGHIỆM LÀM VIỆC</div>
+                    <div class="ms-5 mt-4">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
-                                <h5 class="fw-bold text-uppercase fs-4">Trợ giảng tại Trung tâm Anh ngữ ILA</h5>
+                                <h5 class="fw-bold text-uppercase fs-4">Gia sư rèn chữ & Toán tiểu học</h5>
                                 <ul>
-                                    <li>Hỗ trợ giáo viên bản ngữ trong việc điều phối lớp học và chỉnh sửa phát âm cho học sinh.</li>
-                                    <li>Quản lý tiến độ học tập và báo cáo kết quả định kỳ cho phụ huynh.</li>
+                                    <li>Hỗ trợ rèn chữ và tư duy Toán cho các em học sinh lớp 1 đến lớp 5.</li>
+                                    <li>Thiết kế các trò chơi trí tuệ giúp buổi học không bị nhàm chán.</li>
+                                    <li>90% học sinh cải thiện rõ rệt về điểm số và thái độ tự giác học tập.</li>
                                 </ul>
                             </div>
-                            <div class="fw-bold fs-5">2022 - 2023</div>
+                            <div class="fw-bold fs-5">2022 - Nay</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</body>
-</html>
+<?php require_once __DIR__ . '/../partials/footer.php'; ?>

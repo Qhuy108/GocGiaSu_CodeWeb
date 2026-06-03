@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gia Sư - Phạm Minh Đức</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../../css/style.css">
+<?php
+$pageTitle = 'Gia Sư - Nguyễn Hải Yến';
+require_once __DIR__ . '/../partials/header.php';
+?>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -41,7 +35,6 @@
         .section-title i {
             color: #9FC131;
         }
-
         .star-decor { 
             position: absolute; 
             top: 20px; 
@@ -80,6 +73,7 @@
             position: relative; 
             z-index: 5; 
         }
+
         .info-list p { 
             margin-bottom: 20px; 
             display: flex; 
@@ -92,27 +86,25 @@
             text-align: center; 
         }
     </style>
-</head>
-<body>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4 col-lg-3 sidebar p-4 text-center text-md-start">
                 <div class="star-decor">★</div>
                 <div class="text-center mb-5 mt-4">
-                    <img src="../assets/nam2.png" alt="Avatar" class="profile-img mb-3">
-                    <h2 class="fw-bold" style="font-size: 2.5rem;">Phạm Minh Đức</h2>
-                    <p class="fs-3">Gia sư Lập trình</p>
+                    <img src="../../assets/nu2.png" alt="Avatar" class="profile-img mb-3">
+                    <h2 class="fw-bold" style="font-size: 2.5rem;">Nguyễn Hải Yến</h2>
+                    <p class="fs-3">Gia sư Tiếng Anh</p>
                 </div>
                 <div class="mt-5 info-list">
-                    <p><i class="bi bi-telephone-fill"></i> 0333 444 555</p>
-                    <p><i class="bi bi-envelope-fill"></i> duc.it@uit.edu.vn</p>
-                    <p><i class="bi bi-house-door-fill"></i> Dĩ An, Bình Dương</p>
-                    <p><i class="bi bi-calendar-event"></i> 20/05/2003</p>
-                    <p><i class="bi bi-gender-ambiguous"></i> Nam</p>
+                    <p><i class="bi bi-telephone-fill"></i> 0909 123 456</p>
+                    <p><i class="bi bi-envelope-fill"></i> haiyen.ielts@uit.edu.vn</p>
+                    <p><i class="bi bi-house-door-fill"></i> Quận 1, Tp.HCM</p>
+                    <p><i class="bi bi-calendar-event"></i> 15/08/2002</p>
+                    <p><i class="bi bi-gender-ambiguous"></i> Nữ</p>
                 </div>
                 <div class="mt-5">
                     <h4 class="fw-bold border-bottom pb-2">Mục tiêu nghề nghiệp</h4>
-                    <p style="text-align: justify;">Xây dựng nền tảng tư duy thuật toán vững chắc, giúp học sinh tiếp cận lập trình một cách thực tế thông qua các dự án sản phẩm cụ thể.</p>
+                    <p style="text-align: justify;">Truyền cảm hứng học ngoại ngữ thông qua các phương pháp tương tác hiện đại, giúp học viên không chỉ đạt điểm IELTS kỳ vọng mà còn tự tin giao tiếp trong môi trường quốc tế.</p>
                 </div>
             </div>
             <div class="col-md-8 col-lg-9 main-content">
@@ -123,45 +115,44 @@
                     <div class="ms-5 mt-4">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
-                                <h5 class="fw-bold text-uppercase fs-4">ĐH Công nghệ Thông tin (UIT)</h5>
-                                <p class="fs-5">Chuyên ngành: Kỹ thuật Phần mềm</p>
+                                <h5 class="fw-bold text-uppercase fs-4">ĐH Khoa học Xã hội & Nhân văn</h5>
+                                <p class="fs-5">Chuyên ngành: Ngôn ngữ Anh</p>
                                 <p class="fw-bold">*Thành tích nổi bật:</p>
                                 <ul>
-                                    <li>Giải Nhất kỳ thi Competitive Programming cấp UIT 2024</li>
-                                    <li>GPA chuyên ngành: 3.8/4.0</li>
-                                    <li>Top 10 sinh viên có thành tích nghiên cứu xuất sắc nhất khoa</li>
+                                    <li>Chứng chỉ IELTS Academic 8.5 (Speaking 8.5)</li>
+                                    <li>Giải Nhất Olympic Tiếng Anh sinh viên toàn quốc 2024</li>
+                                    <li>Học bổng trao đổi văn hóa toàn phần tại Singapore</li>
                                 </ul>
                             </div>
-                            <div class="fw-bold fs-5">2021 - Nay</div>
+                            <div class="fw-bold fs-5">2022 - Nay</div>
                         </div>
                     </div>
                     <div class="section-title mt-5"><i class="bi bi-briefcase-fill"></i> KINH NGHIỆM LÀM VIỆC</div>
                     <div class="ms-5 mt-4">
                         <div class="d-flex justify-content-between align-items-start mb-4">
                             <div>
-                                <h5 class="fw-bold text-uppercase fs-4">Gia sư Tin học & Lập trình HSG</h5>
+                                <h5 class="fw-bold text-uppercase fs-4">Gia sư IELTS Online & Offline</h5>
                                 <ul>
-                                    <li>Dạy kèm Python, C++ ôn thi học sinh giỏi các cấp với tỷ lệ 80% học sinh đạt giải.</li>
-                                    <li>Hướng dẫn xây dựng website cá nhân cơ bản bằng HTML, CSS và JavaScript.</li>
-                                    <li>Xây dựng bộ đề luyện tập thuật toán bám sát cấu trúc thi quốc gia.</li>
+                                    <li>Thiết kế lộ trình học cá nhân hóa cho hơn 50 học viên đạt mục tiêu 6.5+.</li>
+                                    <li>Biên soạn bộ tài liệu chuyên sâu về kỹ năng Writing và Speaking Task 2.</li>
+                                    <li>90% học viên tăng từ 1.0 - 1.5 band điểm sau 3 tháng ôn luyện.</li>
                                 </ul>
                             </div>
-                            <div class="fw-bold fs-5">2022 - Nay</div>
+                            <div class="fw-bold fs-5">2021 - Nay</div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
-                                <h5 class="fw-bold text-uppercase fs-4">Cộng tác viên giảng dạy Stem/Robot</h5>
+                                <h5 class="fw-bold text-uppercase fs-4">Trợ giảng tại Trung tâm Anh ngữ ILA</h5>
                                 <ul>
-                                    <li>Hướng dẫn lắp ráp và lập trình Robot điều khiển cho học sinh tiểu học và THCS.</li>
-                                    <li>Phát triển giáo trình trực quan về tư duy logic cho trẻ em.</li>
+                                    <li>Hỗ trợ giáo viên bản ngữ trong việc điều phối lớp học và chỉnh sửa phát âm cho học sinh.</li>
+                                    <li>Quản lý tiến độ học tập và báo cáo kết quả định kỳ cho phụ huynh.</li>
                                 </ul>
                             </div>
-                            <div class="fw-bold fs-5">2023 - Nay</div>
+                            <div class="fw-bold fs-5">2022 - 2023</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</body>
-</html>
+<?php require_once __DIR__ . '/../partials/footer.php'; ?>

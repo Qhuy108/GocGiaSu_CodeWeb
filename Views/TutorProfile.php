@@ -37,8 +37,10 @@ require_once __DIR__ . '/partials/header.php';
                     
                     <div class="mb-4">
                         <strong>Môn học:</strong><br>
-                        <?php foreach(explode(',', $tutor['mon_hoc']) as $mon): ?>
-                            <span class="badge bg-primary me-1"><?= trim($mon) ?></span>
+                        <?php foreach(explode(',', $tutor['mon_hoc'] ?? '') as $mon): ?>
+                            <?php if(trim($mon) !== ''): ?>
+                            <span class="badge bg-primary me-1"><?= htmlspecialchars(trim($mon)) ?></span>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </div>
 

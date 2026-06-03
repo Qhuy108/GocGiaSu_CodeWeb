@@ -28,9 +28,8 @@ $action = $_GET['action'] ?? 'index';
 switch ($page) {
     // Thêm vào trong switch ($page)
 case 'get_tutor_contact':
-    // Không cần require_once header.php, không cần login
-    require_once __DIR__ . '/thong-tin-lien-he-hoc-sinh.php';
-    exit; // Dừng lại ở đây, không load thêm bất kỳ thứ gì khác
+    require_once __DIR__ . '/Views/thong-tin-lien-he-hoc-sinh.php';
+    exit;
 
     // ── Trang công khai ──────────────────────────────────────────────────────
     case 'home':
@@ -84,6 +83,22 @@ case 'get_tutor_contact':
         loadController('Auth');
         $controller = new AuthController();
         $controller->logout();
+        break;
+
+    case 'profile':
+        requireLogin();
+        $role = $_SESSION['role'] ?? '';
+        if ($role === 'tutor') {
+            loadController('Tutor');
+            $controller = new TutorController();
+            $controller->editProfile();
+        } elseif ($role === 'student') {
+            header('Location: /index.php?page=student');
+            exit;
+        } else {
+            header('Location: /index.php?page=admin');
+            exit;
+        }
         break;
 
     // ── Dashboard Học sinh ───────────────────────────────────────────────────

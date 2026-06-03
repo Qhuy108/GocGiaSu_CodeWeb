@@ -87,30 +87,17 @@ public function profile(): void
 // Trong TutorController.php
 // Trong Controllers/TutorController.php
 
-public function myClasses()
+public function myClasses(): void
 {
-    $classes = [
-        [
-            'id' => 1,
-            'subject' => 'Toán',
-            'student_name' => 'Nguyễn Văn A',
-            'address' => 'Tân Bình',
-            'status' => 'Đang dạy',
-            'schedule' => 'T2 - T4 - T6',
-            'fee' => 200000,
-            'progress' => 10
-        ],
-        [
-            'id' => 2,
-            'subject' => 'Anh Văn',
-            'student_name' => 'Trần Thị B',
-            'address' => 'Gò Vấp',
-            'status' => 'Đang dạy',
-            'schedule' => 'T3 - T5',
-            'fee' => 250000,
-            'progress' => 5
-        ]
-    ];
+    requireLogin();
+    requireRole('tutor');
+
+    $user   = currentUser();
+    $tutor  = $this->tutorModel->findByUserId($user['id']);
+
+    require_once __DIR__ . '/../Models/BookingModel.php';
+    $bookingModel = new BookingModel();
+    $classes = $tutor ? $bookingModel->getByTutor((int)$tutor['Id'], 'confirmed') : [];
 
     require_once __DIR__ . '/../Views/lop-da-nhan.php';
 }

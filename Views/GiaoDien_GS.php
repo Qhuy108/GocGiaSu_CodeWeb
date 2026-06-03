@@ -25,7 +25,7 @@ require_once __DIR__ . '/partials/header.php';
     <a href="#" class="nav-link">
         <i class="fa-solid fa-gear me-3"></i> Cài đặt tài khoản
     </a>
-    <a href="/index.php?action=logout" class="nav-link text-danger mt-0">
+    <a href="/index.php?page=logout" class="nav-link text-danger mt-0">
         <i class="fa-solid fa-right-from-bracket me-3"></i> Đăng xuất
     </a>
 </div>

@@ -21,13 +21,21 @@ class TutorModel
         $where  = ["t.Status = 'approved'"];
         $params = [];
 
-       if (!empty($filters['mon_hoc'])) {
-             $where[] = 's.Id = :subject_id';
+        if (!empty($filters['mon_hoc'])) {
+            $where[]               = 's.Id = :subject_id';
             $params[':subject_id'] = $filters['mon_hoc'];
         }
         if (!empty($filters['khu_vuc'])) {
             $where[]            = 't.Location LIKE :location';
             $params[':location'] = '%' . $filters['khu_vuc'] . '%';
+        }
+        if (!empty($filters['muc_luong'])) {
+            $range = explode('-', $filters['muc_luong']);
+            if (count($range) == 2) {
+                $where[] = 't.Hourly_rate >= :min_rate AND t.Hourly_rate <= :max_rate';
+                $params[':min_rate'] = (float)$range[0];
+                $params[':max_rate'] = (float)$range[1];
+            }
         }
 
         $whereClause = implode(' AND ', $where);
@@ -35,7 +43,8 @@ class TutorModel
         $sql = "SELECT t.*, u.Name, u.Avatar,
                        COALESCE(AVG(r.Rating), 0) AS diem_tb,
                        COUNT(r.Id) AS so_danh_gia,
-                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc
+                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc,
+                       CONCAT('[', GROUP_CONCAT(DISTINCT CONCAT('{\"id\":', s.Id, ',\"name\":\"', s.Name, '\"}') SEPARATOR ','), ']') AS subjects_json
                 FROM tutors t
                 JOIN users u ON u.Id = t.User_id
                 LEFT JOIN tutor_subjects ts ON ts.Tutor_id = t.Id
@@ -62,7 +71,8 @@ class TutorModel
     public function findById(int $id): array|false
     {
         $sql = "SELECT t.*, u.Name, u.Email, u.Phone, u.Avatar,
-                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc
+                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc,
+                       CONCAT('[', GROUP_CONCAT(DISTINCT CONCAT('{\"id\":', s.Id, ',\"name\":\"', s.Name, '\"}') SEPARATOR ','), ']') AS subjects_json
                 FROM tutors t
                 JOIN users u ON u.Id = t.User_id
                 LEFT JOIN tutor_subjects ts ON ts.Tutor_id = t.Id
@@ -76,14 +86,14 @@ class TutorModel
         return $stmt->fetch();
     }
 
-    // Tìm hồ sơ gia sư theo User_id (dùng trong dashboard)
     public function findByUserId(int $userId): array|false
-    {
-        $stmt = $this->db->prepare('SELECT * FROM tutors WHERE User_id = ? LIMIT 1');
-        $stmt->execute([$userId]);
-        return $stmt->fetch();
-    }
+{
+    $sql = "SELECT * FROM tutors WHERE User_id = ? LIMIT 1";
 
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$userId]);
+    return $stmt->fetch();
+}
     // Tạo hồ sơ gia sư (khi đăng ký)
     public function create(array $data): int
     {
@@ -127,7 +137,8 @@ class TutorModel
     {
         $sql = "SELECT t.Id, u.Name, u.Avatar,
                        COALESCE(AVG(r.Rating), 0) AS diem_tb,
-                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc
+                       GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name SEPARATOR ', ') AS mon_hoc,
+                       CONCAT('[', GROUP_CONCAT(DISTINCT CONCAT('{\"id\":', s.Id, ',\"name\":\"', s.Name, '\"}') SEPARATOR ','), ']') AS subjects_json
                 FROM tutors t
                 JOIN users u ON u.Id = t.User_id
                 LEFT JOIN tutor_subjects ts ON ts.Tutor_id = t.Id
@@ -143,13 +154,76 @@ class TutorModel
         $stmt->execute([$limit]);
         return $stmt->fetchAll();
     }
+          //Lay mon hoc
+public function getSubjectsByTutorId(int $tutorId): array
+{
+    $sql = "SELECT s.Id, s.Name FROM subjects s
+            JOIN tutor_subjects ts ON ts.Subject_id = s.Id
+            WHERE ts.Tutor_id = ?";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$tutorId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
-    //Lay mon hoc
-    public function getSubjects(): array
+public function getSubjects(): array
 {
     $sql = "SELECT Id, Name FROM subjects";
     $stmt = $this->db->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+public function countApproved(array $filters = []): int
+{
+    $where  = ["t.Status = 'approved'"];
+    $params = [];
+
+    if (!empty($filters['mon_hoc'])) {
+        $where[]               = 's.Id = :subject_id';
+        $params[':subject_id'] = $filters['mon_hoc'];
+    }
+
+    if (!empty($filters['khu_vuc'])) {
+        $where[]            = 't.Location LIKE :location';
+        $params[':location'] = '%' . $filters['khu_vuc'] . '%';
+    }
+
+    if (!empty($filters['muc_luong'])) {
+        $range = explode('-', $filters['muc_luong']);
+        if (count($range) == 2) {
+            $where[] = 't.Hourly_rate >= :min_rate AND t.Hourly_rate <= :max_rate';
+            $params[':min_rate'] = (float)$range[0];
+            $params[':max_rate'] = (float)$range[1];
+        }
+    }
+
+    $whereClause = implode(' AND ', $where);
+
+    $sql = "
+        SELECT COUNT(DISTINCT t.Id)
+        FROM tutors t
+        JOIN users u ON u.Id = t.User_id
+        LEFT JOIN tutor_subjects ts ON ts.Tutor_id = t.Id
+        LEFT JOIN subjects s ON s.Id = ts.Subject_id
+        WHERE $whereClause
+    ";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute($params);
+
+    return (int)$stmt->fetchColumn();
 }
+// Lấy danh sách lớp học của gia sư
+   // Sửa trong file Models/TutorModel.php
+public function getClassesByTutorId(int $tutorId): array
+{
+    // Giả sử bảng của bạn là 'bookings' và cột là 'Tutor_id'
+    // Bạn nên kiểm tra lại trong phpMyAdmin tên cột chính xác
+    $sql = "SELECT * FROM bookings WHERE Tutor_id = :tutor_id";
+    
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([':tutor_id' => $tutorId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+}
+

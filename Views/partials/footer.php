@@ -9,9 +9,16 @@
  */
 ?>
 
+</main>
+
+<?php
+// Include the booking modal partial here so it's globally available
+require_once __DIR__ . '/booking_modal.php';
+?>
+
 <!-- ===== FOOTER ===== -->
 <footer class="footer-section pt-5 pb-3 mt-5" style="background-color: #042940; color: #D6D58E;">
-    <div class="container">
+    <div class="container-fluid px-3 px-md-4 px-xl-5">
         <div class="row g-4">
 
             <!-- Cột 1: Thương hiệu + mô tả -->
@@ -131,6 +138,15 @@
 }
 .footer-link:hover {
     color: #9FC131;
+}
+@media (min-width: 1400px) {
+    .footer-section { font-size: 0.95rem; }
+    .footer-section h6 { font-size: 1rem; }
+}
+@media (min-width: 1920px) {
+    .footer-section { font-size: 1rem; }
+    .footer-section h6 { font-size: 1.1rem; }
+    .footer-section .fs-5 { font-size: 1.4rem !important; }
 }
 </style>
 

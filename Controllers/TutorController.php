@@ -25,46 +25,231 @@ class TutorController
 
     // Trang danh sách gia sư + bộ lọc tìm kiếm
     public function index(): void
-    {
-        $filters = [
-            'mon_hoc' => $_GET['mon_hoc'] ?? '',
-            'khu_vuc' => $_GET['khu_vuc'] ?? '',
-        ];
+{
+    $filters = [
+        'mon_hoc' => $_GET['mon_hoc'] ?? '',
+        'khu_vuc' => $_GET['khu_vuc'] ?? '',
+    ];
 
-        $limit  = 12;
-        $trang  = max(1, (int)($_GET['trang'] ?? 1));
-        $offset = ($trang - 1) * $limit;
+    $limit  = 12;
+    $trang  = max(1, (int)($_GET['trang'] ?? 1));
+    $offset = ($trang - 1) * $limit;
 
-        $tutors = $this->tutorModel->getApproved($filters, $limit, $offset);
+    $tutors = $this->tutorModel->getApproved(
+        $filters,
+        $limit,
+        $offset
+    );
 
-        // TODO: Thành viên 3 tạo file Views/TutorList.php
-        require_once __DIR__ . '/../Views/TutorList.php';
-    }
+    $tongTrang = ceil(
+        $this->tutorModel->countApproved($filters)
+        / $limit
+    );
 
-    // Trang chi tiết profile 1 gia sư
-    public function profile(int $id): void
-    {
-        $tutor = $this->tutorModel->findById($id);
-
-        if (!$tutor) {
-            http_response_code(404);
-            die('Không tìm thấy gia sư.');
-        }
-
-        // TODO: Thành viên 3 tạo Views/TutorProfile.php
-        require_once __DIR__ . '/../Views/TutorProfile.php';
-    }
+    require_once __DIR__ . '/../Views/TutorList.php';
+}
 
     // Dashboard của gia sư (cần đăng nhập)
-    public function dashboard(): void
-    {
-        requireLogin();
-        requireRole('tutor');
+   // Trong Controllers/TutorController.php
+public function dashboard(): void
+{
+    requireLogin();
+    requireRole('tutor');
 
-        $user  = currentUser();
-        $tutor = $this->tutorModel->findByUserId($user['id']);
+    $user  = currentUser();
+    $tutor = $this->tutorModel->findByUserId($user['id']);
 
-        // TODO: Thành viên 3 render GiaoDien_GS.php
-        require_once __DIR__ . '/../Views/GiaoDien_GS.php';
+    require_once __DIR__ . '/../Models/BookingModel.php';
+    $bookingModel    = new BookingModel();
+    $pendingBookings = $tutor ? $bookingModel->getByTutor((int)$tutor['Id'], 'pending') : [];
+
+    require_once __DIR__ . '/../Views/GiaoDien_GS.php';
+}
+
+    // Trong TutorController.php
+public function contact()
+{
+    http_response_code(404);
+    echo "Not used";
+    exit;
+}
+
+public function profile(): void
+{
+    $id = (int)($_GET['id'] ?? 0);
+
+    $tutor = $this->tutorModel->findById($id);
+
+    if (!$tutor) {
+        die('Không tìm thấy gia sư');
     }
+
+    $tutorSubjects = $this->tutorModel->getSubjectsByTutorId((int)$tutor['Id']);
+
+    require_once __DIR__ . '/../Views/TutorProfile.php';
+}
+public function accountSettings(): void
+{
+    require_once __DIR__ . '/../Models/UserModel.php';
+    $currentUser = currentUser();
+    $user = (new UserModel())->findById((int)$currentUser['id']);
+    require_once __DIR__ . '/../Views/TutorAccountSettings.php';
+}
+
+public function updateAccountSettings(): void
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: /index.php?page=tutor_settings');
+        exit;
+    }
+
+    require_once __DIR__ . '/../Models/UserModel.php';
+    $userModel   = new UserModel();
+    $currentUser = currentUser();
+    $userId      = (int)$currentUser['id'];
+    $type        = $_GET['type'] ?? '';
+
+    if ($type === 'info') {
+        $name  = trim($_POST['Name']  ?? '');
+        $phone = trim($_POST['Phone'] ?? '');
+
+        $userModel->update($userId, ['Name' => $name, 'Phone' => $phone]);
+
+        // Cập nhật lại session
+        $_SESSION['name'] = $name;
+
+        header('Location: /index.php?page=tutor_settings&success=info');
+        exit;
+    }
+
+    if ($type === 'password') {
+        $current = $_POST['current_password'] ?? '';
+        $new     = $_POST['new_password']     ?? '';
+        $confirm = $_POST['confirm_password'] ?? '';
+
+        $userFull = $userModel->findById($userId);
+
+        if (!password_verify($current, $userFull['Password'])) {
+            header('Location: /index.php?page=tutor_settings&error=wrong_password');
+            exit;
+        }
+        if (strlen($new) < 6) {
+            header('Location: /index.php?page=tutor_settings&error=password_short');
+            exit;
+        }
+        if ($new !== $confirm) {
+            header('Location: /index.php?page=tutor_settings&error=password_mismatch');
+            exit;
+        }
+
+        $userModel->update($userId, ['Password' => password_hash($new, PASSWORD_DEFAULT)]);
+        header('Location: /index.php?page=tutor_settings&success=password');
+        exit;
+    }
+
+    header('Location: /index.php?page=tutor_settings');
+    exit;
+}
+
+public function editProfile(): void
+{
+    $user  = currentUser();
+    $tutor = $this->tutorModel->findByUserId($user['id']);
+    if (!$tutor) die('Không tìm thấy hồ sơ gia sư.');
+    require_once __DIR__ . '/../Views/TutorEditProfile.php';
+}
+
+public function updateProfile(): void
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: /index.php?page=tutor_edit');
+        exit;
+    }
+    $user  = currentUser();
+    $tutor = $this->tutorModel->findByUserId($user['id']);
+    if (!$tutor) die('Không tìm thấy hồ sơ gia sư.');
+
+    $data = [
+        'Bio'            => trim($_POST['Bio']            ?? ''),
+        'Experience'     => trim($_POST['Experience']     ?? ''),
+        'Location'       => trim($_POST['Location']       ?? ''),
+        'Hourly_rate'    => (float)($_POST['Hourly_rate'] ?? 0),
+    ];
+
+    // Xử lý upload ảnh chứng chỉ bổ sung
+    $newQualifications = [];
+    if (!empty($_FILES['certificates']['name'][0])) {
+        $allowed  = ['image/jpeg', 'image/png', 'image/webp'];
+        $maxSize  = 5 * 1024 * 1024; // 5MB
+        $uploadDir = __DIR__ . '/../assets/uploads/certificates';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        foreach ($_FILES['certificates']['name'] as $key => $name) {
+            $tmp_name = $_FILES['certificates']['tmp_name'][$key];
+            $error    = $_FILES['certificates']['error'][$key];
+            $type     = $_FILES['certificates']['type'][$key];
+            $size     = $_FILES['certificates']['size'][$key];
+
+            if ($error === UPLOAD_ERR_OK && in_array($type, $allowed) && $size <= $maxSize) {
+                $ext      = pathinfo($name, PATHINFO_EXTENSION);
+                $safeName  = preg_replace('/[^A-Za-z0-9_\-\.]/', '_', pathinfo($name, PATHINFO_FILENAME));
+                $filename = sprintf('%s_%s.%s', $safeName, uniqid(), strtolower($ext));
+                $dest     = $uploadDir . '/' . $filename;
+
+                if (move_uploaded_file($tmp_name, $dest)) {
+                    $newQualifications[] = 'assets/uploads/certificates/' . $filename;
+                }
+            }
+        }
+    }
+
+    // Ghép chứng chỉ mới vào chứng chỉ cũ
+    $existingCerts = array_filter(explode(',', $tutor['Qualifications'] ?? ''));
+    $allCerts = array_merge($existingCerts, $newQualifications);
+    $data['Qualifications'] = implode(',', $allCerts);
+
+    $this->tutorModel->update((int)$tutor['Id'], $data);
+
+    // Xử lý upload ảnh
+    if (!empty($_FILES['avatar']['name'])) {
+        $file     = $_FILES['avatar'];
+        $allowed  = ['image/jpeg', 'image/png', 'image/webp'];
+        $maxSize  = 2 * 1024 * 1024; // 2MB
+
+        if (in_array($file['type'], $allowed) && $file['size'] <= $maxSize && $file['error'] === 0) {
+            $ext      = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = 'tutor_' . $user['id'] . '_' . time() . '.' . $ext;
+            $dest     = __DIR__ . '/../assets/uploads/' . $filename;
+
+            if (move_uploaded_file($file['tmp_name'], $dest)) {
+                $db = getDB();
+                $db->prepare("UPDATE users SET Avatar = ? WHERE Id = ?")
+                   ->execute([$filename, $user['id']]);
+                
+                // Cập nhật session avatar
+                $_SESSION['avatar'] = $filename;
+            }
+        }
+    }
+
+    header('Location: /index.php?page=tutor_edit&success=1');
+    exit;
+}
+
+public function myClasses(): void
+{
+    requireLogin();
+    requireRole('tutor');
+
+    $user   = currentUser();
+    $tutor  = $this->tutorModel->findByUserId($user['id']);
+
+    require_once __DIR__ . '/../Models/BookingModel.php';
+    $bookingModel = new BookingModel();
+    $classes = $tutor ? $bookingModel->getByTutor((int)$tutor['Id'], 'confirmed') : [];
+
+    require_once __DIR__ . '/../Views/lop-da-nhan.php';
+}
 }

@@ -1,90 +1,131 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) session_start();
+$id = (int)($_GET['id'] ?? 0);
 
-$studentName = $student['Name'] ?? ($_SESSION['name'] ?? 'Học sinh');
+if ($id == 1) {
+    $name  = "Chu Thành Đức";
+    $phone = "0901 234 567";
+    $zalo  = "zalo.me/chuthanhduc";
+    $fb    = "fb.com/chuthanhduc";
+    $email = "ducthanh.student@email.com";
+    $avatar = "CĐ";
+    $color = "#8BC34A";
+}
+elseif ($id == 2) {
+    $name  = "Nguyễn Hương Mai";
+    $phone = "0912 345 678";
+    $zalo  = "zalo.me/nguyenhuongmai";
+    $fb    = "fb.com/nguyenhuongmai";
+    $email = "huongmai.student@email.com";
+    $avatar = "T";
+    $color = "#A4C639";
+}
+else {
+    $name  = "Chưa có dữ liệu";
+    $phone = "";
+    $zalo  = "";
+    $fb    = "";
+    $email = "";
+    $avatar = "?";
+    $color = "#999";
+}
 ?>
 
-<?php
-$avatar = $student['Avatar'] ?? null;
-$phone = $student['phone'] ?? null;
-$zalo = $student['zalo'] ?? null;
-$facebook = $student['facebook'] ?? null;
-$email = $student['email'] ?? null;
-?>
+<div class="modal-header border-0 pb-0">
+    <button type="button"
+            class="btn-close ms-auto"
+            data-bs-dismiss="modal">
+    </button>
+</div>
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-12 col-sm-8 col-md-6 col-lg-4">
-            <div class="card contact-card shadow-lg rounded-4 p-4 text-center">
-                <!-- Tiêu đề -->
-                <div class="contact-header">
-                    <h6 class="contact-title">Thông tin liên hệ</h6>
-                </div>
+<div class="modal-body pt-0">
 
-                <!-- Avatar -->
-                <div class="mb-3">
+    <div class="d-flex align-items-center mb-3">
+        <div
+            class="d-flex align-items-center justify-content-center text-white fw-bold me-3"
+            style="
+                width:70px;
+                height:70px;
+                border-radius:50%;
+                background: <?= $color ?>;
+                font-size:28px;
+            ">
+            <?= $avatar ?>
+        </div>
 
-                <div class="avatar-circle mx-auto"
-                 style="width: 80px; height: 80px; font-size: 28px;">
+        <div>
+            <h4 class="fw-bold text-success mb-1">
+                Thông tin liên hệ Học sinh
+            </h4>
 
-                <?php if ($avatar): ?>
-                <img src="<?= htmlspecialchars($avatar) ?>"
-                style="width:100%;height:100%;border-radius:50%">
-                 <?php else: ?>
-                <?= strtoupper(substr($studentName, 0, 1)) ?>
-                <?php endif; ?>
-
-                </div>
-                </div>
-
-                <!-- Tên -->
-                <h5 class="fw-bold mb-1"><?= htmlspecialchars($studentName) ?></h5>
-
-                <!-- Nội dung -->
-                <div class="text-start mt-3">
-                    <div class="mb-3">
-                        <strong>Số điện thoại</strong>
-                        <p class="fs-5 text-success mb-0">
-                            <i class="fa-solid fa-phone me-2"></i>
-                            <?= htmlspecialchars($phone ?? 'Chưa cập nhật') ?>
-                        </p>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Zalo</strong>
-                        <a href="<?= htmlspecialchars($zalo ?: '#') ?>"
-                        class="btn btn-outline-success w-100 text-start mt-1">
-                        <?= htmlspecialchars($zalo ?? 'Chưa cập nhật') ?>
-                    </a>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Facebook</strong>
-                        <a href="<?= htmlspecialchars($facebook ?: '#') ?>"
-                        class="btn btn-outline-primary w-100 text-start mt-1">
-                        <?= htmlspecialchars($facebook ?? 'Chưa cập nhật') ?>
-                        </a>
-                    </div>
-                    <div class="mb-4">
-                        <strong>Email</strong>
-                        <p class="mb-0">
-                            <i class="fa-solid fa-envelope me-2"></i>
-                             <?= htmlspecialchars($email ?? 'Chưa cập nhật') ?>
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Ghi chú -->
-                <div class="alert alert-warning small text-start">
-                    <strong>Lưu ý:</strong> Vui lòng liên hệ ngoài giờ hành chính hoặc gửi tin nhắn Zalo.
-                </div>
-
-                <!-- Nút gọi -->
-                <a href="<?= htmlspecialchars($phone ? 'tel:' . $phone : '#') ?>"
-                    class="btn btn-contact w-100 py-3 rounded-pill fw-bold mt-2">
-                    <i class="fa-solid fa-phone me-2"></i>
-                    Gọi điện ngay
-                </a>
-            </div>
+            <h5 class="mb-0">
+                <?= $name ?>
+            </h5>
         </div>
     </div>
+
+    <hr>
+
+    <div class="mb-3">
+        <div class="d-flex align-items-center mb-3">
+            <i class="fa-solid fa-phone fa-lg text-secondary me-3"></i>
+
+            <div>
+                <strong>Số điện thoại:</strong>
+                <span class="fw-bold">
+                    <?= $phone ?>
+                </span>
+            </div>
+        </div>
+
+<div class="d-flex align-items-center mb-3">
+    <i class="fa-solid fa-comment-dots text-primary me-4"></i>
+
+    <div class="flex-grow-1">
+        <strong>Zalo:</strong>
+    </div>
+
+    <span class="badge bg-light text-dark border">
+        <?= $zalo ?>
+    </span>
 </div>
-    
+
+        <div class="d-flex align-items-center mb-3">
+            <i class="fa-brands fa-facebook fa-lg text-secondary me-3"></i>
+
+            <div class="flex-grow-1">
+                <strong>Facebook:</strong>
+            </div>
+
+            <span class="badge bg-light text-dark border">
+                <?= $fb ?>
+            </span>
+        </div>
+
+        <div class="d-flex align-items-center">
+            <i class="fa-solid fa-envelope fa-lg text-secondary me-3"></i>
+
+            <div class="flex-grow-1">
+                <strong>Email:</strong>
+            </div>
+
+            <span class="badge bg-light text-dark border">
+                <?= $email ?>
+            </span>
+        </div>
+    </div>
+
+    <div class="alert alert-light border small">
+        <strong>Lưu ý:</strong>
+        Học sinh là sinh viên, vui lòng liên hệ ngoài giờ hành chính
+        hoặc gửi tin nhắn Zalo.
+    </div>
+
+    <div class="d-grid">
+        <a href="tel:<?= str_replace(' ','',$phone) ?>"
+           class="btn btn-success rounded-pill">
+            <i class="fa-solid fa-phone me-2"></i>
+            Gọi điện ngay
+        </a>
+    </div>
+
+</div>

@@ -55,6 +55,7 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
 
     <!-- CSS chính của nhóm -->
     <link rel="stylesheet" href="<?= htmlspecialchars($cssPath) ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         /* Navbar chuyên nghiệp với gradient */
@@ -157,6 +158,21 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23DBF227' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
 
+        /* Màn hình lớn (1400px+) */
+        @media (min-width: 1400px) {
+            .brand-professional { font-size: 1.6rem; }
+            .logo-professional { width: 54px; height: 54px; }
+            .nav-link-professional { font-size: 1rem; }
+            .navbar-professional { padding: 14px 0 !important; }
+        }
+        /* Màn hình rất lớn (1920px+) */
+        @media (min-width: 1920px) {
+            .brand-professional { font-size: 1.8rem; }
+            .logo-professional { width: 60px; height: 60px; }
+            .nav-link-professional { font-size: 1.05rem; }
+            .navbar-professional { padding: 16px 0 !important; }
+        }
+
         @media (max-width: 991px) {
             .brand-professional {
                 font-size: 1.2rem;
@@ -179,7 +195,7 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
 
 <!-- ===== HEADER / NAVBAR ===== -->
 <nav class="navbar navbar-expand-lg navbar-professional sticky-top">
-    <div class="container">
+    <div class="container-fluid px-3 px-md-4 px-xl-5">
 
         <!-- Logo + Brand Name -->
         <a class="navbar-brand d-flex align-items-center gap-3 text-decoration-none" href="/index.php">
@@ -221,7 +237,13 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
                         <a class="nav-link nav-link-professional dropdown-toggle d-flex align-items-center gap-2"
                            href="#" id="userDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle"></i>
+                            <?php if (!empty($_SESSION['avatar'])): ?>
+                                <img src="/assets/uploads/<?= htmlspecialchars($_SESSION['avatar']) ?>" 
+                                     class="rounded-circle border" 
+                                     style="width: 30px; height: 30px; object-fit: cover;">
+                            <?php else: ?>
+                                <i class="bi bi-person-circle" style="font-size: 1.2rem;"></i>
+                            <?php endif; ?>
                             <?= htmlspecialchars($userName) ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-professional"
@@ -257,4 +279,6 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
     </div>
 </nav>
 <!-- ===== KẾT THÚC HEADER ===== -->
+
+<main class="flex-grow-1">
 

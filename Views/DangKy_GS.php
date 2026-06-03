@@ -94,8 +94,8 @@ require_once __DIR__ . '/partials/header.php';
                                         <label for="experience">Kinh nghiệm giảng dạy</label>
                                     </div>
                                     <div class="mb-4">
-                                        <label class="form-label fw-semibold" for="certificateFile">Nộp chứng chỉ / bằng cấp</label>
-                                        <input class="form-control" type="file" id="certificateFile" name="certificateFile" accept="image/*" aria-describedby="certificateHelp">
+                                        <label class="form-label fw-semibold" for="certificateFile">Nộp chứng chỉ / bằng cấp <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="file" id="certificateFile" name="certificateFile" accept="image/*" aria-describedby="certificateHelp" required>
                                         <div id="certificateHelp" class="form-text">Tải lên ảnh chứng chỉ, bằng cấp hoặc thẻ sinh viên để tăng độ tin cậy.</div>
                                     </div>
                                 </div>

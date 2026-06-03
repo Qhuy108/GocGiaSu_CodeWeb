@@ -30,7 +30,27 @@ class BookingController
         $user     = currentUser();
         $bookings = $this->bookingModel->getByStudent($user['id']);
 
-        require_once __DIR__ . '/../Views/giao_dien_hoc_sinh.php';
+        require_once __DIR__ . '/../Views/GiaoDien_HS.php';
+    }
+
+    // AJAX endpoint: trả về HTML chứa danh sách thẻ gia sư theo filter
+    public function filter_tutors(): void
+    {
+        requireLogin();
+        requireRole('student');
+
+        $filters = [
+            'mon_hoc'   => $_GET['mon_hoc'] ?? null,
+            'khu_vuc'   => $_GET['khu_vuc'] ?? null,
+            'muc_luong' => $_GET['muc_luong'] ?? null,
+        ];
+
+        $limit = 12;
+        $tutors = $this->tutorModel->getApproved($filters, $limit, 0);
+
+        // Trả về chỉ phần HTML card (partial)
+        require_once __DIR__ . '/../Views/partials/tutor_cards.php';
+        exit;
     }
 
     public function create(): void
@@ -152,6 +172,11 @@ class BookingController
 
         if ($rating < 1 || $rating > 5) {
             header('Location: /index.php?page=student&error=invalid_rating');
+            exit;
+        }
+
+        if ($this->reviewModel->existsForBooking($bookingId)) {
+            header('Location: /index.php?page=student&error=already_reviewed');
             exit;
         }
 

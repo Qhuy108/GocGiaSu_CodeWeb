@@ -26,6 +26,10 @@ $page   = $_GET['page']   ?? 'home';
 $action = $_GET['action'] ?? 'index';
 
 switch ($page) {
+    // Thêm vào trong switch ($page)
+case 'get_tutor_contact':
+    require_once __DIR__ . '/Views/thong-tin-lien-he-hoc-sinh.php';
+    exit;
 
     // ── Trang công khai ──────────────────────────────────────────────────────
     case 'home':
@@ -45,10 +49,10 @@ switch ($page) {
         break;
 
     case 'tutor_profile':
-        loadController('Tutor');
-        $controller = new TutorController();
-        $controller->profile((int)($_GET['id'] ?? 0));
-        break;
+    loadController('Tutor');
+    $controller = new TutorController();
+    $controller->profile(); // Bỏ (int)($_GET['id'] ?? 0) đi
+    break;
 
     // ── Xác thực (Auth) ──────────────────────────────────────────────────────
     case 'login':
@@ -81,6 +85,21 @@ switch ($page) {
         $controller->logout();
         break;
 
+    case 'profile':
+        requireLogin();
+        $role = $_SESSION['role'] ?? '';
+        if ($role === 'tutor') {
+            header('Location: /index.php?page=tutor_dashboard');
+            exit;
+        } elseif ($role === 'student') {
+            header('Location: /index.php?page=student');
+            exit;
+        } else {
+            header('Location: /index.php?page=admin');
+            exit;
+        }
+        break;
+
     // ── Dashboard Học sinh ───────────────────────────────────────────────────
     case 'student':
         requireLogin();
@@ -94,9 +113,47 @@ switch ($page) {
     case 'tutor_dashboard':
         requireLogin();
         requireRole('tutor');
+        loadController('Booking');
         loadController('Tutor');
         $controller = new TutorController();
-        $controller->dashboard();
+        if ($action === 'updateStatus') {
+            $bookingController = new BookingController();
+            $bookingController->updateStatus();
+        } else {
+            $controller->dashboard();
+        }
+        break;
+
+    case 'tutor_edit':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->editProfile();
+        break;
+
+    case 'tutor_settings':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->accountSettings();
+        break;
+
+    case 'tutor_settings_update':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->updateAccountSettings();
+        break;
+
+    case 'tutor_update':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->updateProfile();
         break;
 
     // ── Admin Panel ──────────────────────────────────────────────────────────
@@ -107,6 +164,17 @@ switch ($page) {
         $controller = new AdminController();
         $controller->$action();
         break;
+
+    //----Lop nhan-------
+case 'my_classes':
+    requireLogin();
+    requireRole('tutor');
+
+    loadController('Tutor');
+
+    $controller = new TutorController();
+    $controller->myClasses();
+    break;
 
     // ── 404 ──────────────────────────────────────────────────────────────────
     default:

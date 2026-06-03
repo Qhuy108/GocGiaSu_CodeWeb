@@ -357,6 +357,8 @@ require_once __DIR__ . '/partials/header.php';
         </div>
     </div>
 
+</div><!-- /container mt-5 mb-5 -->
+
 <!-- Modal đánh giá gia sư -->
 <div class="modal fade" id="reviewModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">

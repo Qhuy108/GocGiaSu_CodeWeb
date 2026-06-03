@@ -56,11 +56,13 @@ public function dashboard(): void
     requireLogin();
     requireRole('tutor');
 
-    $user = currentUser();
-    // Lấy thông tin gia sư từ database dựa trên User_id của người đang đăng nhập
+    $user  = currentUser();
     $tutor = $this->tutorModel->findByUserId($user['id']);
 
-    // Truyền biến $tutor này sang view GiaoDien_GS.php
+    require_once __DIR__ . '/../Models/BookingModel.php';
+    $bookingModel    = new BookingModel();
+    $pendingBookings = $tutor ? $bookingModel->getByTutor((int)$tutor['Id'], 'pending') : [];
+
     require_once __DIR__ . '/../Views/GiaoDien_GS.php';
 }
 

@@ -22,37 +22,61 @@ require_once __DIR__ . '/partials/header.php';
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="fw-bold m-0 text-dark">
                             <i class="fa-solid fa-book-open text-muted me-2"></i>
-                            <?= htmlspecialchars($class['subject']) ?> - <?= htmlspecialchars($class['student_name']) ?>
+                            <?= htmlspecialchars($class['subject_name'] ?? 'Chưa rõ môn') ?> - <?= htmlspecialchars($class['ten_hoc_sinh'] ?? '') ?>
                         </h5>
-                        <span class="badge bg-light text-success border border-success rounded-pill px-3 py-2">
-                            <i class="fa-solid fa-circle-check me-1"></i> <?= $class['status'] ?>
+                        <?php
+                        $statusMap = [
+                            'confirmed' => ['text-success border-success', 'Đang dạy'],
+                            'done'      => ['text-primary border-primary', 'Hoàn thành'],
+                            'cancelled' => ['text-secondary border-secondary', 'Đã hủy'],
+                            'pending'   => ['text-warning border-warning', 'Chờ xác nhận'],
+                        ];
+                        [$badgeClass, $badgeLabel] = $statusMap[$class['Status'] ?? ''] ?? ['text-muted border-muted', $class['Status'] ?? ''];
+                        ?>
+                        <span class="badge bg-light <?= $badgeClass ?> border rounded-pill px-3 py-2">
+                            <i class="fa-solid fa-circle-check me-1"></i> <?= $badgeLabel ?>
                         </span>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-md-4">
                             <div class="d-flex align-items-center">
-                                <i class="fa-solid fa-location-dot text-primary me-2"></i>
-                                <small class="text-muted"><?= htmlspecialchars($class['address']) ?></small>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="d-flex align-items-center">
                                 <i class="fa-solid fa-calendar-days text-warning me-2"></i>
-                                <span class="fw-medium"><?= htmlspecialchars($class['schedule']) ?></span>
+                                <span class="fw-medium"><?= htmlspecialchars($class['Date'] ?? '') ?></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="d-flex align-items-center">
-                                <i class="fa-solid fa-money-bill-wave text-success me-2"></i>
-                                <span class="fw-bold text-success"><?= number_format($class['fee']) ?>đ/buổi</span>
+                                <i class="fa-solid fa-clock text-primary me-2"></i>
+                                <span class="fw-medium"><?= htmlspecialchars($class['Time'] ?? '') ?></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-phone text-success me-2"></i>
+                                <small class="text-muted"><?= htmlspecialchars($class['Phone'] ?? '') ?></small>
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center">
-                        <small class="text-muted"><i class="fa-solid fa-chart-line me-1"></i> Đã dạy: <strong><?= $class['progress'] ?></strong> buổi</small>
-                        <a href="/index.php?page=class_detail&id=<?= $class['id'] ?>" class="btn btn-outline-success btn-sm rounded-pill px-4">Chi tiết lớp</a>
+                    <?php if (!empty($class['Note'])): ?>
+                    <div class="mt-2">
+                        <small class="text-muted fst-italic">
+                            <i class="fa-solid fa-note-sticky me-1"></i>"<?= htmlspecialchars($class['Note']) ?>"
+                        </small>
+                    </div>
+                    <?php endif; ?>
+
+                    <div class="mt-3 pt-3 border-top d-flex justify-content-end">
+                        <?php if ($class['Status'] === 'confirmed'): ?>
+                        <form method="POST" action="/index.php?page=tutor_dashboard&action=updateStatus">
+                            <input type="hidden" name="booking_id" value="<?= (int)$class['Id'] ?>">
+                            <input type="hidden" name="status" value="done">
+                            <button type="submit" class="btn btn-success btn-sm rounded-pill px-4">
+                                <i class="fa-solid fa-check me-1"></i> Đánh dấu hoàn thành
+                            </button>
+                        </form>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

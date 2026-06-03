@@ -95,22 +95,25 @@ a:hover {
 }
 /*BTN ĐĂNG TIN TÌM GS*/
 /* Class duy nhất để định vị nút lơ lửng */
-.fab-custom{
+.fab-custom {
     position: fixed;
-    right: 25px;
-    bottom: 25px;
-
-    width: auto !important;
-    height: auto !important;
-
-    padding: 12px 20px;
-    border-radius: 999px;
-
-    display: inline-flex !important;
+    right: 28px;
+    bottom: 28px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    padding: 0;
+    border: none;
+    background-color: #9FC131;
+    color: #042940;
+    display: flex;
     align-items: center;
-    gap: 8px;
-
+    justify-content: center;
+    font-size: 1.4rem;
     z-index: 1050;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(159, 193, 49, 0.5);
 }
 
 /* Tận dụng biến màu của nhóm để icon bên trong có màu đồng bộ */

@@ -250,16 +250,6 @@ require_once __DIR__ . '/partials/header.php';
     </div>
 </div>
 
-        <button
-            type="button"
-            class="btn btn-gocgiasu fab-custom shadow-lg"
-            data-bs-toggle="modal"
-            data-bs-target="#modalDangTin">
-
-            <i class="bi bi-megaphone-fill"></i>
-            <span>Đăng tin tìm gia sư</span>
-
-        </button>
 
         <div class="modal fade" id="modalDangTin" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" style="max-width: 450px;">
@@ -497,5 +487,18 @@ hocPhiRange.addEventListener("input", function(){
 
 });
 </script> 
+
+<!-- FAB Button: nằm ngoài mọi container -->
+<button type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#modalDangTin"
+        title="Đăng tin tìm gia sư"
+        style="position:fixed; right:28px; bottom:28px; width:56px; height:56px;
+               border-radius:50%; border:none; background:#9FC131; color:#042940;
+               display:flex; align-items:center; justify-content:center;
+               font-size:1.4rem; z-index:9999; cursor:pointer;
+               box-shadow:0 4px 15px rgba(159,193,49,0.5);">
+    <i class="bi bi-megaphone-fill"></i>
+</button>
 
 <?php require_once __DIR__ . '/partials/footer.php'; ?>

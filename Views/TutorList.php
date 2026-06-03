@@ -45,7 +45,7 @@ require_once __DIR__ . '/partials/header.php';
                         </div>
                     </div>
                     <span class="badge bg-light text-dark mb-3 px-3 py-2 rounded-pill border">
-                        <i class="fa-solid fa-book text-primary me-1"></i> <?= htmlspecialchars($tutor['mon_hoc']) ?>
+                        <i class="fa-solid fa-book text-primary me-1"></i> <?= htmlspecialchars($tutor['mon_hoc'] ?? '') ?>
                     </span>
                     <p class="text-muted small mb-4">⭐ <?= number_format($tutor['diem_tb'], 1) ?> (Đánh giá cao)</p>
                     <a href="/index.php?page=tutor_profile&id=<?= $tutor['Id'] ?>" 

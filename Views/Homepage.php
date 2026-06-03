@@ -101,7 +101,7 @@ require_once __DIR__ . '/partials/header.php';
                                  alt="<?= htmlspecialchars($tutor['Name']) ?>">
                             <div class="card-body d-flex flex-column text-center p-3">
                                 <h5 class="card-title text-navy fw-bold mb-1"><?= htmlspecialchars($tutor['Name']) ?></h5>
-                                <p class="card-text text-teal fw-medium mb-2 small"><?= htmlspecialchars($tutor['mon_hoc']) ?></p>
+                                <p class="card-text text-teal fw-medium mb-2 small"><?= htmlspecialchars($tutor['mon_hoc'] ?? '') ?></p>
                                 <div class="mb-3 small">
                                     <i class="bi bi-star-fill text-warning"></i>
                                     <span class="fw-bold"><?= number_format($tutor['diem_tb'] ?? 0, 1) ?></span>

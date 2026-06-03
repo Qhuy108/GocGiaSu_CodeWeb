@@ -158,6 +158,21 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23DBF227' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
 
+        /* Màn hình lớn (1400px+) */
+        @media (min-width: 1400px) {
+            .brand-professional { font-size: 1.6rem; }
+            .logo-professional { width: 54px; height: 54px; }
+            .nav-link-professional { font-size: 1rem; }
+            .navbar-professional { padding: 14px 0 !important; }
+        }
+        /* Màn hình rất lớn (1920px+) */
+        @media (min-width: 1920px) {
+            .brand-professional { font-size: 1.8rem; }
+            .logo-professional { width: 60px; height: 60px; }
+            .nav-link-professional { font-size: 1.05rem; }
+            .navbar-professional { padding: 16px 0 !important; }
+        }
+
         @media (max-width: 991px) {
             .brand-professional {
                 font-size: 1.2rem;
@@ -180,7 +195,7 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
 
 <!-- ===== HEADER / NAVBAR ===== -->
 <nav class="navbar navbar-expand-lg navbar-professional sticky-top">
-    <div class="container">
+    <div class="container-fluid px-3 px-md-4 px-xl-5">
 
         <!-- Logo + Brand Name -->
         <a class="navbar-brand d-flex align-items-center gap-3 text-decoration-none" href="/index.php">

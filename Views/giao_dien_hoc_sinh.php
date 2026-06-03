@@ -218,7 +218,7 @@ require_once __DIR__ . '/partials/header.php';
                             <?= number_format($tutor['diem_tb'], 1) ?>/5
                         </span>
 
-                        <a href="tutor_detail.php?id=<?= $tutor['Id'] ?>"
+                        <a href="/index.php?page=tutor_profile&id=<?= (int)$tutor['Id'] ?>"
                            class="btn btn-gocgiasu btn-sm rounded-pill px-3 py-1 fw-bold"
                            style="font-size: 10px;">
                             Chi tiết

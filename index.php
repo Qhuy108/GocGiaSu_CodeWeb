@@ -124,6 +124,38 @@ case 'get_tutor_contact':
         }
         break;
 
+    case 'tutor_edit':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->editProfile();
+        break;
+
+    case 'tutor_settings':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->accountSettings();
+        break;
+
+    case 'tutor_settings_update':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->updateAccountSettings();
+        break;
+
+    case 'tutor_update':
+        requireLogin();
+        requireRole('tutor');
+        loadController('Tutor');
+        $controller = new TutorController();
+        $controller->updateProfile();
+        break;
+
     // ── Admin Panel ──────────────────────────────────────────────────────────
     case 'admin':
         requireLogin();

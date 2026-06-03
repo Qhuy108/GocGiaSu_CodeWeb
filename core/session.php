@@ -41,6 +41,7 @@ function setUserSession(array $user): void
     $_SESSION['name']    = $user['Name'];
     $_SESSION['role']    = $user['Role'];
     $_SESSION['email']   = $user['Email'];
+    $_SESSION['avatar']  = $user['Avatar'] ?? '';
 }
 
 function destroySession(): void

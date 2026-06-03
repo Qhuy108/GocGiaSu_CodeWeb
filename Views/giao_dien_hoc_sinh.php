@@ -7,8 +7,9 @@ $tutorModel = new TutorModel();
 $subjects = $tutorModel->getSubjects();
 
 $filters = [
-    'mon_hoc' => $_GET['mon_hoc'] ?? null,
-    'khu_vuc' => $_GET['khu_vuc'] ?? null
+    'mon_hoc'   => $_GET['mon_hoc'] ?? null,
+    'khu_vuc'   => $_GET['khu_vuc'] ?? null,
+    'muc_luong' => $_GET['muc_luong'] ?? null
 ];
 
 $tutors = $tutorModel->getApproved($filters);
@@ -101,15 +102,14 @@ require_once __DIR__ . '/partials/header.php';
                         <h4 class="text-teal fw-bold mt-1">TÌM GIA SƯ PHÙ HỢP</h4>
                     </div>
 
-                    <form method="GET" action="/index.php">
+                    <form id="filterForm" method="GET" action="/index.php">
                         <input type="hidden" name="page" value="student">
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-navy">Môn học</label>
                             <select name="mon_hoc" class="form-select bg-teal text-white border-0 rounded-3 py-2 small shadow-none">
                                 <option value="">-- Chọn môn học --</option>
-
                                 <?php foreach ($subjects as $s): ?>
-                                <option value="<?= $s['Id'] ?>">
+                                <option value="<?= $s['Id'] ?>" <?= ($filters['mon_hoc'] == $s['Id']) ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($s['Name']) ?>
                                 </option>
                                 <?php endforeach; ?>
@@ -117,123 +117,33 @@ require_once __DIR__ . '/partials/header.php';
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-navy">Lớp</label>
-                            <select class="form-select bg-teal text-white border-0 rounded-3 py-2 small shadow-none">
-                                <option selected>Tiền tiểu học</option>
-                                <option value="1">Lớp 1-5</option>
-                                <option value="2">Lớp 6-9</option>
-                                <option value="1">Lớp 10-12</option>
-                                <option value="3">Khác...</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
                             <label class="form-label small fw-bold text-navy">Khu vực</label>
-                            <select name="khu_vuc" class="form-select bg-teal text-white border-0 rounded-3 py-2 small shadow-none">
-                                <option selected>Thủ Đức</option>
-                                <option value="1">Tp Hồ Chí Minh</option>
-                                <option value="2">Bình Dương</option>
-                                <option value="3">Khác...</option>
-                            </select>
+                            <input type="text" name="khu_vuc" class="form-control"
+                                   placeholder="Nhập khu vực..."
+                                   value="<?= htmlspecialchars($filters['khu_vuc'] ?? '') ?>">
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-navy">Mức lương</label>
-                            <select class="form-select bg-teal text-white border-0 rounded-3 py-2 small shadow-none">
-                                <option selected>Thỏa thuận</option>
-                                <option value="1">150-200k/buổi</option>
-                                <option value="2">200-350k/buổi</option>
+                            <select name="muc_luong" class="form-select bg-teal text-white border-0 rounded-3 py-2 small shadow-none">
+                                <option value="">-- Thỏa thuận / Tất cả --</option>
+                                <option value="0-150000" <?= ($filters['muc_luong'] == '0-150000') ? 'selected' : '' ?>>Dưới 150k/buổi</option>
+                                <option value="150000-200000" <?= ($filters['muc_luong'] == '150000-200000') ? 'selected' : '' ?>>150k - 200k/buổi</option>
+                                <option value="200000-350000" <?= ($filters['muc_luong'] == '200000-350000') ? 'selected' : '' ?>>200k - 350k/buổi</option>
+                                <option value="350000-9999999" <?= ($filters['muc_luong'] == '350000-9999999') ? 'selected' : '' ?>>Trên 350k/buổi</option>
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-navy">Kinh nghiệm</label>
-                            <select class="form-select bg-teal text-white border-0 rounded-3 py-2 small shadow-none">
-                                <option selected>Không yêu cầu kinh nghiệm</option>
-                                <option value="1">1-2 năm</option>
-                                <option value="2">3-5 năm</option>
-                                <option value="3">Khác...</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label small fw-bold text-navy">Giới tính</label>
-                            <select class="form-select bg-teal text-white border-0 rounded-3 py-2 small shadow-none">
-                                <option selected>GV nữ</option>
-                                <option value="1">GV nam</option>
-                                <option value="2">SV nam</option>
-                                <option value="3">SV nữ</option>
-                                <option value="4">Tất cả</option>
-                            </select>
-                        </div>
-
-                        <div class="mt-4 d-grid">
-                            <button type="submit" class="btn fw-bold rounded-pill py-2"
-                                    style="background:#9FC131; color:#fff;">
-                                <i class="fa-solid fa-magnifying-glass me-2"></i> Tìm kiếm
-                            </button>
-                        </div>
+                        <!-- Removed submit/reset buttons for real-time filtering -->
                     </form>
                 </div>
             </aside>
 
             <div class="col-lg-9">
-    <div class="row g-4">
-
-        <?php foreach ($tutors as $tutor): ?>
-
-        <div class="col-md-6 col-xl-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 role-card bg-white p-2">
-
-                <img src="<?= htmlspecialchars($tutor['Avatar'] ?? '../assets/avt.jpg') ?>"
-                     class="card-img-top rounded-4 object-fit-cover"
-                     style="height: 150px;"
-                     alt="Gia sư">
-
-                <div class="card-body pt-3 text-center px-1">
-
-                    <h6 class="fw-bold text-navy mb-2">
-                        <?= htmlspecialchars($tutor['Name']) ?>
-                    </h6>
-
-                    <!-- môn học -->
-                    <div class="d-flex justify-content-center gap-1 mb-2">
-                        <span class="badge rounded-pill bg-light text-teal border"
-                              style="font-size: 10px;">
-                            <?= htmlspecialchars($tutor['mon_hoc'] ?? 'Chưa có môn') ?>
-                        </span>
-                    </div>
-
-                    <!-- khu vực -->
-                    <p class="text-muted small mb-3">
-                        <i class="bi bi-geo-alt-fill"></i>
-                        <?= htmlspecialchars($tutor['Location'] ?? 'Chưa cập nhật') ?>
-                    </p>
-
-                    <!-- rating + button -->
-                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-
-                        <span class="small fw-bold text-navy">
-                            <i class="bi bi-star-fill text-warning"></i>
-                            <?= number_format($tutor['diem_tb'], 1) ?>/5
-                        </span>
-
-                        <a href="/index.php?page=tutor_profile&id=<?= (int)$tutor['Id'] ?>"
-                           class="btn btn-gocgiasu btn-sm rounded-pill px-3 py-1 fw-bold"
-                           style="font-size: 10px;">
-                            Chi tiết
-                        </a>
-
-                    </div>
-
+                <div id="tutorListContainer">
+                    <?php $tutors = $tutors ?? []; require_once __DIR__ . '/partials/tutor_cards.php'; ?>
                 </div>
             </div>
-        </div>
-
-        <?php endforeach; ?>
-
-    </div>
-</div>
 
         <button type="button" class="btn btn-gocgiasu rounded-pill shadow-lg d-flex align-items-center p-2 pe-3 fab-custom"
             data-bs-toggle="modal" 
@@ -341,5 +251,45 @@ require_once __DIR__ . '/partials/header.php';
             </div>
         </div>
     </div>
+
+<script>
+(function(){
+    const form = document.getElementById('filterForm');
+    const container = document.getElementById('tutorListContainer');
+    if (!form || !container) return;
+
+    const debounceMs = 400;
+    let timer = null;
+
+    function fetchAndRender(){
+        const params = new URLSearchParams(new FormData(form));
+        params.set('page', 'student');
+        params.set('action', 'filter_tutors');
+
+        fetch('/index.php?' + params.toString(), {
+            headers: {'X-Requested-With': 'XMLHttpRequest'}
+        })
+        .then(r => r.text())
+        .then(html => { container.innerHTML = html; })
+        .catch(err => { console.error('Filter fetch error', err); });
+    }
+
+    // debounce wrapper for input
+    function debounceFetch(){
+        clearTimeout(timer);
+        timer = setTimeout(fetchAndRender, debounceMs);
+    }
+
+    // Listen selects change
+    form.querySelectorAll('select[name="mon_hoc"], select[name="muc_luong"]').forEach(el => {
+        el.addEventListener('change', fetchAndRender);
+    });
+
+    // Listen khu_vuc input with debounce
+    const khu = form.querySelector('input[name="khu_vuc"]');
+    if (khu) khu.addEventListener('input', debounceFetch);
+
+})();
+</script>
 
 <?php require_once __DIR__ . '/partials/footer.php'; ?>

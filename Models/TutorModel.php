@@ -22,12 +22,20 @@ class TutorModel
         $params = [];
 
         if (!empty($filters['mon_hoc'])) {
-            $where[]            = 's.Name LIKE :subject';
-            $params[':subject'] = '%' . $filters['mon_hoc'] . '%';
+            $where[]               = 's.Id = :subject_id';
+            $params[':subject_id'] = $filters['mon_hoc'];
         }
         if (!empty($filters['khu_vuc'])) {
             $where[]            = 't.Location LIKE :location';
             $params[':location'] = '%' . $filters['khu_vuc'] . '%';
+        }
+        if (!empty($filters['muc_luong'])) {
+            $range = explode('-', $filters['muc_luong']);
+            if (count($range) == 2) {
+                $where[] = 't.Hourly_rate >= :min_rate AND t.Hourly_rate <= :max_rate';
+                $params[':min_rate'] = (float)$range[0];
+                $params[':max_rate'] = (float)$range[1];
+            }
         }
 
         $whereClause = implode(' AND ', $where);
@@ -168,13 +176,22 @@ public function countApproved(array $filters = []): int
     $params = [];
 
     if (!empty($filters['mon_hoc'])) {
-        $where[] = 's.Name LIKE :subject';
-        $params[':subject'] = '%' . $filters['mon_hoc'] . '%';
+        $where[]               = 's.Id = :subject_id';
+        $params[':subject_id'] = $filters['mon_hoc'];
     }
 
     if (!empty($filters['khu_vuc'])) {
-        $where[] = 't.Location LIKE :location';
+        $where[]            = 't.Location LIKE :location';
         $params[':location'] = '%' . $filters['khu_vuc'] . '%';
+    }
+
+    if (!empty($filters['muc_luong'])) {
+        $range = explode('-', $filters['muc_luong']);
+        if (count($range) == 2) {
+            $where[] = 't.Hourly_rate >= :min_rate AND t.Hourly_rate <= :max_rate';
+            $params[':min_rate'] = (float)$range[0];
+            $params[':max_rate'] = (float)$range[1];
+        }
     }
 
     $whereClause = implode(' AND ', $where);

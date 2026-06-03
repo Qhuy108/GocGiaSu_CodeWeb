@@ -19,6 +19,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 $studentName = $_SESSION['name'] ?? 'Học sinh';
+$userAvatar = '../assets/' . ($_SESSION['avatar'] ?? 'default-avatar.png');
 
 $pageTitle  = 'Giao diện học sinh | Góc Gia Sư';
 $activePage = 'student';
@@ -175,17 +176,17 @@ require_once __DIR__ . '/partials/header.php';
             <div class="modal-dialog modal-dialog-centered" style="max-width: 450px;">
                 <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
                     <div class="modal-body p-4">
-                        <div class="d-flex align-items-center mb-4">
+                        <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
                             <div class="rounded-circle me-3 shadow-sm" style="width: 65px; height: 65px; background-color: #9de3c5;"></div>
                             <h4 class="fw-bold m-0 text-navy text-uppercase" style="letter-spacing: 1px;"><?= htmlspecialchars($studentName) ?></h4>
                             <button type="button" class="btn-close ms-auto shadow-none" data-bs-dismiss="modal"></button>
                         </div>
 
-                        <form id="formPostTutor">
+                        <form id="formPostTutor" novalidate>
                             <div class="row g-2 mb-3">
                                 <div class="col-6">
                                     <label class="form-label fw-bold text-navy small">Môn học</label>
-                                    <input list="subjects" class="form-control border-0 text-white shadow-none" 
+                                    <input list="subjects" name="subject" required class="form-control border-0 text-white shadow-none" 
                                         placeholder="Chọn hoặc nhập..."
                                         style="background-color: #005c53; border-radius: 12px; font-size: 0.9rem;">
                                     <datalist id="subjects">
@@ -196,10 +197,13 @@ require_once __DIR__ . '/partials/header.php';
                                         <option value="Hóa Học">
                                         <option value="Toeic/ Ielts">
                                     </datalist>
+                                    <div class="invalid-feedback">
+                                        Vui lòng chọn môn học.
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label fw-bold text-navy small">Lớp</label>
-                                    <input list="grades" class="form-control border-0 text-white shadow-none" 
+                                    <input list="grades" name="grade" required class="form-control border-0 text-white shadow-none" 
                                         placeholder="Chọn hoặc nhập..."
                                         style="background-color: #005c53; border-radius: 12px; font-size: 0.9rem;">
                                     <datalist id="grades">
@@ -218,6 +222,9 @@ require_once __DIR__ . '/partials/header.php';
                                         <option value="Tuyển sinh 10">
                                         <option value="Ôn thi đại học">
                                     </datalist>
+                                    <div class="invalid-feedback">
+                                        Vui lòng chọn lớp.
+                                    </div>
                                 </div>
                             </div>
 
@@ -228,17 +235,32 @@ require_once __DIR__ . '/partials/header.php';
                                         style="border-radius: 12px; border-width: 1.5px; font-size: 0.9rem;"></textarea>
                             </div>
 
-                            <div class="row align-items-center mb-3">
-                                <div class="col-5">
-                                    <label class="form-label fw-bold m-0 text-navy small">Học phí/ buổi</label>
-                                </div>
-                                <div class="col-7">
-                                    <div class="input-group border border-success rounded-3 px-2">
-                                        <input type="text" class="form-control border-0 shadow-none text-end bg-transparent p-1" placeholder="0">
-                                        <span class="input-group-text bg-transparent border-0 fw-bold text-navy small">VNĐ</span>
-                                    </div>
-                                </div>
+                          <div class="mb-4">
+
+                            <label class="form-label fw-bold text-navy small">
+                                Học phí / buổi
+                            </label>
+
+                            <input type="range"
+                                class="form-range"
+                                min="100000"
+                                max="500000"
+                                step="50000"
+                                value="200000"
+                                id="hocPhiRange">
+
+                            <div class="text-center">
+
+                                <span class="badge rounded-pill px-3 py-2"
+                                    style="background:#005c53;">
+                                    <span id="hocPhiText">
+                                        200.000 VNĐ
+                                    </span>
+                                </span>
+
                             </div>
+
+                        </div>
 
                             <div class="d-flex gap-2 flex-wrap">
                                 <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">T2</button>
@@ -267,6 +289,8 @@ require_once __DIR__ . '/partials/header.php';
             </div>
         </div>
     </div>
+
+</div><!-- /container mt-5 mb-5 -->
 
 <!-- Modal đánh giá gia sư -->
 <div class="modal fade" id="reviewModal" tabindex="-1">
@@ -314,6 +338,55 @@ require_once __DIR__ . '/partials/header.php';
         </div>
     </div>
 </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.getElementById("formPostTutor")
+.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    if(!this.checkValidity()){
+        this.reportValidity();
+        return;
+    }
+
+    Swal.fire({
+    icon: "success",
+    title: "Đăng tin thành công",
+    html: `
+        <div class="mt-2">
+            Yêu cầu tìm gia sư của bạn đã được gửi.<br>
+            Chúng tôi sẽ kết nối gia sư phù hợp sớm nhất.
+        </div>
+    `,
+    showConfirmButton: false,
+    timer: 2500
+});
+});
+</script>
+
+<script>
+(() => {
+    'use strict';
+
+    const forms = document.querySelectorAll('.needs-validation');
+
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+</script>
 
 <script>
 document.getElementById('reviewModal').addEventListener('show.bs.modal', function(e) {

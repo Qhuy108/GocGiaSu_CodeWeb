@@ -35,8 +35,10 @@ CREATE TABLE `bookings` (
   `Date` date NOT NULL,
   `Time` time NOT NULL,
   `Total_price` decimal(10,2) DEFAULT 0.00,
+  `Total_sessions` int(11) DEFAULT 1,
   `Status` enum('pending','confirmed','cancelled','done') DEFAULT 'pending',
-  `Payment_status` enum('unpaid','paid') DEFAULT 'unpaid',
+  `Payment_status` enum('unpaid','pending_approval','paid') DEFAULT 'unpaid',
+  `Payment_receipt` varchar(255) DEFAULT NULL,
   `Note` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

@@ -26,11 +26,10 @@ $page   = $_GET['page']   ?? 'home';
 $action = $_GET['action'] ?? 'index';
 
 switch ($page) {
-    // Thêm vào trong switch ($page)
+
 case 'get_tutor_contact':
     require_once __DIR__ . '/Views/thong-tin-lien-he-hoc-sinh.php';
     exit;
-
     // ── Trang công khai ──────────────────────────────────────────────────────
     case 'home':
         loadController('Tutor');
@@ -40,6 +39,18 @@ case 'get_tutor_contact':
 
     case 'about':
         require_once __DIR__ . '/Views/About.php';
+        break;
+
+    case 'blog':
+        loadController('Blog');
+        $controller = new BlogController();
+        $controller->index();
+        break;
+
+    case 'blog_detail':
+        loadController('Blog');
+        $controller = new BlogController();
+        $controller->detail();
         break;
 
     case 'tutors':
@@ -107,6 +118,22 @@ case 'get_tutor_contact':
         loadController('Booking');
         $controller = new BookingController();
         $controller->$action();
+        break;
+
+    case 'payment':
+        requireLogin();
+        requireRole('student');
+        loadController('Booking');
+        $controller = new BookingController();
+        $controller->payment();
+        break;
+
+    case 'process_payment':
+        requireLogin();
+        requireRole('student');
+        loadController('Booking');
+        $controller = new BookingController();
+        $controller->processPayment();
         break;
 
     // ── Dashboard Gia sư ─────────────────────────────────────────────────────

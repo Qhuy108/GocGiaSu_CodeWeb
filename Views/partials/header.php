@@ -227,8 +227,8 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link nav-link-professional <?= $activePage === 'tutors' ? 'active' : '' ?>"
-                       href="/index.php?page=tutors">Tìm gia sư</a>
+                    <a class="nav-link nav-link-professional <?= $activePage === 'blog' ? 'active' : '' ?>"
+                       href="/index.php?page=blog">Blog</a>
                 </li>
 
                 <?php if ($isLoggedIn): ?>

@@ -23,7 +23,7 @@ if (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'student'):
 
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-medium text-navy small">Ngày học</label>
+                            <label class="form-label fw-medium text-navy small">Ngày Bắt Đầu Học</label>
                             <input type="date" name="date" class="form-control rounded-3 bg-light border-0 shadow-none"
                                    min="<?= date('Y-m-d', strtotime('+1 day')) ?>" required>
                         </div>
@@ -31,6 +31,12 @@ if (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'student'):
                             <label class="form-label fw-medium text-navy small">Giờ học</label>
                             <input type="time" name="time" class="form-control rounded-3 bg-light border-0 shadow-none" required>
                         </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-medium text-navy small">Số buổi học</label>
+                        <input type="number" name="total_sessions" class="form-control rounded-3 bg-light border-0 shadow-none" 
+                               min="1" value="1" required placeholder="Nhập số buổi muốn học...">
                     </div>
 
                     <div class="mb-4">
@@ -41,7 +47,7 @@ if (isset($_SESSION['user_id']) && ($_SESSION['role'] ?? '') === 'student'):
 
                     <button type="submit" class="btn w-100 fw-bold rounded-pill py-2 shadow-sm"
                             style="background:#9FC131; color:#fff;">
-                        <i class="fa-solid fa-paper-plane me-2"></i> Gửi yêu cầu đặt lịch
+                        <i class="fa-solid fa-credit-card me-2"></i> Tiếp Tục Thanh Toán
                     </button>
                 </form>
             </div>

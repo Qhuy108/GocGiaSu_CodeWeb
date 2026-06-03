@@ -51,6 +51,13 @@ require_once __DIR__ . '/partials/header.php';
 
     <div class="container mt-4">
         <h3 class="text-navy fw-bold">Lịch học của bạn</h3>
+        
+        <?php if (isset($_GET['success']) && $_GET['success'] === 'payment_submitted'): ?>
+        <div class="alert alert-success rounded-4 border-0 shadow-sm mb-4">
+            <i class="fa-solid fa-check-circle me-2"></i> Đặt lịch thành công! Vui lòng chờ Admin duyệt minh chứng thanh toán của bạn.
+        </div>
+        <?php endif; ?>
+
         <div class="row g-3">
             <?php if (!empty($bookings)): ?>
                 <?php foreach ($bookings as $b): ?>
@@ -58,7 +65,7 @@ require_once __DIR__ . '/partials/header.php';
                         <div class="card p-3 shadow-sm border-0">
                             <p><b>Gia sư:</b> <?= htmlspecialchars($b['ten_gia_su'] ?? '') ?></p>
                             <p><b>Môn:</b> <?= htmlspecialchars($b['subject_name'] ?? 'Chưa rõ') ?></p>
-                            <p><b>Ngày:</b> <?= htmlspecialchars($b['Date'] ?? '') ?></p>
+                            <p><b>Bắt đầu:</b> <?= date('d/m/Y', strtotime($b['Date'] ?? '')) ?></p>
                             <p><b>Giờ:</b> <?= htmlspecialchars($b['Time'] ?? '') ?></p>
                             <p><b>Trạng thái:</b>
                                 <?php
@@ -68,7 +75,12 @@ require_once __DIR__ . '/partials/header.php';
                                     'cancelled' => '<span class="badge bg-secondary">Đã hủy</span>',
                                     'done'      => '<span class="badge bg-primary">Hoàn thành</span>',
                                 ];
-                                echo $statusMap[$b['Status']] ?? htmlspecialchars($b['Status']);
+                                
+                                if ($b['Status'] === 'pending' && ($b['Payment_status'] ?? '') === 'pending_approval') {
+                                    echo '<span class="badge bg-info text-white">Chờ duyệt thanh toán</span>';
+                                } else {
+                                    echo $statusMap[$b['Status']] ?? htmlspecialchars($b['Status']);
+                                }
                                 ?>
                             </p>
 

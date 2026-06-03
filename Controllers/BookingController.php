@@ -69,22 +69,111 @@ class BookingController
         $date      = trim($_POST['date'] ?? '');
         $time      = trim($_POST['time'] ?? '');
         $note      = trim($_POST['note'] ?? '');
+        $sessions  = (int)($_POST['total_sessions'] ?? 1);
 
-        if ($tutorId <= 0 || $subjectId <= 0 || $date === '') {
+        if ($tutorId <= 0 || $subjectId <= 0 || $date === '' || $sessions <= 0) {
             header('Location: /index.php?page=tutors&error=missing_booking_info');
             exit;
         }
 
-        $this->bookingModel->create([
-            'Student_id' => $user['id'],
-            'Tutor_id'   => $tutorId,
-            'Subject_id' => $subjectId,
-            'Date'       => $date,
-            'Time'       => $time,
-            'Note'       => $note,
-        ]);
+        $tutor = $this->tutorModel->findById($tutorId);
+        if (!$tutor) {
+            header('Location: /index.php?page=tutors&error=tutor_not_found');
+            exit;
+        }
 
-        header('Location: /index.php?page=student&success=booking_created');
+        // Lấy tên môn học để hiển thị
+        $subjectName = '';
+        $subjects = $this->tutorModel->getSubjectsByTutorId($tutorId);
+        foreach ($subjects as $s) {
+            if ((int)$s['Id'] === $subjectId) {
+                $subjectName = $s['Name'];
+                break;
+            }
+        }
+
+        // Lưu vào session để sang bước thanh toán
+        $_SESSION['pending_booking'] = [
+            'Student_id'     => $user['id'],
+            'Tutor_id'       => $tutorId,
+            'Tutor_name'     => $tutor['Name'],
+            'Subject_id'     => $subjectId,
+            'Subject_name'   => $subjectName,
+            'Date'           => $date,
+            'Time'           => $time,
+            'Note'           => $note,
+            'Total_sessions' => $sessions,
+            'Hourly_rate'    => (float)$tutor['Hourly_rate'],
+            'Total_price'    => (float)$tutor['Hourly_rate'] * $sessions,
+        ];
+
+        header('Location: /index.php?page=payment');
+        exit;
+    }
+
+    public function payment(): void
+    {
+        requireLogin();
+        requireRole('student');
+
+        if (!isset($_SESSION['pending_booking'])) {
+            header('Location: /index.php?page=tutors');
+            exit;
+        }
+
+        $booking = $_SESSION['pending_booking'];
+        require_once __DIR__ . '/../Views/Payment.php';
+    }
+
+    public function processPayment(): void
+    {
+        requireLogin();
+        requireRole('student');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_SESSION['pending_booking'])) {
+            header('Location: /index.php?page=tutors');
+            exit;
+        }
+
+        $bookingData = $_SESSION['pending_booking'];
+        $receiptPath = null;
+
+        if (isset($_FILES['payment_receipt']) && $_FILES['payment_receipt']['error'] === UPLOAD_ERR_OK) {
+            $file = $_FILES['payment_receipt'];
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+            $maxSize = 5 * 1024 * 1024; // 5MB
+
+            if (in_array($file['type'], $allowedTypes) && $file['size'] <= $maxSize) {
+                $uploadDir = __DIR__ . '/../assets/uploads/payments';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+
+                $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                $filename = 'pay_' . $bookingData['Student_id'] . '_' . time() . '.' . $ext;
+                $dest = $uploadDir . '/' . $filename;
+
+                if (move_uploaded_file($file['tmp_name'], $dest)) {
+                    $receiptPath = 'assets/uploads/payments/' . $filename;
+                }
+            }
+        }
+
+        if (!$receiptPath) {
+            header('Location: /index.php?page=payment&error=upload_failed');
+            exit;
+        }
+
+        // Lưu vào database
+        $bookingData['Payment_receipt'] = $receiptPath;
+        $bookingData['Payment_status']  = 'pending_approval';
+
+        $this->bookingModel->create($bookingData);
+
+        // Xóa session
+        unset($_SESSION['pending_booking']);
+
+        header('Location: /index.php?page=student&success=payment_submitted');
         exit;
     }
 

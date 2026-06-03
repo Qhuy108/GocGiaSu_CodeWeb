@@ -28,7 +28,7 @@ require_once __DIR__ . '/partials/header.php';
                     <p class="text-navy mb-4 flex-grow-1">
                         Tìm kiếm gia sư uy tín, chất lượng để cải thiện thành tích học tập một cách hiệu quả nhất.
                     </p>
-                    <a href="/index.php?page=tutors" class="btn btn-gocgiasu mt-auto">Tìm Gia Sư Ngay</a>
+                    <a href="/index.php?page=register" class="btn btn-gocgiasu mt-auto">Tìm Gia Sư Ngay</a>
                 </div>
             </div>
             <div class="col-md-5 col-lg-4">

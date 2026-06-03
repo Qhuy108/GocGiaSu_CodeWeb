@@ -19,19 +19,23 @@ class BookingModel
     public function create(array $data): int
     {
         $sql = 'INSERT INTO bookings
-                    (Student_id, Tutor_id, Subject_id, Date, Time, Note, Status)
+                    (Student_id, Tutor_id, Subject_id, Date, Time, Note, Total_sessions, Total_price, Payment_status, Payment_receipt, Status)
                 VALUES
-                    (:Student_id, :Tutor_id, :Subject_id, :Date, :Time, :Note, :Status)';
+                    (:Student_id, :Tutor_id, :Subject_id, :Date, :Time, :Note, :Total_sessions, :Total_price, :Payment_status, :Payment_receipt, :Status)';
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
-            ':Student_id' => $data['Student_id'],
-            ':Tutor_id'   => $data['Tutor_id'],
-            ':Subject_id' => $data['Subject_id'],
-            ':Date'       => $data['Date'],
-            ':Time'       => $data['Time'] ?? '',
-            ':Note'       => $data['Note'] ?? '',
-            ':Status'     => 'pending',
+            ':Student_id'     => $data['Student_id'],
+            ':Tutor_id'       => $data['Tutor_id'],
+            ':Subject_id'     => $data['Subject_id'],
+            ':Date'           => $data['Date'],
+            ':Time'           => $data['Time'] ?? '',
+            ':Note'           => $data['Note'] ?? '',
+            ':Total_sessions' => $data['Total_sessions'] ?? 1,
+            ':Total_price'    => $data['Total_price'] ?? 0,
+            ':Payment_status' => $data['Payment_status'] ?? 'unpaid',
+            ':Payment_receipt' => $data['Payment_receipt'] ?? null,
+            ':Status'         => 'pending',
         ]);
 
         return (int)$this->db->lastInsertId();

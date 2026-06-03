@@ -144,14 +144,16 @@ require_once __DIR__ . '/partials/header.php';
                     <?php $tutors = $tutors ?? []; require_once __DIR__ . '/partials/tutor_cards.php'; ?>
                 </div>
             </div>
+        </div>
+    </div>
 
-        <button type="button" class="btn btn-gocgiasu rounded-pill shadow-lg d-flex align-items-center p-2 pe-3 fab-custom"
+    <button type="button" class="btn btn-gocgiasu fab-custom d-flex align-items-center"
             data-bs-toggle="modal" 
             data-bs-target="#modalDangTin">
             <div class="bg-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
                 <i class="bi bi-plus text-teal fw-bold" style="font-size: 1.5rem; line-height: 0;"></i>
             </div>
-            <span class="text-navy fw-bold" style="font-size: 1.2rem;">Đăng tin tìm gia sư</span>
+            <span class="text-navy fw-bold" style="font-size: 1.1rem;">Đăng tin tìm gia sư</span>
         </button>
 
 

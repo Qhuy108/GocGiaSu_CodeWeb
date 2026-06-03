@@ -9,6 +9,8 @@
  */
 ?>
 
+</main>
+
 <!-- ===== FOOTER ===== -->
 <footer class="footer-section pt-5 pb-3 mt-5" style="background-color: #042940; color: #D6D58E;">
     <div class="container">

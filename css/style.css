@@ -21,6 +21,9 @@ body {
     color: #042940;
     background-color: #fcfdfa;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -97,10 +100,19 @@ a:hover {
 /* Class duy nhất để định vị nút lơ lửng */
 .fab-custom {
     position: fixed !important;
-    bottom: 30px;
-    left: 30px;
+    bottom: 40px;
+    right: 40px;
+    left: auto !important;
     z-index: 1050; /* Để nó luôn nằm trên cùng */
+    padding: 12px 28px !important;
+    border-radius: 50px !important;
+    width: fit-content !important;
+    max-width: 300px !important;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2) !important;
     border: none !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
 /* Tận dụng biến màu của nhóm để icon bên trong có màu đồng bộ */

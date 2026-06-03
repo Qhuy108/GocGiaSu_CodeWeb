@@ -30,7 +30,7 @@ class BookingController
         $user     = currentUser();
         $bookings = $this->bookingModel->getByStudent($user['id']);
 
-        require_once __DIR__ . '/../Views/giao_dien_hoc_sinh.php';
+        require_once __DIR__ . '/../Views/GiaoDien_HS.php';
     }
 
     // AJAX endpoint: trả về HTML chứa danh sách thẻ gia sư theo filter

@@ -259,3 +259,5 @@ elseif ($userRole === 'admin')   $dashboardLink = '/index.php?page=admin';
 </nav>
 <!-- ===== KẾT THÚC HEADER ===== -->
 
+<main class="flex-grow-1">
+

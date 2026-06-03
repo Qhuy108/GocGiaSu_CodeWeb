@@ -139,6 +139,13 @@ require_once __DIR__ . '/partials/header.php';
                                 <option value="4">Tất cả</option>
                             </select>
                         </div>
+
+                        <div class="mt-4 d-grid">
+                            <button type="submit" class="btn fw-bold rounded-pill py-2"
+                                    style="background:#9FC131; color:#fff;">
+                                <i class="fa-solid fa-magnifying-glass me-2"></i> Tìm kiếm
+                            </button>
+                        </div>
                     </form>
                 </div>
             </aside>

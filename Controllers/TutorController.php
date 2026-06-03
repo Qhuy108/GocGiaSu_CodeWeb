@@ -234,7 +234,7 @@ public function updateProfile(): void
         }
     }
 
-    header('Location: /index.php?page=tutor_edit&success=1');
+    header('Location: /index.php?page=tutor_edit&success=1'); // chế độ xem sau khi lưu
     exit;
 }
 

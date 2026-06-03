@@ -21,9 +21,9 @@ class TutorModel
         $where  = ["t.Status = 'approved'"];
         $params = [];
 
-       if (!empty($filters['mon_hoc'])) {
-             $where[] = 's.Id = :subject_id';
-            $params[':subject_id'] = $filters['mon_hoc'];
+        if (!empty($filters['mon_hoc'])) {
+            $where[]            = 's.Name LIKE :subject';
+            $params[':subject'] = '%' . $filters['mon_hoc'] . '%';
         }
         if (!empty($filters['khu_vuc'])) {
             $where[]            = 't.Location LIKE :location';
@@ -144,6 +144,16 @@ class TutorModel
         return $stmt->fetchAll();
     }
           //Lay mon hoc
+public function getSubjectsByTutorId(int $tutorId): array
+{
+    $sql = "SELECT s.Id, s.Name FROM subjects s
+            JOIN tutor_subjects ts ON ts.Subject_id = s.Id
+            WHERE ts.Tutor_id = ?";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute([$tutorId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 public function getSubjects(): array
 {
     $sql = "SELECT Id, Name FROM subjects";

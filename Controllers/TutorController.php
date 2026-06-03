@@ -82,6 +82,8 @@ public function profile(): void
         die('Không tìm thấy gia sư');
     }
 
+    $tutorSubjects = $this->tutorModel->getSubjectsByTutorId((int)$tutor['Id']);
+
     require_once __DIR__ . '/../Views/TutorProfile.php';
 }
 // Trong TutorController.php

@@ -212,7 +212,7 @@ require_once __DIR__ . '/booking_modal.php';
 </div>
 
 <style>
-#chatbot-container { position: fixed; bottom: 105px; right: 28px; z-index: 9999; font-family: 'Roboto', sans-serif; }
+#chatbot-container { position: fixed; bottom: 40px; left: 28px; z-index: 9999; font-family: 'Roboto', sans-serif; }
 
 #chatbot-toggle {
     width: 58px; height: 58px; border-radius: 50%; border: none; cursor: pointer;
@@ -234,7 +234,7 @@ require_once __DIR__ . '/booking_modal.php';
 }
 
 #chatbot-window {
-    position: absolute; bottom: 70px; right: 0;
+    position: absolute; bottom: 70px; left: 0;
     width: 340px; max-height: 520px;
     background: #fff; border-radius: 16px;
     box-shadow: 0 8px 32px rgba(4,41,64,0.18);

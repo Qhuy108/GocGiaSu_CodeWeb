@@ -26,11 +26,10 @@ $page   = $_GET['page']   ?? 'home';
 $action = $_GET['action'] ?? 'index';
 
 switch ($page) {
-    // Thêm vào trong switch ($page)
+
 case 'get_tutor_contact':
     require_once __DIR__ . '/Views/thong-tin-lien-he-hoc-sinh.php';
     exit;
-
     // ── Trang công khai ──────────────────────────────────────────────────────
     case 'home':
         loadController('Tutor');
@@ -176,6 +175,15 @@ case 'my_classes':
     $controller->myClasses();
     break;
 
+case 'settings':
+    requireLogin();
+    requireRole('tutor');
+
+    loadController('Tutor');
+
+    $controller = new TutorController();
+    $controller->settings();
+    break;
     // ── 404 ──────────────────────────────────────────────────────────────────
     default:
         http_response_code(404);

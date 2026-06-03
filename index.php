@@ -42,6 +42,14 @@ case 'get_tutor_contact':
         require_once __DIR__ . '/Views/About.php';
         break;
 
+    case 'blog':
+        require_once __DIR__ . '/Views/Blog.php';
+        break;
+
+    case 'blog_detail':
+        require_once __DIR__ . '/Views/BlogDetail.php';
+        break;
+
     case 'tutors':
         loadController('Tutor');
         $controller = new TutorController();

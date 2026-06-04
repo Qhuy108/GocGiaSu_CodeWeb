@@ -167,7 +167,89 @@ class AdminController
             $db->prepare("DELETE FROM users WHERE Id = ?")->execute([$userId]);
         }
 
-        header('Location: /index.php?page=admin&action=users');
+        header('Location: /index.php?page=admin&action=users&success=deleted');
+        exit;
+    }
+
+    // Thêm người dùng mới (Admin)
+    public function userCreate(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /index.php?page=admin&action=users');
+            exit;
+        }
+
+        $name     = trim($_POST['name'] ?? '');
+        $email    = trim($_POST['email'] ?? '');
+        $phone    = trim($_POST['phone'] ?? '');
+        $password = trim($_POST['password'] ?? '');
+        $role     = trim($_POST['role'] ?? 'student');
+
+        if ($name === '' || $email === '' || $password === '') {
+            header('Location: /index.php?page=admin&action=users&error=missing_info');
+            exit;
+        }
+
+        if ($this->userModel->findByEmail($email)) {
+            header('Location: /index.php?page=admin&action=users&error=email_exists');
+            exit;
+        }
+
+        $userId = $this->userModel->create([
+            'Name'     => $name,
+            'Email'    => $email,
+            'Password' => password_hash($password, PASSWORD_DEFAULT),
+            'Phone'    => $phone ?: null,
+            'Role'     => $role,
+        ]);
+
+        if ($userId > 0) {
+            // Tự động xác thực cho user do admin tạo
+            $this->userModel->verifyUser($userId);
+            header('Location: /index.php?page=admin&action=users&success=created');
+        } else {
+            header('Location: /index.php?page=admin&action=users&error=create_failed');
+        }
+        exit;
+    }
+
+    // Cập nhật thông tin người dùng (Admin)
+    public function userUpdate(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /index.php?page=admin&action=users');
+            exit;
+        }
+
+        $id       = (int)($_POST['user_id'] ?? 0);
+        $name     = trim($_POST['name'] ?? '');
+        $email    = trim($_POST['email'] ?? '');
+        $phone    = trim($_POST['phone'] ?? '');
+        $role     = trim($_POST['role'] ?? '');
+        $password = trim($_POST['password'] ?? '');
+
+        if ($id <= 0 || $name === '' || $email === '') {
+            header('Location: /index.php?page=admin&action=users&error=missing_info');
+            exit;
+        }
+
+        $data = [
+            'Name'  => $name,
+            'Email' => $email,
+            'Phone' => $phone ?: null,
+            'Role'  => $role
+        ];
+
+        // Chỉ cập nhật mật khẩu nếu có nhập mới
+        if ($password !== '') {
+            $data['Password'] = password_hash($password, PASSWORD_DEFAULT);
+        }
+
+        if ($this->userModel->update($id, $data)) {
+            header('Location: /index.php?page=admin&action=users&success=updated');
+        } else {
+            header('Location: /index.php?page=admin&action=users&error=update_failed');
+        }
         exit;
     }
 

@@ -60,8 +60,12 @@ public function dashboard(): void
     $tutor = $this->tutorModel->findByUserId($user['id']);
 
     require_once __DIR__ . '/../Models/BookingModel.php';
+    require_once __DIR__ . '/../Models/StudentPostModel.php';
     $bookingModel    = new BookingModel();
     $pendingBookings = $tutor ? $bookingModel->getByTutor((int)$tutor['Id'], 'pending') : [];
+    $studentPostModel = new StudentPostModel();
+    $studentPostModel->closeExpired();
+    $studentPosts     = $studentPostModel->getAll(10, 0);
 
     require_once __DIR__ . '/../Views/GiaoDien_GS.php';
 }

@@ -103,7 +103,8 @@ require_once __DIR__ . '/partials/header.php';
                 <?php endif; ?>
             </div>
 
-            <div class="mb-4 p-3 bg-light rounded-4">
+            <!-- Bài đăng tìm gia sư (dữ liệu thật từ DB) -->
+            <div class="mb-3 p-3 bg-light rounded-4">
                 <div class="d-flex align-items-center gap-3">
                     <div class="bg-success rounded-circle d-flex align-items-center justify-content-center"
                          style="width: 50px; height: 50px;">
@@ -111,73 +112,63 @@ require_once __DIR__ . '/partials/header.php';
                     </div>
                     <div>
                         <strong>Bài đăng tìm gia sư</strong>
+                        <?php if (!empty($studentPosts)): ?>
+                            <span class="badge bg-success ms-1"><?= count($studentPosts) ?></span>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
 
-            <div class="card card-tutor mb-4">
+            <?php if (empty($studentPosts)): ?>
+                <p class="text-muted small px-2">Chưa có bài đăng nào từ học sinh.</p>
+            <?php else: foreach ($studentPosts as $p):
+                $words    = explode(' ', trim($p['student_name'] ?? '?'));
+                $initials = mb_strtoupper(mb_substr(end($words), 0, 1));
+                if (count($words) >= 2) {
+                    $initials = mb_strtoupper(mb_substr($words[0], 0, 1) . mb_substr(end($words), 0, 1));
+                }
+                $diffSec = time() - strtotime($p['Created_at']);
+                if ($diffSec < 60)        $timeAgo = 'Vừa xong';
+                elseif ($diffSec < 3600)  $timeAgo = (int)($diffSec/60) . ' phút trước';
+                elseif ($diffSec < 86400) $timeAgo = (int)($diffSec/3600) . ' giờ trước';
+                else                      $timeAgo = (int)($diffSec/86400) . ' ngày trước';
+            ?>
+            <div class="card card-tutor mb-3">
                 <div class="card-body">
                     <div class="d-flex align-items-start gap-3">
-                        <div class="avatar-circle fs-4">CĐ</div>
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h5 class="mb-1">Chu Thành Đức <i class="fa-solid fa-circle-check text-success"></i></h5>
-                                    <small class="text-muted">36 phút trước</small>
-                                </div>
-                            </div>
-                            <p class="mb-1"><strong>Môn:</strong> Toán, Lớp: 12</p>
-                            <p class="mb-1"><i class="fa-solid fa-location-dot text-muted"></i> Tân Bình, Hồ Chí Minh, Việt Nam</p>
-                            <div class="d-flex align-items-center gap-2 mb-2">
-                                <img src="/assets/money.png" width="20" height="20" alt="money">
-                                <span class="fw-bold text-dark">180.000 - 360.000 / buổi</span>
-                            </div>
-                            <p class="text-muted small">Mô tả: Tìm giáo viên dạy toán quanh khu vực tân bình</p>
+                        <div class="avatar-circle fs-5 d-flex align-items-center justify-content-center">
+                            <?= htmlspecialchars($initials) ?>
                         </div>
-                    </div>
-                    <div class="d-flex justify-content-end mt-3"> 
-   <button class="btn btn-success"
-        data-bs-toggle="modal"
-        data-bs-target="#contactTutorModal"
-        data-id="1">
-    Liên hệ ngay
-</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card card-tutor">
-                <div class="card-body">
-                    <div class="d-flex align-items-start gap-3">
-                        <div class="avatar-circle fs-4">T</div>
                         <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h5 class="mb-1">Nguyễn Hương Mai <i class="fa-solid fa-circle-check text-success"></i></h5>
-                                    <small class="text-muted">36 phút trước</small>
-                                </div>
-                            </div>
-                            <p class="mb-1"><strong>Môn:</strong> Ngữ Văn, lớp 9</p>
-                            <p class="mb-1"><i class="fa-solid fa-location-dot text-muted"></i> 120 Yên Lãng, Đống Đa, Hà Nội, Việt Nam</p>
-                            <div class="d-flex align-items-center gap-2 mb-2">
+                            <h5 class="mb-1">
+                                <?= htmlspecialchars($p['student_name']) ?>
+                                <i class="fa-solid fa-circle-check text-success"></i>
+                            </h5>
+                            <small class="text-muted"><?= $timeAgo ?></small>
+                            <p class="mb-1 mt-2"><strong>Môn:</strong> <?= htmlspecialchars($p['Subject']) ?>, Lớp: <?= htmlspecialchars($p['Grade']) ?></p>
+                            <?php if (!empty($p['Schedule'])): ?>
+                            <p class="mb-1 text-muted small"><i class="fa-regular fa-clock me-1"></i><?= htmlspecialchars($p['Schedule']) ?></p>
+                            <?php endif; ?>
+                            <div class="d-flex align-items-center gap-2 mb-1">
                                 <img src="/assets/money.png" width="20" height="20" alt="money">
-                                <span class="fw-bold text-dark">150.000 - 200.000 / buổi</span>
+                                <span class="fw-bold text-dark"><?= number_format($p['Budget'], 0, ',', '.') ?> VNĐ / buổi</span>
                             </div>
-                            <p class="text-muted small">Mô tả: Tìm giáo viên có kinh nghiệm luyện thi ngữ văn 9 lên 10</p>
+                            <?php if (!empty($p['Goal'])): ?>
+                            <p class="text-muted small mb-0">Mô tả: <?= htmlspecialchars($p['Goal']) ?></p>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mt-3">
-            
-<button class="btn btn-success"
-        data-bs-toggle="modal"
-        data-bs-target="#contactTutorModal"
-        data-id="2">
-    Liên hệ ngay
-</button>
-                    
+                        <button class="btn btn-success"
+                                data-bs-toggle="modal"
+                                data-bs-target="#contactTutorModal"
+                                data-id="<?= (int)$p['Id'] ?>">
+                            Liên hệ ngay
+                        </button>
                     </div>
                 </div>
             </div>
+            <?php endforeach; endif; ?>
 
         </div>
 

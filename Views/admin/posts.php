@@ -11,11 +11,16 @@ require_once __DIR__ . '/../partials/header.php';
             <h4 class="fw-bold mb-0" style="color:#042940;">
                 <i class="bi bi-journal-text me-2"></i>Quản lý Blog
             </h4>
-            <a href="/index.php?page=admin&action=postCreate"
-               class="btn rounded-pill px-4 fw-bold"
-               style="background:#9FC131;color:#042940;">
-                <i class="bi bi-plus-lg me-2"></i>Viết bài mới
-            </a>
+            <div class="d-flex gap-2 align-items-center">
+                <a href="/index.php?page=admin&action=postCreate"
+                   class="btn rounded-pill px-4 fw-bold"
+                   style="background:#9FC131;color:#042940;">
+                    <i class="bi bi-plus-lg me-2"></i>Viết bài mới
+                </a>
+                <a href="/index.php?page=admin" class="btn btn-outline-secondary rounded-pill px-3">
+                    <i class="bi bi-arrow-left me-1"></i> Quay lại Dashboard
+                </a>
+            </div>
         </div>
 
         <?php if (isset($_GET['success'])): ?>

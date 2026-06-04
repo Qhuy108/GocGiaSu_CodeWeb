@@ -32,11 +32,14 @@ $roleLabel  = match($roleFilter) {
                 <i class="bi bi-people me-2"></i>Quản lý người dùng
                 <span class="fs-6 fw-normal text-muted ms-2">(<?= $roleLabel ?>)</span>
             </h4>
-            <div class="d-flex gap-2">
+            <div class="d-flex gap-2 align-items-center">
                 <span class="badge bg-primary fs-6 d-flex align-items-center px-3"><?= count($users) ?> người dùng</span>
                 <button class="btn btn-success btn-sm shadow-sm px-3" data-bs-toggle="modal" data-bs-target="#addUserModal">
                     <i class="bi bi-plus-circle me-1"></i>Thêm người dùng
                 </button>
+                <a href="/index.php?page=admin" class="btn btn-outline-secondary rounded-pill px-3">
+                    <i class="bi bi-arrow-left me-1"></i> Quay lại Dashboard
+                </a>
             </div>
         </div>
 

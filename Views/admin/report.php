@@ -19,9 +19,14 @@ require_once __DIR__ . '/../partials/header.php';
             </ol>
         </nav>
 
-        <h4 class="fw-bold mb-4" style="color:#042940;">
-            <i class="bi bi-bar-chart-line me-2"></i>Báo cáo & Thống kê
-        </h4>
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h4 class="fw-bold mb-0" style="color:#042940;">
+                <i class="bi bi-bar-chart-line me-2"></i>Báo cáo & Thống kê
+            </h4>
+            <a href="/index.php?page=admin" class="btn btn-outline-secondary rounded-pill px-3">
+                <i class="bi bi-arrow-left me-1"></i> Quay lại Dashboard
+            </a>
+        </div>
 
         <div class="row g-4">
 

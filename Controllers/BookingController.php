@@ -198,7 +198,28 @@ class BookingController
 
         $this->bookingModel->updateStatus($bookingId, $status);
 
-        header('Location: /index.php?page=tutor_dashboard&success=status_updated');
+        $mailSent = true;
+        if ($status === 'confirmed') {
+            require_once __DIR__ . '/../core/MailService.php';
+            $mailService = new MailService();
+            $details = $this->bookingModel->getBookingDetailsWithUsers($bookingId);
+            
+            if ($details) {
+                $mailSent = $mailService->sendTutorConfirmedEmail(
+                    $details['StudentEmail'],
+                    $details['StudentName'],
+                    $details['TutorName'],
+                    $details['TutorEmail'],
+                    $details['TutorPhone'],
+                    $details['SubjectName'],
+                    $details['Date'],
+                    $details['Time']
+                );
+            }
+        }
+
+        $errorQuery = !$mailSent ? '&error=mail_failed' : '';
+        header('Location: /index.php?page=tutor_dashboard&success=status_updated' . $errorQuery);
         exit;
     }
 

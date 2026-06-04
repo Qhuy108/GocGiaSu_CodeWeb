@@ -88,6 +88,32 @@ class BookingModel
         return $stmt->execute([$status, $id]);
     }
 
+    /**
+     * Lấy thông tin chi tiết booking kèm email/tên của học sinh và gia sư
+     */
+    public function getBookingDetailsWithUsers(int $bookingId): array|false
+    {
+        $sql = "SELECT 
+                    b.*, 
+                    s.Name as SubjectName,
+                    u_student.Name as StudentName, 
+                    u_student.Email as StudentEmail,
+                    u_tutor.Name as TutorName, 
+                    u_tutor.Email as TutorEmail,
+                    u_tutor.Phone as TutorPhone
+                FROM bookings b
+                JOIN subjects s ON b.Subject_id = s.Id
+                JOIN users u_student ON b.Student_id = u_student.Id
+                JOIN tutors t ON b.Tutor_id = t.Id
+                JOIN users u_tutor ON t.User_id = u_tutor.Id
+                WHERE b.Id = ?
+                LIMIT 1";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$bookingId]);
+        return $stmt->fetch();
+    }
+
     // Tìm 1 booking theo ID (để kiểm tra quyền)
     public function findById(int $id): array|false
     {

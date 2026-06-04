@@ -466,6 +466,20 @@ document.getElementById('reviewModal').addEventListener('show.bs.modal', functio
     document.getElementById('review_booking_id').value = btn.getAttribute('data-booking-id');
     document.getElementById('review_tutor_name').textContent = btn.getAttribute('data-tutor-name');
 });
+
+// Xử lý thanh kéo (slider) học phí
+document.addEventListener('DOMContentLoaded', function() {
+    const rangeInput = document.getElementById('hocPhiRange');
+    const textOutput = document.getElementById('hocPhiText');
+    
+    if (rangeInput && textOutput) {
+        rangeInput.addEventListener('input', function() {
+            // Định dạng số thành VNĐ (ví dụ: 250,000)
+            const formattedValue = parseInt(this.value).toLocaleString('vi-VN');
+            textOutput.textContent = formattedValue + ' VNĐ';
+        });
+    }
+});
 </script>
 
 <!-- Real-time tutor filtering with Fetch API + debounce -->

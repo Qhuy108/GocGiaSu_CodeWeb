@@ -7,6 +7,7 @@
 require_once __DIR__ . '/../Models/BookingModel.php';
 require_once __DIR__ . '/../Models/TutorModel.php';
 require_once __DIR__ . '/../Models/ReviewModel.php';
+require_once __DIR__ . '/../Models/StudentPostModel.php';
 require_once __DIR__ . '/../core/session.php';
 
 class BookingController
@@ -15,11 +16,14 @@ class BookingController
     private TutorModel $tutorModel;
     private ReviewModel $reviewModel;
 
+    private StudentPostModel $studentPostModel;
+
     public function __construct()
     {
-        $this->bookingModel = new BookingModel();
-        $this->tutorModel   = new TutorModel();
-        $this->reviewModel  = new ReviewModel();
+        $this->bookingModel     = new BookingModel();
+        $this->tutorModel       = new TutorModel();
+        $this->reviewModel      = new ReviewModel();
+        $this->studentPostModel = new StudentPostModel();
     }
 
     public function index(): void
@@ -29,6 +33,8 @@ class BookingController
 
         $user     = currentUser();
         $bookings = $this->bookingModel->getByStudent($user['id']);
+        $this->studentPostModel->closeExpired();
+        $myPosts  = $this->studentPostModel->getByStudent($user['id']);
 
         require_once __DIR__ . '/../Views/GiaoDien_HS.php';
     }

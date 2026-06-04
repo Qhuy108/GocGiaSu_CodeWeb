@@ -120,6 +120,64 @@ require_once __DIR__ . '/partials/header.php';
         </div>
     </div>
 
+    <!-- Bài đăng của học sinh -->
+    <div class="container mt-4">
+        <h3 class="text-navy fw-bold">Bài đăng của tôi</h3>
+
+        <?php if (isset($_GET['success']) && $_GET['success'] === 'post_closed'): ?>
+        <div class="alert alert-info rounded-4 border-0 shadow-sm mb-3">
+            <i class="fa-solid fa-check-circle me-2"></i> Bài đăng đã được đóng.
+        </div>
+        <?php endif; ?>
+
+        <?php if (empty($myPosts)): ?>
+            <p class="text-muted">Bạn chưa có bài đăng nào. Nhấn "Đăng tin tìm gia sư" để tạo bài đăng mới.</p>
+        <?php else: ?>
+        <div class="row g-3">
+            <?php foreach ($myPosts as $mp): ?>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 p-3 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <span class="fw-bold text-navy"><?= htmlspecialchars($mp['Subject']) ?></span>
+                            <span class="text-muted"> – <?= htmlspecialchars($mp['Grade']) ?></span>
+                        </div>
+                        <?php if ($mp['Status'] === 'open'): ?>
+                            <span class="badge bg-success">Đang mở</span>
+                        <?php else: ?>
+                            <span class="badge bg-secondary">Đã đóng</span>
+                        <?php endif; ?>
+                    </div>
+                    <?php if (!empty($mp['Goal'])): ?>
+                    <p class="small text-muted mb-1"><?= htmlspecialchars($mp['Goal']) ?></p>
+                    <?php endif; ?>
+                    <p class="small text-muted mb-2">
+                        <i class="fa-solid fa-wallet me-1 text-success"></i>
+                        <?= number_format($mp['Budget'], 0, ',', '.') ?> VNĐ / buổi
+                    </p>
+                    <small class="text-muted">Đăng: <?= date('d/m/Y', strtotime($mp['Created_at'])) ?></small><br>
+                    <?php if ($mp['Status'] === 'open'):
+                        $expireDate = date('d/m/Y', strtotime($mp['Created_at'] . ' +30 days'));
+                    ?>
+                    <small class="text-warning"><i class="fa-regular fa-clock me-1"></i>Tự đóng: <?= $expireDate ?></small>
+                    <?php endif; ?>
+
+                    <?php if ($mp['Status'] === 'open'): ?>
+                    <form method="POST" action="/index.php?page=student_post_close" class="mt-2"
+                          onsubmit="return confirm('Đóng bài đăng này?')">
+                        <input type="hidden" name="post_id" value="<?= (int)$mp['Id'] ?>">
+                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill w-100">
+                            Đóng bài đăng
+                        </button>
+                    </form>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+    </div>
+
     <div class="container mt-5 mb-5">
         <div class="row g-4">
             <aside class="col-lg-3">
@@ -194,7 +252,7 @@ require_once __DIR__ . '/partials/header.php';
                             <button type="button" class="btn-close ms-auto shadow-none" data-bs-dismiss="modal"></button>
                         </div>
 
-                        <form id="formPostTutor" novalidate>
+                        <form id="formPostTutor" method="POST" action="/index.php?page=student_post_create" novalidate>
                             <div class="row g-2 mb-3">
                                 <div class="col-6">
                                     <label class="form-label fw-bold text-navy small">Môn học</label>
@@ -242,7 +300,7 @@ require_once __DIR__ . '/partials/header.php';
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold text-navy small">Mục tiêu</label>
-                                <textarea class="form-control border-success shadow-none" rows="3" 
+                                <textarea class="form-control border-success shadow-none" name="goal" rows="3"
                                         placeholder="Ví dụ: Cải thiện môn Toán từ 7 lên 9+ .."
                                         style="border-radius: 12px; border-width: 1.5px; font-size: 0.9rem;"></textarea>
                             </div>
@@ -259,6 +317,7 @@ require_once __DIR__ . '/partials/header.php';
                                 max="500000"
                                 step="50000"
                                 value="200000"
+                                name="budget"
                                 id="hocPhiRange">
 
                             <div class="text-center">
@@ -275,18 +334,19 @@ require_once __DIR__ . '/partials/header.php';
                         </div>
 
                             <div class="d-flex gap-2 flex-wrap">
-                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">T2</button>
-                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">T3</button>
-                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">T4</button>
-                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">T5</button>
-                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">T6</button>
-                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">T7</button>
-                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')">CN</button>
+                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')" data-day="T2">T2</button>
+                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')" data-day="T3">T3</button>
+                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')" data-day="T4">T4</button>
+                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')" data-day="T5">T5</button>
+                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')" data-day="T6">T6</button>
+                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')" data-day="T7">T7</button>
+                                <button type="button" class="btn-day-click" onclick="this.classList.toggle('active')" data-day="CN">CN</button>
                             </div>
+                            <input type="hidden" name="days" id="daysInput">
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold text-navy small">Thời gian</label>
-                                <textarea class="form-control border-success shadow-none" rows="3" 
+                                <textarea class="form-control border-success shadow-none" name="schedule" rows="3"
                                         placeholder="Ví dụ: 17h-19h, Online các buổi trong tuần"
                                         style="border-radius: 12px; border-width: 1.5px; font-size: 0.9rem;"></textarea>
                             </div>
@@ -357,27 +417,27 @@ require_once __DIR__ . '/partials/header.php';
 <script>
 document.getElementById("formPostTutor")
 .addEventListener("submit", function(e){
-
-    e.preventDefault();
-
     if(!this.checkValidity()){
+        e.preventDefault();
         this.reportValidity();
         return;
     }
+    // Collect các ngày được chọn
+    const active = document.querySelectorAll('.btn-day-click.active');
+    const days   = Array.from(active).map(b => b.getAttribute('data-day')).join(',');
+    document.getElementById('daysInput').value = days;
+    // Form submit bình thường, server redirect về page=student&success=post_created
+});
 
-    Swal.fire({
+<?php if (isset($_GET['success']) && $_GET['success'] === 'post_created'): ?>
+Swal.fire({
     icon: "success",
     title: "Đăng tin thành công",
-    html: `
-        <div class="mt-2">
-            Yêu cầu tìm gia sư của bạn đã được gửi.<br>
-            Chúng tôi sẽ kết nối gia sư phù hợp sớm nhất.
-        </div>
-    `,
+    html: '<div class="mt-2">Yêu cầu tìm gia sư của bạn đã được gửi.<br>Gia sư phù hợp sẽ liên hệ với bạn sớm nhất.</div>',
     showConfirmButton: false,
     timer: 2500
 });
-});
+<?php endif; ?>
 </script>
 
 <script>

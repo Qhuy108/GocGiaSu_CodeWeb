@@ -58,6 +58,21 @@ require_once __DIR__ . '/partials/header.php';
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-layer-group text-info me-2"></i>
+                                <span class="fw-medium">Số buổi: <?= htmlspecialchars($class['Total_sessions'] ?? 1) ?></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-money-bill text-danger me-2"></i>
+                                <span class="fw-medium">Tổng tiền: <?= number_format((float)($class['Total_price'] ?? 0), 0, ',', '.') ?> VNĐ</span>
+                            </div>
+                        </div>
+                    </div>
 
                     <?php if (!empty($class['Note'])): ?>
                     <div class="mt-2">

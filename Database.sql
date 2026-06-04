@@ -156,6 +156,9 @@ CREATE TABLE `users` (
   `Phone` varchar(15) DEFAULT NULL,
   `Role` enum('student','tutor','admin') NOT NULL,
   `Avatar` varchar(255) DEFAULT NULL,
+  `is_verified` tinyint(1) DEFAULT 0,
+  `verification_code` varchar(10) DEFAULT NULL,
+  `verification_expires_at` datetime DEFAULT NULL,
   `Created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

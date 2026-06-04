@@ -7,16 +7,19 @@
 require_once __DIR__ . '/../Models/UserModel.php';
 require_once __DIR__ . '/../Models/TutorModel.php';
 require_once __DIR__ . '/../core/session.php';
+require_once __DIR__ . '/../core/MailService.php';
 
 class AuthController
 {
     private UserModel $userModel;
     private TutorModel $tutorModel;
+    private MailService $mailService;
 
     public function __construct()
     {
-        $this->userModel  = new UserModel();
-        $this->tutorModel = new TutorModel();
+        $this->userModel   = new UserModel();
+        $this->tutorModel  = new TutorModel();
+        $this->mailService = new MailService();
     }
 
     // ── Hiển thị form đăng nhập / xử lý POST ────────────────────────────
@@ -45,6 +48,10 @@ if (!$user) {
         !password_verify($password, $user['Password'])
     ) {
         $errors[] = 'Email/số điện thoại hoặc mật khẩu không đúng.';
+    }
+
+    if (!$errors && $user['is_verified'] == 0) {
+        $errors[] = 'Tài khoản của bạn chưa được xác thực email. <a href="/index.php?page=verify_email&email=' . urlencode($user['Email']) . '">Xác thực ngay</a>';
     }
 
     if (!$errors && $user['Role'] === 'tutor') {
@@ -119,6 +126,9 @@ if (!$user) {
 
                     $step    = 'verify';
                     $success = 'Mã xác nhận đã được tạo. Vui lòng kiểm tra email và nhập mã 6 chữ số.';
+                    
+                    // Gửi mail xác nhận quên mật khẩu
+                    $this->mailService->sendOTP($email, $code, 'forgot_password');
                 }
             } elseif ($step === 'verify') {
                 if (!$this->hasValidPasswordResetSession()) {
@@ -229,7 +239,7 @@ if (!$user) {
             if (!$errors) {
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-                $this->userModel->create([
+                $userId = $this->userModel->create([
                     'Name'     => $oldData['Name'],
                     'Email'    => $oldData['Email'],
                     'Password' => $hashedPassword,
@@ -237,8 +247,19 @@ if (!$user) {
                     'Role'     => 'student',
                 ]);
 
-                header('Location: /index.php?page=login&registered=1');
-                exit;
+                // Tạo OTP và gửi mail xác thực
+                $otp = (string)random_int(100000, 999999);
+                $expiresAt = date('Y-m-d H:i:s', time() + 900); // 15 phút
+                $this->userModel->setVerificationCode($userId, $otp, $expiresAt);
+                
+                if ($this->mailService->sendOTP($oldData['Email'], $otp, 'register')) {
+                    header('Location: /index.php?page=verify_email&email=' . urlencode($oldData['Email']));
+                    exit;
+                } else {
+                    $errors[] = 'Tài khoản đã tạo nhưng không thể gửi email xác thực. Vui lòng bấm "Gửi lại mã" ở trang xác thực hoặc kiểm tra cấu hình SMTP.';
+                    header('Location: /index.php?page=verify_email&email=' . urlencode($oldData['Email']) . '&error=1');
+                    exit;
+                }
             }
         }
 
@@ -370,13 +391,19 @@ if (!$user) {
 
                     $pdo->commit();
 
+                    // Tạo OTP và gửi mail xác thực
+                    $otp = (string)random_int(100000, 999999);
+                    $expiresAt = date('Y-m-d H:i:s', time() + 900); // 15 phút
+                    $this->userModel->setVerificationCode($userId, $otp, $expiresAt);
+                    $this->mailService->sendOTP($oldData['email'], $otp, 'register');
+
                     if ($isAjax) {
                         header('Content-Type: application/json; charset=utf-8');
-                        echo json_encode(['status' => 'success']);
+                        echo json_encode(['status' => 'success', 'redirect' => '/index.php?page=verify_email&email=' . urlencode($oldData['email'])]);
                         exit;
                     }
 
-                    header('Location: /index.php?page=login&registered_tutor=1');
+                    header('Location: /index.php?page=verify_email&email=' . urlencode($oldData['email']));
                     exit;
                 } catch (Exception $e) {
                     $pdo->rollBack();
@@ -412,5 +439,59 @@ if (!$user) {
         destroySession();
         header('Location: /index.php');
         exit;
+    }
+
+    // ── Xác thực Email (Registration OTP) ────────────────────────────────────
+    public function verifyEmail(): void
+    {
+        $errors  = [];
+        $success = '';
+        $email   = trim($_GET['email'] ?? $_POST['email'] ?? '');
+
+        if ($email === '') {
+            header('Location: /index.php?page=login');
+            exit;
+        }
+
+        $user = $this->userModel->findByEmail($email);
+        if (!$user) {
+            header('Location: /index.php?page=login');
+            exit;
+        }
+
+        if ($user['is_verified'] == 1) {
+            header('Location: /index.php?page=login&verified=1');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $action = $_POST['action'] ?? 'verify';
+
+            if ($action === 'verify') {
+                $code = trim($_POST['code'] ?? '');
+
+                if ($code === '') {
+                    $errors[] = 'Vui lòng nhập mã xác thực.';
+                } elseif ($code !== $user['verification_code']) {
+                    $errors[] = 'Mã xác thực không đúng.';
+                } elseif (strtotime($user['verification_expires_at']) < time()) {
+                    $errors[] = 'Mã xác thực đã hết hạn. Vui lòng bấm gửi lại mã.';
+                }
+
+                if (!$errors) {
+                    $this->userModel->verifyUser($user['Id']);
+                    header('Location: /index.php?page=login&verified=1');
+                    exit;
+                }
+            } elseif ($action === 'resend') {
+                $otp = (string)random_int(100000, 999999);
+                $expiresAt = date('Y-m-d H:i:s', time() + 900);
+                $this->userModel->setVerificationCode($user['Id'], $otp, $expiresAt);
+                $this->mailService->sendOTP($email, $otp, 'register');
+                $success = 'Mã xác thực mới đã được gửi tới email của bạn.';
+            }
+        }
+
+        require_once __DIR__ . '/../Views/XacThucEmail.php';
     }
 }

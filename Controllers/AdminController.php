@@ -90,16 +90,35 @@ class AdminController
 
         if ($bookingId > 0 && in_array($action, ['approve', 'reject'])) {
             $db = getDB();
+            $mailSent = true;
+
             if ($action === 'approve') {
                 $db->prepare("UPDATE bookings SET Payment_status = 'paid' WHERE Id = ?")->execute([$bookingId]);
+                
+                // Gửi mail thông báo cho học sinh
+                require_once __DIR__ . '/../Models/BookingModel.php';
+                require_once __DIR__ . '/../core/MailService.php';
+                
+                $bookingModel = new BookingModel();
+                $mailService = new MailService();
+                
+                $details = $bookingModel->getBookingDetailsWithUsers($bookingId);
+                if ($details) {
+                    $mailSent = $mailService->sendPaymentConfirmedEmail(
+                        $details['StudentEmail'],
+                        $details['StudentName'],
+                        $details['SubjectName']
+                    );
+                }
             } else {
                 // Nếu từ chối thanh toán, có thể xóa booking hoặc chuyển trạng thái
                 $db->prepare("UPDATE bookings SET Status = 'cancelled', Payment_status = 'unpaid' WHERE Id = ?")->execute([$bookingId]);
             }
-        }
 
-        header('Location: /index.php?page=admin&action=pendingPayments');
-        exit;
+            $errorQuery = !$mailSent ? '&error=mail_failed' : '';
+            header('Location: /index.php?page=admin&action=pendingPayments' . $errorQuery);
+            exit;
+        }
     }
 
     // Duyệt hoặc từ chối hồ sơ gia sư

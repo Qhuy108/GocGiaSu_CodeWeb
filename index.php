@@ -90,6 +90,12 @@ case 'get_tutor_contact':
         $controller->registerTutor();
         break;
 
+    case 'verify_email':
+        loadController('Auth');
+        $controller = new AuthController();
+        $controller->verifyEmail();
+        break;
+
     case 'logout':
         loadController('Auth');
         $controller = new AuthController();

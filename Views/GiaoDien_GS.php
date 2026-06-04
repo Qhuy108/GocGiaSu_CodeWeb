@@ -70,6 +70,10 @@ require_once __DIR__ . '/partials/header.php';
                                         <i class="fa-solid fa-calendar me-1"></i><?= htmlspecialchars($b['Date'] ?? '') ?>
                                         &nbsp;<i class="fa-solid fa-clock me-1"></i><?= htmlspecialchars($b['Time'] ?? '') ?>
                                     </p>
+                                    <p class="mb-1 small text-muted">
+                                        <i class="fa-solid fa-layer-group me-1"></i>Số buổi: <?= htmlspecialchars($b['Total_sessions'] ?? 1) ?>
+                                        &nbsp;<i class="fa-solid fa-money-bill me-1"></i>Tổng tiền: <?= number_format((float)($b['Total_price'] ?? 0), 0, ',', '.') ?> VNĐ
+                                    </p>
                                     <?php if (!empty($b['Note'])): ?>
                                     <p class="mb-0 small text-muted fst-italic">"<?= htmlspecialchars($b['Note']) ?>"</p>
                                     <?php endif; ?>

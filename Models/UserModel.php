@@ -65,6 +65,25 @@ class UserModel
         return $stmt->execute($params);
     }
 
+    // Thiết lập mã xác thực
+    public function setVerificationCode(int $userId, string $code, string $expiresAt): bool
+    {
+        return $this->update($userId, [
+            'verification_code'       => $code,
+            'verification_expires_at' => $expiresAt
+        ]);
+    }
+
+    // Xác thực người dùng
+    public function verifyUser(int $userId): bool
+    {
+        return $this->update($userId, [
+            'is_verified'             => 1,
+            'verification_code'       => null,
+            'verification_expires_at' => null
+        ]);
+    }
+
     // Lấy danh sách tất cả user (dành cho Admin)
     public function getAll(string $role = ''): array
     {

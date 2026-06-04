@@ -198,6 +198,31 @@ case 'get_tutor_contact':
         $controller->$action();
         break;
 
+    // ── Bài đăng tìm gia sư ─────────────────────────────────────────────────
+    case 'student_post_create':
+        requireLogin();
+        requireRole('student');
+        loadController('StudentPost');
+        $controller = new StudentPostController();
+        $controller->create();
+        break;
+
+    case 'student_post_close':
+        requireLogin();
+        requireRole('student');
+        loadController('StudentPost');
+        $controller = new StudentPostController();
+        $controller->close();
+        break;
+
+    case 'student_posts':
+        requireLogin();
+        requireRole('tutor');
+        loadController('StudentPost');
+        $controller = new StudentPostController();
+        $controller->index();
+        break;
+
     //----Lop nhan-------
 case 'my_classes':
     requireLogin();

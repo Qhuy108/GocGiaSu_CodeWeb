@@ -285,6 +285,30 @@ ALTER TABLE `tutors`
 ALTER TABLE `tutor_subjects`
   ADD CONSTRAINT `tutor_subjects_ibfk_1` FOREIGN KEY (`Tutor_id`) REFERENCES `tutors` (`Id`) ON DELETE CASCADE,
   ADD CONSTRAINT `tutor_subjects_ibfk_2` FOREIGN KEY (`Subject_id`) REFERENCES `subjects` (`Id`) ON DELETE CASCADE;
+
+-- --------------------------------------------------------
+--
+-- Cấu trúc bảng cho bảng `student_posts`
+--
+CREATE TABLE `student_posts` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Student_id` int(11) NOT NULL,
+  `Subject` varchar(255) NOT NULL,
+  `Grade` varchar(100) NOT NULL,
+  `Goal` text DEFAULT NULL,
+  `Budget` int(11) DEFAULT 200000,
+  `Days` varchar(100) DEFAULT NULL,
+  `Schedule` text DEFAULT NULL,
+  `Status` enum('open','closed') DEFAULT 'open',
+  `Created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`Id`),
+  KEY `idx_student_posts_student` (`Student_id`),
+  KEY `idx_student_posts_status` (`Status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `student_posts`
+  ADD CONSTRAINT `student_posts_ibfk_1` FOREIGN KEY (`Student_id`) REFERENCES `users` (`Id`) ON DELETE CASCADE;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -23,7 +23,12 @@ require_once __DIR__ . '/../partials/header.php';
             <h4 class="fw-bold mb-0" style="color:#042940;">
                 <i class="bi bi-person-check me-2"></i>Danh sách gia sư chờ duyệt
             </h4>
-            <span class="badge bg-warning text-dark fs-6"><?= count($pendingTutors) ?> hồ sơ</span>
+            <div class="d-flex gap-2 align-items-center">
+                <span class="badge bg-warning text-dark fs-6"><?= count($pendingTutors) ?> hồ sơ</span>
+                <a href="/index.php?page=admin" class="btn btn-outline-secondary rounded-pill px-3">
+                    <i class="bi bi-arrow-left me-1"></i> Quay lại Dashboard
+                </a>
+            </div>
         </div>
 
         <?php if (empty($pendingTutors)): ?>

@@ -409,8 +409,12 @@ require_once __DIR__ . '/partials/header.php';
                 console.log('Tutor registration response:', response.status, data);
 
                 if (response.ok && data.status === 'success') {
-                    resetForm();
-                    successModal?.show();
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    } else {
+                        resetForm();
+                        successModal?.show();
+                    }
                     return;
                 }
 
